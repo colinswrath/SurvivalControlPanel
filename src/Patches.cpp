@@ -38,4 +38,14 @@ namespace Patches
 
 		return true;
 	}
+
+
+	bool RevertArrowWeight()
+	{
+		REL::Relocation<std::uintptr_t> GetWeight_ArrowWeight_Hook(TESBoundObject_GetWeight_offset, 0x83);	//0x1A17B3;
+
+		const std::array<UINT8, 2> remove_arrow_patch = { 0x74, 0x56 };
+
+		REL::safe_write(GetWeight_ArrowWeight_Hook.address(), remove_arrow_patch);
+	}
 }
