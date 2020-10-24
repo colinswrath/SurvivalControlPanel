@@ -15,6 +15,12 @@
     <ClCompile Include="src\Hooks.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Papyrus.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PapyrusSurvival.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\Survival.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -30,6 +36,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Hooks.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Papyrus.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PapyrusSurvival.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Survival.h">
