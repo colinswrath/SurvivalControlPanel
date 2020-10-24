@@ -1,5 +1,6 @@
 ﻿#include "version.h"
 #include "Hooks.h"
+#include "Survival.h"
 
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
@@ -57,6 +58,10 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	SKSE::AllocTrampoline(128); // TODO figure out exactly how much we need
 
 	Hooks::Install();
+
+	// FIXME Temporary just to prove it works
+	auto settings = Survival::GetSettings(Survival::Feature::ArrowWeight);
+	settings->ForceEnable();
 
 	return true;
 }
