@@ -50,6 +50,9 @@
     <ClInclude Include="src\ArrowWeightManager.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\LockpickWeightManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
