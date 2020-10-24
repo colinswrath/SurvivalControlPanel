@@ -1,5 +1,5 @@
 ﻿#include "version.h"
-#include "Patches.h"
+#include "Hooks.h"
 
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
@@ -54,10 +54,9 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	logger::info("Survival Decoupler loaded");
 
 	SKSE::Init(a_skse);
-	
-	logger::info("Patching arrow weight");
-	
-	Patches::PatchArrowWeight();
+	SKSE::AllocTrampoline(128); // TODO figure out exactly how much we need
+
+	Hooks::Install();
 
 	return true;
 }

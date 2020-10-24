@@ -12,7 +12,7 @@
     <ClCompile Include="src\PCH.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Patches.cpp">
+    <ClCompile Include="src\Hooks.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -23,10 +23,10 @@
     <ClInclude Include="src\version.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Patches.h">
+    <ClInclude Include="src\Offsets.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Offsets.h">
+    <ClInclude Include="src\Hooks.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
