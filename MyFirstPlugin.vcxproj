@@ -226,11 +226,14 @@
       <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</MultiProcessorCompilation>
       <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</MultiProcessorCompilation>
     </ClCompile>
+    <ClCompile Include="src\Survival.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ArrowWeightManager.h" />
     <ClInclude Include="src\Hooks.h" />
     <ClInclude Include="src\Offsets.h" />
     <ClInclude Include="src\PCH.h" />
+    <ClInclude Include="src\Survival.h" />
     <ClInclude Include="src\version.h" />
   </ItemGroup>
   <ItemGroup>
