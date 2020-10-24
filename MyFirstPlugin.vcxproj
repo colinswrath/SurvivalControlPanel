@@ -231,6 +231,7 @@
   <ItemGroup>
     <ClInclude Include="src\ArrowWeightManager.h" />
     <ClInclude Include="src\Hooks.h" />
+    <ClInclude Include="src\LockpickWeightManager.h" />
     <ClInclude Include="src\Offsets.h" />
     <ClInclude Include="src\PCH.h" />
     <ClInclude Include="src\Survival.h" />
