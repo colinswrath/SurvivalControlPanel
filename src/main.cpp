@@ -1,5 +1,6 @@
 ﻿#include "version.h"
 #include "Hooks.h"
+#include "Papyrus.h"
 #include "Survival.h"
 
 
@@ -57,6 +58,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	SKSE::Init(a_skse);
 	SKSE::AllocTrampoline(128); // TODO figure out exactly how much we need
 
+	Papyrus::Register();
 	Hooks::Install();
 
 	// FIXME Temporary just to prove it works

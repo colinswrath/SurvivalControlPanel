@@ -1,5 +1,7 @@
 Scriptname Survival Hidden
 
+; NOTE: You cannot actually access these variables from your scripts, so you
+; will have to copy the definitions if you want to use them.
 int Property HUD_INDICATORS    = 0  AutoReadOnly
 int Property INVENTORY_UI      = 1  AutoReadOnly
 int Property SLEEP_TO_LEVEL_UP = 2  AutoReadOnly

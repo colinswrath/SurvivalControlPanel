@@ -9,11 +9,11 @@ namespace PapyrusSurvival
 	using Severity = RE::BSScript::ErrorLogger::Severity;
 	using Feature = Survival::Feature;
 
-	void ForceEnable(VM* a_vm, StackID a_stackID, RE::StaticFunctionTag*, Feature a_feature);
-	void RequestDisable(VM* a_vm, StackID a_stackID, RE::StaticFunctionTag*, Feature a_feature);
-	void UserEnable(VM* a_vm, StackID a_stackID, RE::StaticFunctionTag*, Feature a_feature);
-	void UserDisable(VM* a_vm, StackID a_stackID, RE::StaticFunctionTag*, Feature a_feature);
-	void UserReset(VM* a_vm, StackID a_stackID, RE::StaticFunctionTag*, Feature a_feature);
+	void ForceEnable(RE::StaticFunctionTag*, Feature a_feature);
+	void RequestDisable(RE::StaticFunctionTag*, Feature a_feature);
+	void UserEnable(RE::StaticFunctionTag*, Feature a_feature);
+	void UserDisable(RE::StaticFunctionTag*, Feature a_feature);
+	void UserReset(RE::StaticFunctionTag*, Feature a_feature);
 
 	bool RegisterFuncs(VM* a_vm);
 }
