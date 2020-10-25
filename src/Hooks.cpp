@@ -2,7 +2,7 @@
 #include "ArrowWeightManager.h"
 #include "LockpickWeightManager.h"
 #include "SleepLevelUpManager.h"
-#include "WarmthInventoryUIManager.h"
+#include "InventoryUIManager.h"
 
 namespace Hooks
 {
@@ -11,7 +11,7 @@ namespace Hooks
 		ArrowWeightManager::Install();
 		LockpickWeightManager::Install();
 		SleepLevelUpManager::Install();
-		WarmthInventoryUIManager::Install();
+		InventoryUIManager::Install();
 
 		logger::info("Installed all hooks"sv);
 	}

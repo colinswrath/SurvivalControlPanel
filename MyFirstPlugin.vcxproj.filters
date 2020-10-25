@@ -56,7 +56,7 @@
     <ClInclude Include="src\SleepLevelUpManager.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\WarmthInventoryUIManager.h">
+    <ClInclude Include="src\InventoryUIManager.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

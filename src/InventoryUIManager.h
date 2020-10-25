@@ -3,7 +3,7 @@
 #include "Offsets.h"
 #include "Survival.h"
 
-class WarmthInventoryUIManager
+class InventoryUIManager
 {
 public:
 	inline static void Install()
