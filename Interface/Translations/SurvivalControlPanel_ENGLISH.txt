@@ -3,10 +3,13 @@ $Always Enabled	Always Enabled
 $Arrow weight	Arrow weight
 $Cloak Cold Bonus	Cloak Cold Bonus
 $Cloak Normal Bonus	Cloak Normal Bonus
-$Cold Warm Bonus	Cloak Warm Bonus
+$Cloak Warm Bonus	Cloak Warm Bonus
 $Default	Default
+$Enable Cloak Warmth	Enable Cloak Warmth
+$Enable Frostfall Keywords	Enable Frostfall Keywords
 $HUD indicators	HUD indicators
 $Inventory UI	Inventory UI
 $Lockpick weight	Lockpick weight
 $Sleep to level up	Sleep to level up
 $Survival Mode Features	Survival Mode Features
+$Warmth Options	Warmth Options

@@ -34,6 +34,12 @@ Event OnPageReset(String a_page)
 	AddToggleOptions("$Arrow weight", 3)
 	AddToggleOptions("$Lockpick weight", 4)
 
+	SetCursorPosition(1)
+
+	AddHeaderOption("$Warmth Options")
+
+	AddToggleOption("$Enable Frostfall Keywords", false)
+	AddToggleOption("$Enable Cloak Warmth", true)
 	CloakWarmSlider = AddSliderOption("$Cloak Warm Bonus", GetCloakWarmBonus())
 	CloakNormalSlider = AddSliderOption("$Cloak Normal Bonus", GetCloakNormalBonus())
 	CloakColdSlider = AddSliderOption("$Cloak Cold Bonus", GetCloakColdBonus())
