@@ -231,6 +231,7 @@
     <ClCompile Include="src\Survival.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\SleepLevelUpManager.h" />
     <ClInclude Include="src\ArrowWeightManager.h" />
     <ClInclude Include="src\Hooks.h" />
     <ClInclude Include="src\LockpickWeightManager.h" />

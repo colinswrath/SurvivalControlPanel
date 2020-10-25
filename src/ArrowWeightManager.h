@@ -14,6 +14,7 @@ public:
 		ArrowWeightHook = trampoline.write_call<5>(GetWeight_ArrowWeight_Hook.address(), IsArrowWeightEnabled);
 
 		logger::info("Installed hook for arrow weight"sv);
+
 	}
 
 private:

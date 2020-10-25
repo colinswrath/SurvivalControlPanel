@@ -53,6 +53,9 @@
     <ClInclude Include="src\LockpickWeightManager.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\SleepLevelUpManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />

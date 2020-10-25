@@ -63,5 +63,8 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	auto settings = Survival::GetSettings(Survival::Feature::ArrowWeight);
 	settings->ForceEnable();
 
+	auto SleepToLevel = Survival::GetSettings(Survival::Feature::SleepToLevelUp);
+	SleepToLevel->ForceEnable();
+
 	return true;
 }
