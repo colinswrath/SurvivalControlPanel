@@ -31,5 +31,4 @@ private:
 	{
 		return Survival::FeatureIsEnabled(Survival::Feature::SleepToLevelUp);
 	}
-
 };

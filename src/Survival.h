@@ -68,8 +68,8 @@ namespace Survival
 
 	inline bool ModeIsEnabled()
 	{
-		static REL::Relocation<bool()> func{ IsSurvivalModeEnabled };
-		return func();
+		static REL::Relocation<bool()> IsSurvivalModeEnabled{ IsSurvivalModeEnabled_offset };
+		return IsSurvivalModeEnabled();
 	}
 
 	inline bool FeatureIsEnabled(Feature feature)
