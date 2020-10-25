@@ -11,7 +11,7 @@ public:
 		REL::Relocation<std::uintptr_t> GetWeight_ArrowWeight_Hook{ TESBoundObject_GetWeight_offset, 0x7C };
 
 		auto& trampoline = SKSE::GetTrampoline();
-		ArrowWeightHook = trampoline.write_call<5>(GetWeight_ArrowWeight_Hook.address(), IsArrowWeightEnabled);
+		trampoline.write_call<5>(GetWeight_ArrowWeight_Hook.address(), IsArrowWeightEnabled);
 
 		logger::info("Installed hook for arrow weight"sv);
 
@@ -20,8 +20,6 @@ public:
 private:
 	inline static bool IsArrowWeightEnabled()
 	{
-		return Survival::IsEnabled(Survival::Feature::ArrowWeight, ArrowWeightHook);
+		return Survival::FeatureIsEnabled(Survival::Feature::ArrowWeight);
 	}
-
-	inline static SurvivalModeCallback ArrowWeightHook;
 };

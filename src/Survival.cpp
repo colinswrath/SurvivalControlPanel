@@ -35,7 +35,7 @@ namespace Survival
 		UserPreference = Preference::None;
 	}
 
-	bool Settings::IsEnabled(SurvivalModeCallback gameCallback)
+	bool Settings::IsEnabled()
 	{
 		if (UserPreference == Preference::AlwaysEnabled)
 		{
@@ -55,7 +55,7 @@ namespace Survival
 		}
 		else
 		{
-			return gameCallback();
+			return ModeIsEnabled();
 		}
 	}
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-using SurvivalModeCallback = REL::Relocation<bool()>;
+#include "Offsets.h"
 
 namespace Survival
 {
@@ -30,7 +30,7 @@ namespace Survival
 		void UserDisable();
 		void UserReset();
 
-		bool IsEnabled(SurvivalModeCallback gameCallback);
+		bool IsEnabled();
 
 		static Settings* GetSingleton(Feature feature)
 		{
@@ -66,16 +66,22 @@ namespace Survival
 		return Settings::GetSingleton(feature);
 	}
 
-	inline bool IsEnabled(Feature feature, SurvivalModeCallback gameCallback)
+	inline bool ModeIsEnabled()
+	{
+		static REL::Relocation<bool()> func{ IsSurvivalModeEnabled };
+		return func();
+	}
+
+	inline bool FeatureIsEnabled(Feature feature)
 	{
 		auto settings = GetSettings(feature);
 		if (!settings)
 		{
-			return gameCallback();
+			return ModeIsEnabled();
 		}
 		else
 		{
-			return settings->IsEnabled(gameCallback);
+			return settings->IsEnabled();
 		}
 	}
 }
