@@ -12,7 +12,7 @@ public:
 		REL::Relocation<std::uintptr_t> Enable_SleepSkills_Menu_Hook{ StatsMenu_Sub_offset, 0xF2C };
 
 		auto& trampoline = SKSE::GetTrampoline();
-		trampoline.write_call<5>(Disable_World_Level_Hook.address(), IsWorldLevelingDisabled);
+		trampoline.write_call<5>(Disable_World_Level_Hook.address(), IsSleepToLevelUpEnabled);
 
 		logger::info("Installed hook for disabled world leveling."sv);
 
@@ -22,11 +22,6 @@ public:
 	}
 
 private:
-	inline static bool IsWorldLevelingDisabled()
-	{
-		return Survival::FeatureIsEnabled(Survival::Feature::SleepToLevelUp);
-	}
-
 	inline static bool IsSleepToLevelUpEnabled()
 	{
 		return Survival::FeatureIsEnabled(Survival::Feature::SleepToLevelUp);
