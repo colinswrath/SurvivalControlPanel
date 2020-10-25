@@ -19,7 +19,7 @@ public:
 
 		trampoline.write_call<5>(StatsCalcEnable_Hook.address(), IsInventoryUIEnabled);
 
-		logger::info("Installed enabling warmth calcualtion hook."sv);
+		logger::info("Installed enabling warmth calculation hook."sv);
 
 		trampoline.write_call<5>(UIDescription_Hook.address(), IsInventoryUIEnabled);
 
