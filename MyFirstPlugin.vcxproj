@@ -241,6 +241,7 @@
     <ClInclude Include="src\PCH.h" />
     <ClInclude Include="src\Survival.h" />
     <ClInclude Include="src\version.h" />
+    <ClInclude Include="src\InventoryUIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(CommonLibSSEPath)\CommonLibSSE.vcxproj">
