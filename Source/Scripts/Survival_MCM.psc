@@ -8,6 +8,9 @@ int Property ENABLED_INDEX  = 2  AutoReadOnly
 
 String[] MenuEntries
 int[] MenuOptions
+int CloakWarmSlider
+int CloakNormalSlider
+int CloakColdSlider
 
 Event OnInit()
 	parent.OnInit()
@@ -30,6 +33,16 @@ Event OnPageReset(String a_page)
 	AddToggleOptions("$Sleep to level up", 2)
 	AddToggleOptions("$Arrow weight", 3)
 	AddToggleOptions("$Lockpick weight", 4)
+
+	SetCursorPosition(1)
+
+	AddHeaderOption("$Warmth Options")
+
+	AddToggleOption("$Enable Frostfall Keywords", false)
+	AddToggleOption("$Enable Cloak Warmth", true)
+	CloakWarmSlider = AddSliderOption("$Cloak Warm Bonus", GetCloakWarmBonus())
+	CloakNormalSlider = AddSliderOption("$Cloak Normal Bonus", GetCloakNormalBonus())
+	CloakColdSlider = AddSliderOption("$Cloak Cold Bonus", GetCloakColdBonus())
 EndEvent
 
 Function AddToggleOptions(String asName, int aiFeature)
@@ -81,5 +94,34 @@ Event OnOptionMenuAccept(int option, int index)
 	elseif index == ENABLED_INDEX
 		UserEnable(iFeature)
 		SetMenuOptionValue(option, MenuEntries[ENABLED_INDEX])
+	endif
+EndEvent
+
+Event OnOptionSliderOpen(int option)
+	if option == CloakWarmSlider
+		SetSliderDialogStartValue(GetCloakWarmBonus())
+		SetSliderDialogDefaultValue(29.0)
+	elseif option == CloakNormalSlider
+		SetSliderDialogStartValue(GetCloakNormalBonus())
+		SetSliderDialogDefaultValue(18.0)
+	elseif option == CloakColdSlider
+		SetSliderDialogStartValue(GetCloakColdBonus())
+		SetSliderDialogDefaultValue(8.0)
+	endif
+
+	SetSliderDialogRange(0.0, 60.0)
+	SetSliderDialogInterval(1.0)
+EndEvent
+
+Event OnOptionSliderAccept(int option, float value)
+	if option == CloakWarmSlider
+		SetCloakWarmBonus(value)
+		SetSliderOptionValue(CloakWarmSlider, value)
+	elseif option == CloakNormalSlider
+		SetCloakNormalBonus(value)
+		SetSliderOptionValue(CloakNormalSlider, value)
+	elseif option == CloakColdSlider
+		SetCloakColdBonus(value)
+		SetSliderOptionValue(CloakColdSlider, value)
 	endif
 EndEvent

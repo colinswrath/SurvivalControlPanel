@@ -25,6 +25,36 @@ namespace Survival
 			_cloakColdBonus.data = 8.0f;
 		}
 
+		float GetCloakWarmBonus()
+		{
+			return _cloakWarmBonus.data;
+		}
+
+		void SetCloakWarmBonus(float warmth)
+		{
+			_cloakWarmBonus.data = warmth;
+		}
+
+		float GetCloakNormalBonus()
+		{
+			return _cloakNormalBonus.data;
+		}
+
+		void SetCloakNormalBonus(float warmth)
+		{
+			_cloakNormalBonus.data = warmth;
+		}
+
+		float GetCloakColdBonus()
+		{
+			return _cloakColdBonus.data;
+		}
+
+		void SetCloakColdBonus(float warmth)
+		{
+			_cloakColdBonus.data = warmth;
+		}
+
 		RE::Setting** GetCloakSetting(WarmthClass warmthClass)
 		{
 			// Actually, the game expects an array of 4 pointers, but if we set
