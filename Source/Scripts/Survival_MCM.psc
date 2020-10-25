@@ -25,14 +25,14 @@ Event OnPageReset(String a_page)
 
 	AddHeaderOption("$Survival Mode Features")
 
-	AddToggleOptions("HUDIndicators", "$HUD indicators", 0)
-	AddToggleOptions("InventoryUI", "$Inventory UI", 1)
-	AddToggleOptions("SleepToLevelUp", "$Sleep to level up", 2)
-	AddToggleOptions("ArrowWeight", "$Arrow weight", 3)
-	AddToggleOptions("LockpickWeight", "$Lockpick weight", 4)
+	AddToggleOptions("$HUD indicators", 0)
+	AddToggleOptions("$Inventory UI", 1)
+	AddToggleOptions("$Sleep to level up", 2)
+	AddToggleOptions("$Arrow weight", 3)
+	AddToggleOptions("$Lockpick weight", 4)
 EndEvent
 
-Function AddToggleOptions(String asState, String asName, int aiFeature)
+Function AddToggleOptions(String asName, int aiFeature)
 
 	bool bUserEnabled = IsEnabledByUser(aiFeature)
 	bool bUserDisabled = IsDisabledByUser(aiFeature)
