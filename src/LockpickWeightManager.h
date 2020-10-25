@@ -11,7 +11,7 @@ public:
 		REL::Relocation<std::uintptr_t> GetWeight_LockpickWeight_Hook{ TESBoundObject_GetWeight_offset, 0x9E };
 
 		auto& trampoline = SKSE::GetTrampoline();
-		LockpickWeightHook = trampoline.write_call<5>(GetWeight_LockpickWeight_Hook.address(), IsLockpickWeightEnabled);
+		trampoline.write_call<5>(GetWeight_LockpickWeight_Hook.address(), IsLockpickWeightEnabled);
 
 		logger::info("Installed hook for lockpick weight"sv);
 	}
@@ -19,8 +19,6 @@ public:
 private:
 	inline static bool IsLockpickWeightEnabled()
 	{
-		return Survival::IsEnabled(Survival::Feature::LockpickWeight, LockpickWeightHook);
+		return Survival::FeatureIsEnabled(Survival::Feature::LockpickWeight);
 	}
-
-	inline static SurvivalModeCallback LockpickWeightHook;
 };
