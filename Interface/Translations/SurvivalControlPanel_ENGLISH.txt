@@ -1,0 +1,9 @@
+$Always Disabled	Always Disabled
+$Always Enabled	Always Enabled
+$Arrow weight	Arrow weight
+$Default	Default
+$HUD indicators	HUD indicators
+$Inventory UI	Inventory UI
+$Lockpick weight	Lockpick weight
+$Sleep to level up	Sleep to level up
+$Survival Mode Features	Survival Mode Features
