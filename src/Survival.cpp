@@ -61,7 +61,7 @@ namespace Survival
 
 	bool Settings::SerializeSave(SKSE::SerializationInterface* a_intfc, UINT32 a_type, UINT32 a_version)
 	{
-		if (!a_intfc->OpenRecord(a_type, 1))
+		if (!a_intfc->OpenRecord(a_type, a_version))
 		{
 			logger::error("Failed to open record for Setting!");
 			return false;
@@ -77,21 +77,64 @@ namespace Survival
 	{
 		std::vector<Survival::Preference> prefVector = { ModPreference, UserPreference };
 
-		for (auto& elem : prefVector)
+		std::size_t size = prefVector.size();
+		if (!a_intfc->WriteRecordData(size))
 		{
-			if (!a_intfc->WriteRecordData(elem))
+			logger::error("Failed to write size of record!");
+		}
+		else
+		{
+			for (auto& elem : prefVector)
 			{
-				logger::error("Failed to write data for elem!");
-				break;
+				if (!a_intfc->WriteRecordData(elem))
+				{
+					logger::error("Failed to write data for elem!");
+					break;
+				}
+				logger::info(FMT_STRING("Serializing {}"), elem);
+				logger::info(FMT_STRING("element size {}"), size);
 			}
-			logger::info(FMT_STRING("Serializing {}"), elem);
 		}
 
 		return true;
 	}
 
+	//TODO -> remove value logging
+	/// <summary>
+	/// First element in retrieved vector is Mod, second is user
+	/// </summary>
+	/// <param name="a_intfc"></param>
+	/// <returns></returns>
 	bool Settings::DeserializeLoad(SKSE::SerializationInterface* a_intfc)
 	{
-		return false;
+		std::vector<Survival::Preference> settings;
+
+
+		std::size_t size;
+		if (!a_intfc->ReadRecordData(size))
+		{
+			logger::error("Failed to load size!");
+			return false;
+		}
+
+		for (UINT32 i = 0; i < size; ++i)
+		{
+			Survival::Preference elem;
+			if (!a_intfc->ReadRecordData(elem))
+			{
+				logger::error(FMT_STRING("Failed to load setting element!"));
+				return false;
+			}
+			else
+			{
+				logger::info(FMT_STRING("deserialized {}"), elem);
+				settings.push_back(elem);
+			}
+		}
+
+		ModPreference = settings[0];
+		UserPreference = settings[1];
+
+		return true;
 	}
 }

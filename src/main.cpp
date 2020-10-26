@@ -5,7 +5,7 @@
 
 enum
 {
-	kSerializationVersion = 3,
+	kSerializationVersion = 1,
 	kHUDIndicators = 'HUDS',
 	kInventoryUI = 'IUIS',
 	kSleepToLevelUp = 'STLS',
@@ -62,51 +62,95 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 void SaveCallback(SKSE::SerializationInterface* a_intfc)
 {
 	auto arrowSettings = Survival::GetSettings(Survival::Feature::ArrowWeight);
+	auto uiSettings = Survival::GetSettings(Survival::Feature::InventoryUI);
+	auto HUDSettings = Survival::GetSettings(Survival::Feature::HUDIndicators);
+	auto lockSettings = Survival::GetSettings(Survival::Feature::LockpickWeight);
+	auto SleepSettings = Survival::GetSettings(Survival::Feature::SleepToLevelUp);
 
 	if (!arrowSettings->SerializeSave(a_intfc, kArrowWeight, kSerializationVersion)) {
 		logger::error("Failed to save arrow settings!\n");
-		//ammo->Clear();
 	}
-
-	auto uiSettings = Survival::GetSettings(Survival::Feature::InventoryUI);
 
 	if (!uiSettings->SerializeSave(a_intfc, kInventoryUI, kSerializationVersion)) {
 		logger::error("Failed to save Inventory UI Settings!\n");
-		//ammo->Clear();
 	}
 
+	if (!HUDSettings->SerializeSave(a_intfc, kHUDIndicators, kSerializationVersion)) {
+		logger::error("Failed to save Hud Settings Settings!\n");
+	}
+
+	if (!lockSettings->SerializeSave(a_intfc, kLockpickWeight, kSerializationVersion)) {
+		logger::error("Failed to save lockpick Settings!\n");
+	}
+
+	if (!SleepSettings->SerializeSave(a_intfc, kSleepToLevelUp, kSerializationVersion)) {
+		logger::error("Failed to save Sleep to level Settings!\n");
+	}
 }
 
 void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 {
-	std::vector<Survival::Preference> arr;
+	auto arrowSettings = Survival::GetSettings(Survival::Feature::ArrowWeight);
+	auto uiSettings = Survival::GetSettings(Survival::Feature::InventoryUI);
+	auto HUDSettings = Survival::GetSettings(Survival::Feature::HUDIndicators);
+	auto lockSettings = Survival::GetSettings(Survival::Feature::LockpickWeight);
+	auto SleepSettings = Survival::GetSettings(Survival::Feature::SleepToLevelUp);
 
 	uint32_t type;
 	uint32_t version;
 	uint32_t length;
+
 	while (a_intfc->GetNextRecordInfo(type, version, length))
 	{
-		std::size_t size;
-		if (!a_intfc->ReadRecordData(size))
-		{
-			logger::error("Failed to load size!");
-			break;
+		if (version != kSerializationVersion) {
+			logger::error("Loaded data is out of date! Read (%u), expected (%u) for type code (%s)", version, kSerializationVersion, type);
+			continue;
 		}
 
-		for (uint32_t i = 0; i < size; ++i)
+		switch (type)
 		{
+		case kArrowWeight:
+			if (!arrowSettings->DeserializeLoad(a_intfc))
+			{
+				logger::error("Failed to load arrow settings!\n");
+			}
+			break;
 
-			Survival::Preference elem;
-			if (!a_intfc->ReadRecordData(elem))
+		case kInventoryUI:
+
+			if (!uiSettings->DeserializeLoad(a_intfc))
 			{
-				logger::error("Failed to load elem!");
-				break;
+				logger::error("Failed to load UI settings!\n");
 			}
-			else
+			break;
+
+		case kHUDIndicators:
+
+			if (!HUDSettings->DeserializeLoad(a_intfc))
 			{
-				logger::info(FMT_STRING("deserialized {}"), elem);
-				arr.push_back(elem);
+				logger::error("Failed to load UI settings!\n");
 			}
+			break;
+
+		case kLockpickWeight:
+
+			if (!lockSettings->DeserializeLoad(a_intfc))
+			{
+				logger::error("Failed to load UI settings!\n");
+			}
+			break;
+
+		case kSleepToLevelUp:
+
+			if (!SleepSettings->DeserializeLoad(a_intfc))
+			{
+				logger::error("Failed to load UI settings!\n");
+			}
+			break;
+
+		default:
+			logger::error("Unrecognized signature type!");
+			break;
 		}
 	}
 }
