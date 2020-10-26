@@ -10,7 +10,7 @@ $Cloak Cold Bonus	Cloak Cold Bonus
 $Cloak Normal Bonus	Cloak Normal Bonus
 $Cloak Warm Bonus	Cloak Warm Bonus
 $Cold	Cold
-$Current Equipment	CurrentEquipment
+$Current Equipment	Current Equipment
 $Default	Default
 $Enable Cloak Warmth	Enable Cloak Warmth
 $Enable Frostfall Keywords	Enable Frostfall Keywords
