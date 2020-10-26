@@ -58,4 +58,40 @@ namespace Survival
 			return ModeIsEnabled();
 		}
 	}
+
+	bool Settings::SerializeSave(SKSE::SerializationInterface* a_intfc, UINT32 a_type, UINT32 a_version)
+	{
+		if (!a_intfc->OpenRecord(a_type, 1))
+		{
+			logger::error("Failed to open record for Setting!");
+			return false;
+		}
+		else
+		{
+			return SerializeSave(a_intfc);
+		}
+	}
+
+	//TODO -> remove logging for values
+	bool Settings::SerializeSave(SKSE::SerializationInterface* a_intfc)
+	{
+		std::vector<Survival::Preference> prefVector = { ModPreference, UserPreference };
+
+		for (auto& elem : prefVector)
+		{
+			if (!a_intfc->WriteRecordData(elem))
+			{
+				logger::error("Failed to write data for elem!");
+				break;
+			}
+			logger::info(FMT_STRING("Serializing {}"), elem);
+		}
+
+		return true;
+	}
+
+	bool Settings::DeserializeLoad(SKSE::SerializationInterface* a_intfc)
+	{
+		return false;
+	}
 }

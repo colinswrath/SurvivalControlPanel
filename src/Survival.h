@@ -29,6 +29,9 @@ namespace Survival
 		void UserEnable();
 		void UserDisable();
 		void UserReset();
+		bool SerializeSave(SKSE::SerializationInterface* a_intfc, UINT32 a_type, UINT32 a_version);
+		bool SerializeSave(SKSE::SerializationInterface* a_intfc);
+		bool DeserializeLoad(SKSE::SerializationInterface* a_intfc);
 
 		bool IsEnabled();
 

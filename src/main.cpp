@@ -1,7 +1,17 @@
 ﻿#include "version.h"
 #include "Hooks.h"
 #include "Papyrus.h"
+#include "Survival.h"
 
+enum
+{
+	kSerializationVersion = 3,
+	kHUDIndicators = 'HUDS',
+	kInventoryUI = 'IUIS',
+	kSleepToLevelUp = 'STLS',
+	kArrowWeight = 'ARWS',
+	kLockpickWeight = 'LKPS',
+};
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
 {
@@ -13,7 +23,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 		return false;
 	}
 
-	*path /= "MyFirstPlugin.log"sv;
+	*path /= "SurvivalCP.log"sv;
 	auto sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true);
 #endif
 
@@ -49,6 +59,57 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 	return true;
 }
 
+void SaveCallback(SKSE::SerializationInterface* a_intfc)
+{
+	auto arrowSettings = Survival::GetSettings(Survival::Feature::ArrowWeight);
+
+	if (!arrowSettings->SerializeSave(a_intfc, kArrowWeight, kSerializationVersion)) {
+		logger::error("Failed to save arrow settings!\n");
+		//ammo->Clear();
+	}
+
+	auto uiSettings = Survival::GetSettings(Survival::Feature::InventoryUI);
+
+	if (!uiSettings->SerializeSave(a_intfc, kInventoryUI, kSerializationVersion)) {
+		logger::error("Failed to save Inventory UI Settings!\n");
+		//ammo->Clear();
+	}
+
+}
+
+void LoadCallBack(SKSE::SerializationInterface* a_intfc)
+{
+	std::vector<Survival::Preference> arr;
+
+	uint32_t type;
+	uint32_t version;
+	uint32_t length;
+	while (a_intfc->GetNextRecordInfo(type, version, length))
+	{
+		std::size_t size;
+		if (!a_intfc->ReadRecordData(size))
+		{
+			logger::error("Failed to load size!");
+			break;
+		}
+
+		for (uint32_t i = 0; i < size; ++i)
+		{
+
+			Survival::Preference elem;
+			if (!a_intfc->ReadRecordData(elem))
+			{
+				logger::error("Failed to load elem!");
+				break;
+			}
+			else
+			{
+				logger::info(FMT_STRING("deserialized {}"), elem);
+				arr.push_back(elem);
+			}
+		}
+	}
+}
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
@@ -59,6 +120,11 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	Papyrus::Register();
 	Hooks::Install();
+
+	auto s_interface = SKSE::GetSerializationInterface();
+	s_interface->SetUniqueID('SURV');						//<-Handle ID
+	s_interface->SetSaveCallback(SaveCallback);
+	s_interface->SetLoadCallback(LoadCallBack);
 
 	return true;
 }
