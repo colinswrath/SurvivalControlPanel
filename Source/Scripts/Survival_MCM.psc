@@ -448,7 +448,7 @@ int Function GuessDefaultWarmth(int a_option)
 		endif
 	endif
 
-	return DEFAULT_INDEX
+	return RESET_INDEX
 EndFunction
 
 Function RecomputeArmorWarmths()
