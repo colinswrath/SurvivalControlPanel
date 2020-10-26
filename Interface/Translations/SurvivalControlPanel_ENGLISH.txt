@@ -1,15 +1,34 @@
 $Always Disabled	Always Disabled
 $Always Enabled	Always Enabled
 $Arrow weight	Arrow weight
+$Body	Body
+$Body Cold Bonus	Body Cold Bonus
+$Body Normal Bonus	Body Normal Bonus
+$Body Warm Bonus	Body Warm Bonus
+$Cloak	Cloak
 $Cloak Cold Bonus	Cloak Cold Bonus
 $Cloak Normal Bonus	Cloak Normal Bonus
 $Cloak Warm Bonus	Cloak Warm Bonus
 $Default	Default
 $Enable Cloak Warmth	Enable Cloak Warmth
 $Enable Frostfall Keywords	Enable Frostfall Keywords
+$Feet	Feet
+$Feet Cold Bonus	Feet Cold Bonus
+$Feet Normal Bonus	Feet Normal Bonus
+$Feet Warm Bonus	Feet Warm Bonus
+$Hands	Hands
+$Hands Cold Bonus	Hands Cold Bonus
+$Hands Normal Bonus	Hands Normal Bonus
+$Hands Warm Bonus	Hands Warm Bonus
+$Head	Head
+$Head Cold Bonus	Head Cold Bonus
+$Head Normal Bonus	Head Normal Bonus
+$Head Warm Bonus	Head Warm Bonus
 $HUD indicators	HUD indicators
 $Inventory UI	Inventory UI
 $Lockpick weight	Lockpick weight
 $Sleep to level up	Sleep to level up
+$Survival Mode Core	Survival Mode Core
 $Survival Mode Features	Survival Mode Features
+$Survival Mode Patches	Survival Mode Patches
 $Warmth Options	Warmth Options
