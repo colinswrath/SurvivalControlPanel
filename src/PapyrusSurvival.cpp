@@ -113,10 +113,22 @@ namespace PapyrusSurvival
 		return settings->UserPreference == Survival::Preference::AlwaysDisabled;
 	}
 
-	void SetCloakWarmBonus(RE::StaticFunctionTag*, float a_warmth)
+	void EnableCloakWarmth(RE::StaticFunctionTag*)
 	{
 		auto& settings = Survival::WarmthSettings::GetSingleton();
-		settings.SetCloakWarmBonus(a_warmth);
+		settings.EnableWarmthForCloaks = true;
+	}
+
+	void DisableCloakWarmth(RE::StaticFunctionTag*)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		settings.EnableWarmthForCloaks = false;
+	}
+
+	bool IsCloakWarmthEnabled(RE::StaticFunctionTag*)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		return settings.EnableWarmthForCloaks;
 	}
 
 	void SetCloakNormalBonus(RE::StaticFunctionTag*, float a_warmth)
@@ -125,22 +137,28 @@ namespace PapyrusSurvival
 		settings.SetCloakNormalBonus(a_warmth);
 	}
 
+	void SetCloakWarmBonus(RE::StaticFunctionTag*, float a_warmth)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		settings.SetCloakWarmBonus(a_warmth);
+	}
+
 	void SetCloakColdBonus(RE::StaticFunctionTag*, float a_warmth)
 	{
 		auto& settings = Survival::WarmthSettings::GetSingleton();
 		settings.SetCloakColdBonus(a_warmth);
 	}
 
-	float GetCloakWarmBonus(RE::StaticFunctionTag*)
-	{
-		auto& settings = Survival::WarmthSettings::GetSingleton();
-		return settings.GetCloakWarmBonus();
-	}
-
 	float GetCloakNormalBonus(RE::StaticFunctionTag*)
 	{
 		auto& settings = Survival::WarmthSettings::GetSingleton();
 		return settings.GetCloakNormalBonus();
+	}
+
+	float GetCloakWarmBonus(RE::StaticFunctionTag*)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		return settings.GetCloakWarmBonus();
 	}
 
 	float GetCloakColdBonus(RE::StaticFunctionTag*)
@@ -163,11 +181,14 @@ namespace PapyrusSurvival
 		a_vm->RegisterFunction("IsEnabledByUser", "Survival", IsEnabledByUser);
 		a_vm->RegisterFunction("IsDisabledByUser", "Survival", IsDisabledByUser);
 
-		a_vm->RegisterFunction("SetCloakWarmBonus", "Survival", SetCloakWarmBonus);
+		a_vm->RegisterFunction("EnableCloakWarmth", "Survival", EnableCloakWarmth);
+		a_vm->RegisterFunction("DisableCloakWarmth", "Survival", DisableCloakWarmth);
+		a_vm->RegisterFunction("IsCloakWarmthEnabled", "Survival", IsCloakWarmthEnabled);
 		a_vm->RegisterFunction("SetCloakNormalBonus", "Survival", SetCloakNormalBonus);
+		a_vm->RegisterFunction("SetCloakWarmBonus", "Survival", SetCloakWarmBonus);
 		a_vm->RegisterFunction("SetCloakColdBonus", "Survival", SetCloakColdBonus);
-		a_vm->RegisterFunction("GetCloakWarmBonus", "Survival", GetCloakWarmBonus);
 		a_vm->RegisterFunction("GetCloakNormalBonus", "Survival", GetCloakNormalBonus);
+		a_vm->RegisterFunction("GetCloakWarmBonus", "Survival", GetCloakWarmBonus);
 		a_vm->RegisterFunction("GetCloakColdBonus", "Survival", GetCloakColdBonus);
 
 		return true;
