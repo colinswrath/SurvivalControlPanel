@@ -229,6 +229,7 @@
       <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</MultiProcessorCompilation>
     </ClCompile>
     <ClCompile Include="src\Survival.cpp" />
+    <ClCompile Include="src\Warmth.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SleepLevelUpManager.h" />

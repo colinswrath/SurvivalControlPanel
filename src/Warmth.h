@@ -18,49 +18,23 @@ namespace Survival
 			return settings;
 		}
 
-		float GetCloakNormalBonus()
-		{
-			return _cloakNormalBonus.data;
-		}
+		float GetCloakNormalBonus();
 
-		void SetCloakNormalBonus(float warmth)
-		{
-			_cloakNormalBonus.data = warmth;
-		}
+		void SetCloakNormalBonus(float warmth);
 
-		float GetCloakWarmBonus()
-		{
-			return _cloakWarmBonus.data;
-		}
+		float GetCloakWarmBonus();
 
-		void SetCloakWarmBonus(float warmth)
-		{
-			_cloakWarmBonus.data = warmth;
-		}
+		void SetCloakWarmBonus(float warmth);
 
-		float GetCloakColdBonus()
-		{
-			return _cloakColdBonus.data;
-		}
+		float GetCloakColdBonus();
 
-		void SetCloakColdBonus(float warmth)
-		{
-			_cloakColdBonus.data = warmth;
-		}
+		void SetCloakColdBonus(float warmth);
 
-		RE::Setting** GetCloakSettings(WarmthClass warmthClass)
-		{
-			// Actually, the game expects an array of 4 pointers, but if we set
-			// the "slot mask" to 0x1, it will only read one.
-			switch (warmthClass) {
-			case WarmthClass::Warm:
-				return reinterpret_cast<RE::Setting**>(&_cloakWarmBonusPtr);
-			case WarmthClass::Cold:
-				return reinterpret_cast<RE::Setting**>(&_cloakColdBonusPtr);
-			default:
-				return reinterpret_cast<RE::Setting**>(&_cloakNormalBonusPtr);
-			}
-		}
+		void SetWarmthOverride(RE::TESObjectARMO* armor, WarmthClass warmthClass);
+
+		void ResetWarmthOverride(RE::TESObjectARMO* armor);
+
+		RE::Setting** GetCloakSettings(WarmthClass warmthClass);
 
 		bool EnableFrostfallKeywords = true;
 		bool EnableWarmthForCloaks = true;

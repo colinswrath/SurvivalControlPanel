@@ -1,6 +1,5 @@
 #include "PapyrusSurvival.h"
 #include "Warmth.h"
-#include "WarmthManager.h"
 
 namespace PapyrusSurvival
 {
@@ -189,42 +188,25 @@ namespace PapyrusSurvival
 	void SetArmorWarmthNormal(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor)
 	{
 		auto& settings = Survival::WarmthSettings::GetSingleton();
-
-		auto it = settings.WarmthOverrides.find(a_armor->formID);
-		if (it != settings.WarmthOverrides.end())
-			settings.WarmthOverrides.erase(it);
-
-		if (WarmthManager::GetWarmthClass(a_armor) != Survival::WarmthClass::Normal)
-			settings.WarmthOverrides[a_armor->formID] = Survival::WarmthClass::Normal;
+		settings.SetWarmthOverride(a_armor, Survival::WarmthClass::Normal);
 	}
 
 	void SetArmorWarmthWarm(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor)
 	{
 		auto& settings = Survival::WarmthSettings::GetSingleton();
-
-		auto it = settings.WarmthOverrides.find(a_armor->formID);
-		if (it != settings.WarmthOverrides.end())
-			settings.WarmthOverrides.erase(it);
-
-		if (WarmthManager::GetWarmthClass(a_armor) != Survival::WarmthClass::Warm)
-			settings.WarmthOverrides[a_armor->formID] = Survival::WarmthClass::Warm;
+		settings.SetWarmthOverride(a_armor, Survival::WarmthClass::Warm);
 	}
 
 	void SetArmorWarmthCold(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor)
 	{
 		auto& settings = Survival::WarmthSettings::GetSingleton();
-
-		auto it = settings.WarmthOverrides.find(a_armor->formID);
-		if (it != settings.WarmthOverrides.end())
-			settings.WarmthOverrides.erase(it);
-
-		if (WarmthManager::GetWarmthClass(a_armor) != Survival::WarmthClass::Cold)
-			settings.WarmthOverrides[a_armor->formID] = Survival::WarmthClass::Cold;
+		settings.SetWarmthOverride(a_armor, Survival::WarmthClass::Cold);
 	}
 
 	void ResetArmorWarmthToDefault(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor)
 	{
 		auto& settings = Survival::WarmthSettings::GetSingleton();
+		settings.ResetWarmthOverride(a_armor);
 		auto it = settings.WarmthOverrides.find(a_armor->formID);
 		if (it != settings.WarmthOverrides.end())
 			settings.WarmthOverrides.erase(it);
