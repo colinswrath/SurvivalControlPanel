@@ -4,8 +4,8 @@ namespace Survival
 {
 	enum class WarmthClass : int32_t
 	{
-		Warm = 0,
-		Normal = 1,
+		Normal = 0,
+		Warm = 1,
 		Cold = 2,
 	};
 
@@ -18,49 +18,23 @@ namespace Survival
 			return settings;
 		}
 
-		float GetCloakWarmBonus()
-		{
-			return _cloakWarmBonus.data;
-		}
+		float GetCloakNormalBonus();
 
-		void SetCloakWarmBonus(float warmth)
-		{
-			_cloakWarmBonus.data = warmth;
-		}
+		void SetCloakNormalBonus(float warmth);
 
-		float GetCloakNormalBonus()
-		{
-			return _cloakNormalBonus.data;
-		}
+		float GetCloakWarmBonus();
 
-		void SetCloakNormalBonus(float warmth)
-		{
-			_cloakNormalBonus.data = warmth;
-		}
+		void SetCloakWarmBonus(float warmth);
 
-		float GetCloakColdBonus()
-		{
-			return _cloakColdBonus.data;
-		}
+		float GetCloakColdBonus();
 
-		void SetCloakColdBonus(float warmth)
-		{
-			_cloakColdBonus.data = warmth;
-		}
+		void SetCloakColdBonus(float warmth);
 
-		RE::Setting** GetCloakSettings(WarmthClass warmthClass)
-		{
-			// Actually, the game expects an array of 4 pointers, but if we set
-			// the "slot mask" to 0x1, it will only read one.
-			switch (warmthClass) {
-			case WarmthClass::Warm:
-				return reinterpret_cast<RE::Setting**>(&_cloakWarmBonusPtr);
-			case WarmthClass::Cold:
-				return reinterpret_cast<RE::Setting**>(&_cloakColdBonusPtr);
-			default:
-				return reinterpret_cast<RE::Setting**>(&_cloakNormalBonusPtr);
-			}
-		}
+		void SetWarmthOverride(RE::TESObjectARMO* armor, WarmthClass warmthClass);
+
+		void ResetWarmthOverride(RE::TESObjectARMO* armor);
+
+		RE::Setting** GetCloakSettings(WarmthClass warmthClass);
 
 		bool EnableFrostfallKeywords = true;
 		bool EnableWarmthForCloaks = true;
@@ -69,8 +43,8 @@ namespace Survival
 	private:
 		WarmthSettings()
 		{
-			_cloakWarmBonus.data = 29.0f;
 			_cloakNormalBonus.data = 18.0f;
+			_cloakWarmBonus.data = 29.0f;
 			_cloakColdBonus.data = 8.0f;
 		}
 
@@ -84,12 +58,12 @@ namespace Survival
 		};
 		static_assert(sizeof(GameSetting) == sizeof(RE::Setting));
 
-		GameSetting _cloakWarmBonus;
 		GameSetting _cloakNormalBonus;
+		GameSetting _cloakWarmBonus;
 		GameSetting _cloakColdBonus;
 
-		GameSetting* _cloakWarmBonusPtr = &_cloakWarmBonus;
 		GameSetting* _cloakNormalBonusPtr = &_cloakNormalBonus;
+		GameSetting* _cloakWarmBonusPtr = &_cloakWarmBonus;
 		GameSetting* _cloakColdBonusPtr = &_cloakColdBonus;
 	};
 }

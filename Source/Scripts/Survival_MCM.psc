@@ -7,14 +7,21 @@ int Property DEFAULT_INDEX  = 0  AutoReadOnly
 int Property DISABLED_INDEX = 1  AutoReadOnly
 int Property ENABLED_INDEX  = 2  AutoReadOnly
 
+int Property NORMAL_INDEX = 0  AutoReadOnly
+int Property WARM_INDEX   = 1  AutoReadOnly
+int Property COLD_INDEX   = 2  AutoReadOnly
+int Property RESET_INDEX  = 3  AutoReadOnly
+
 float Property WARMTH_MIN = 0.0  AutoReadOnly
 float Property WARMTH_MAX = 60.0  AutoReadOnly
 
-String[] MenuEntries
-int[] MenuOptions
+; Survival Mode Core
+String[] FeatureMenuEntries
+int[] FeatureMenuOptions
 int FrostfallToggle
 int CloakWarmthToggle
 
+; Warmth Settings
 int BodyNormalSlider
 int BodyWarmSlider
 int BodyColdSlider
@@ -33,15 +40,30 @@ int CloakColdSlider
 int TorchSlider
 int ScalarSlider
 
+; Equipment
+String[] WarmthMenuEntries
+int BodyOverrideMenu
+int HeadOverrideMenu
+int HandsOverrideMenu
+int FeetOverrideMenu
+int CloakOverrideMenu
+int ResetOverrideButton
+
 Event OnInit()
 	parent.OnInit()
 
-	MenuEntries = new String[3]
-	MenuEntries[DEFAULT_INDEX] = "$Default"
-	MenuEntries[DISABLED_INDEX] = "$Always Disabled"
-	MenuEntries[ENABLED_INDEX] = "$Always Enabled"
+	FeatureMenuEntries = new String[3]
+	FeatureMenuEntries[DEFAULT_INDEX] = "$Default"
+	FeatureMenuEntries[DISABLED_INDEX] = "$Always Disabled"
+	FeatureMenuEntries[ENABLED_INDEX] = "$Always Enabled"
 
-	MenuOptions = new int[5]
+	FeatureMenuOptions = new int[5]
+
+	WarmthMenuEntries = new String[4]
+	WarmthMenuEntries[NORMAL_INDEX] = "$NormalW"
+	WarmthMenuEntries[WARM_INDEX] = "$Warm"
+	WarmthMenuEntries[COLD_INDEX] = "$Cold"
+	WarmthMenuEntries[RESET_INDEX] = "$Default"
 EndEvent
 
 Event OnPageReset(String a_page)
@@ -62,7 +84,7 @@ Event OnPageReset(String a_page)
 
 		FrostfallToggle = AddToggleOption("$Enable Frostfall Keywords", AreFrostfallKeywordsEnabled())
 		CloakWarmthToggle = AddToggleOption("$Enable Cloak Warmth", IsCloakWarmthEnabled())
-	elseif a_page == "$Warmth Options"
+	elseif a_page == "$Warmth Settings"
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
 		AddHeaderOption("$Body")
@@ -99,6 +121,23 @@ Event OnPageReset(String a_page)
 		AddHeaderOption("$Other")
 		ScalarSlider = AddSliderOption("$Scaling Factor", GetGameSettingFloat("fSurvArmorScalar"), "{2}")
 		TorchSlider = AddSliderOption("$Torch Bonus", GetGameSettingFloat("fSurvTorchBonus"))
+	elseif a_page == "$Equipment"
+		SetCursorFillMode(TOP_TO_BOTTOM)
+
+		AddHeaderOption("$Current Equipment")
+
+		BodyOverrideMenu = AddEquipmentOptions("$Body", 32, ArmorBody, ClothingBody)
+		HeadOverrideMenu = AddEquipmentOptions("$Head", 42, ArmorHead, ClothingHead)
+		HandsOverrideMenu = AddEquipmentOptions("$Hands", 33, ArmorHands, ClothingHands)
+		FeetOverrideMenu = AddEquipmentOptions("$Feet", 37, ArmorFeet, ClothingFeet)
+		if IsCloakWarmthEnabled()
+			AddEquipmentOptions("$Cloak", 46)
+		endif
+
+		SetCursorPosition(1)
+
+		AddHeaderOption("$Reset all")
+		ResetOverrideButton = AddTextOption("$Reset all to default", "")
 	endif
 EndEvent
 
@@ -110,47 +149,93 @@ Function AddToggleOptions(String a_name, int a_feature)
 	bool bModDisabled = IsDisabledByMods(a_feature)
 
 	if bUserEnabled
-		MenuOptions[a_feature] = AddMenuOption(a_name, "$Always Enabled")
+		FeatureMenuOptions[a_feature] = AddMenuOption(a_name, "$Always Enabled")
 	elseif bUserDisabled
-		MenuOptions[a_feature] = AddMenuOption(a_name, "$Always Disabled")
+		FeatureMenuOptions[a_feature] = AddMenuOption(a_name, "$Always Disabled")
 	else
-		MenuOptions[a_feature] = AddMenuOption(a_name, "$Default")
+		FeatureMenuOptions[a_feature] = AddMenuOption(a_name, "$Default")
 	endif
 EndFunction
 
-Event OnOptionMenuOpen(int a_option)
-	int iFeature = 0
-	while a_option != MenuOptions[iFeature] && iFeature < 5
-		iFeature += 1
-	endwhile
-
-	SetMenuDialogOptions(MenuEntries)
-	SetMenuDialogDefaultIndex(DEFAULT_INDEX)
-
-	if IsEnabledByUser(iFeature)
-		SetMenuDialogStartIndex(ENABLED_INDEX)
-	elseif IsDisabledByUser(iFeature)
-		SetMenuDialogStartIndex(DISABLED_INDEX)
+int Function AddEquipmentOptions(String a_name, int a_slot, Keyword a_keyword1 = None, Keyword a_keyword2 = None)
+	int option
+	Armor kArmor = GetPlayer().GetEquippedArmorInSlot(a_slot)
+	if kArmor && (!a_keyword1 || kArmor.HasKeyword(a_keyword1) || kArmor.HasKeyword(a_keyword2))
+		option = AddMenuOption(kArmor.GetName(), GetWarmthRatingAsString(kArmor))
 	else
-		SetMenuDialogStartIndex(DEFAULT_INDEX)
+		AddTextOption(a_name, "$None", a_flags = OPTION_FLAG_DISABLED)
+		option = AddEmptyOption()
+	endif
+	return option
+EndFunction
+
+Event OnOptionMenuOpen(int a_option)
+	if CurrentPage == "$Survival Mode Core"
+		int iFeature = 0
+		while a_option != FeatureMenuOptions[iFeature] && iFeature < 5
+			iFeature += 1
+		endwhile
+
+		SetMenuDialogOptions(FeatureMenuEntries)
+		SetMenuDialogDefaultIndex(DEFAULT_INDEX)
+
+		if IsEnabledByUser(iFeature)
+			SetMenuDialogStartIndex(ENABLED_INDEX)
+		elseif IsDisabledByUser(iFeature)
+			SetMenuDialogStartIndex(DISABLED_INDEX)
+		else
+			SetMenuDialogStartIndex(DEFAULT_INDEX)
+		endif
+	elseif CurrentPage == "$Equipment"
+		int iDefaultIndex = GuessDefaultWarmth(a_option)
+		SetMenuDialogOptions(WarmthMenuEntries)
+		SetMenuDialogStartIndex(iDefaultIndex)
+		SetMenuDialogDefaultIndex(RESET_INDEX)
 	endif
 EndEvent
 
 Event OnOptionMenuAccept(int a_option, int index)
-	int iFeature = 0
-	while a_option != MenuOptions[iFeature] && iFeature < 5
-		iFeature += 1
-	endwhile
+	if CurrentPage == "$Survival Mode Core"
+		int iFeature = 0
+		while a_option != FeatureMenuOptions[iFeature] && iFeature < 5
+			iFeature += 1
+		endwhile
 
-	if index == DEFAULT_INDEX
-		UserReset(iFeature)
-		SetMenuOptionValue(a_option, MenuEntries[DEFAULT_INDEX])
-	elseif index == DISABLED_INDEX
-		UserDisable(iFeature)
-		SetMenuOptionValue(a_option, MenuEntries[DISABLED_INDEX])
-	elseif index == ENABLED_INDEX
-		UserEnable(iFeature)
-		SetMenuOptionValue(a_option, MenuEntries[ENABLED_INDEX])
+		if index == DEFAULT_INDEX
+			UserReset(iFeature)
+			SetMenuOptionValue(a_option, FeatureMenuEntries[DEFAULT_INDEX])
+		elseif index == DISABLED_INDEX
+			UserDisable(iFeature)
+			SetMenuOptionValue(a_option, FeatureMenuEntries[DISABLED_INDEX])
+		elseif index == ENABLED_INDEX
+			UserEnable(iFeature)
+			SetMenuOptionValue(a_option, FeatureMenuEntries[ENABLED_INDEX])
+		endif
+	elseif CurrentPage == "$Equipment"
+		Armor kArmor
+		if a_option == BodyOverrideMenu
+			kArmor = GetPlayer().GetEquippedArmorInSlot(32)
+		elseif a_option == HeadOverrideMenu
+			kArmor = GetPlayer().GetEquippedArmorInSlot(42)
+		elseif a_option == HandsOverrideMenu
+			kArmor = GetPlayer().GetEquippedArmorInSlot(33)
+		elseif a_option == FeetOverrideMenu
+			kArmor = GetPlayer().GetEquippedArmorInSlot(37)
+		else
+			return
+		endif
+
+		if index == NORMAL_INDEX
+			SetArmorWarmthNormal(kArmor)
+		elseif index == WARM_INDEX
+			SetArmorWarmthWarm(kArmor)
+		elseif index == COLD_INDEX
+			SetArmorWarmthCold(kArmor)
+		elseif index == RESET_INDEX
+			ResetArmorWarmthToDefault(kArmor)
+		endif
+
+		SetMenuOptionValue(a_option, GetWarmthRatingAsString(kArmor))
 	endif
 EndEvent
 
@@ -171,6 +256,10 @@ Event OnOptionSelect(int a_option)
 			EnableFrostfallKeywords()
 			SetToggleOptionValue(FrostfallToggle, true)
 		endif
+	elseif a_option == ResetOverrideButton
+		; TODO Confirmation dialog
+		ResetAllArmorWarmthToDefault()
+		RecomputeArmorWarmths()
 	endif
 EndEvent
 
@@ -315,3 +404,127 @@ Event OnOptionSliderAccept(int a_option, float a_value)
 		SetSliderOptionValue(ScalarSlider, a_value)
 	endif
 EndEvent
+
+int Function GuessDefaultWarmth(int a_option)
+	if a_option == BodyOverrideMenu
+		Armor kBody = GetPlayer().GetEquippedArmorInSlot(32)
+		float fWarmth = kBody.GetWarmthRating()
+		if fWarmth == GetGameSettingFloat("fSurvNormalBodyBonus")
+			return NORMAL_INDEX
+		elseif fWarmth == GetGameSettingFloat("fSurvWarmBodyBonus")
+			return WARM_INDEX
+		elseif fWarmth == GetGameSettingFloat("fSurvColdBodyBonus")
+			return COLD_INDEX
+		endif
+	elseif a_option == HeadOverrideMenu
+		Armor kHead = GetPlayer().GetEquippedArmorInSlot(42)
+		float fWarmth = kHead.GetWarmthRating()
+		if fWarmth == GetGameSettingFloat("fSurvNormalHeadBonus")
+			return NORMAL_INDEX
+		elseif fWarmth == GetGameSettingFloat("fSurvWarmHeadBonus")
+			return WARM_INDEX
+		elseif fWarmth == GetGameSettingFloat("fSurvColdHeadBonus")
+			return COLD_INDEX
+		endif
+	elseif a_option == HandsOverrideMenu
+		Armor kHands = GetPlayer().GetEquippedArmorInSlot(33)
+		float fWarmth = kHands.GetWarmthRating()
+		if fWarmth == GetGameSettingFloat("fSurvNormalHandsBonus")
+			return NORMAL_INDEX
+		elseif fWarmth == GetGameSettingFloat("fSurvWarmHandsBonus")
+			return WARM_INDEX
+		elseif fWarmth == GetGameSettingFloat("fSurvColdHandsBonus")
+			return COLD_INDEX
+		endif
+	elseif a_option == FeetOverrideMenu
+		Armor kFeet = GetPlayer().GetEquippedArmorInSlot(37)
+		float fWarmth = kFeet.GetWarmthRating()
+		if fWarmth == GetGameSettingFloat("fSurvNormalFeetBonus")
+			return NORMAL_INDEX
+		elseif fWarmth == GetGameSettingFloat("fSurvWarmFeetBonus")
+			return WARM_INDEX
+		elseif fWarmth == GetGameSettingFloat("fSurvColdFeetBonus")
+			return COLD_INDEX
+		endif
+	endif
+
+	return RESET_INDEX
+EndFunction
+
+Function RecomputeArmorWarmths()
+	Armor kBody = GetPlayer().GetEquippedArmorInSlot(32)
+	Armor kHead = GetPlayer().GetEquippedArmorInSlot(42)
+	Armor kHands = GetPlayer().GetEquippedArmorInSlot(33)
+	Armor kFeet = GetPlayer().GetEquippedArmorInSlot(37)
+	Armor kCloak = GetPlayer().GetEquippedArmorInSlot(46)
+
+	if kBody && (kBody.HasKeyword(ArmorBody) || kBody.HasKeyword(ClothingBody))
+		SetMenuOptionValue(BodyOverrideMenu, GetWarmthRatingAsString(kBody))
+	endif
+	if kHead && (kHead.HasKeyword(ArmorHead) || kHead.HasKeyword(ClothingHead))
+		SetMenuOptionValue(HeadOverrideMenu, GetWarmthRatingAsString(kHead))
+	endif
+	if kHands && (kHands.HasKeyword(ArmorHands) || kHands.HasKeyword(ClothingHands))
+		SetMenuOptionValue(HandsOverrideMenu, GetWarmthRatingAsString(kHands))
+	endif
+	if kFeet && (kFeet.HasKeyword(ArmorFeet) || kFeet.HasKeyword(ClothingFeet))
+		SetMenuOptionValue(FeetOverrideMenu, GetWarmthRatingAsString(kFeet))
+	endif
+	if IsCloakWarmthEnabled() && kCloak
+		SetMenuOptionValue(CloakOverrideMenu, GetWarmthRatingAsString(kCloak))
+	endif
+EndFunction
+
+String Function GetWarmthRatingAsString(Armor a_armor)
+	string sWarmth = a_armor.GetWarmthRating() as string
+	sWarmth = StringUtil.Substring(sWarmth, 0, StringUtil.Find(sWarmth, "."))
+	return sWarmth
+EndFunction
+
+Keyword Property ArmorHands
+Keyword Function Get()
+	return (GetForm(0x31) as DefaultObjectManager).GetForm("SKAH") as Keyword
+EndFunction
+EndProperty
+
+Keyword Property ClothingHands
+Keyword Function Get()
+	return (GetForm(0x31) as DefaultObjectManager).GetForm("SKCH") as Keyword
+EndFunction
+EndProperty
+
+Keyword Property ArmorFeet
+Keyword Function Get()
+	return (GetForm(0x31) as DefaultObjectManager).GetForm("SKAF") as Keyword
+EndFunction
+EndProperty
+
+Keyword Property ClothingFeet
+Keyword Function Get()
+	return (GetForm(0x31) as DefaultObjectManager).GetForm("SKCF") as Keyword
+EndFunction
+EndProperty
+
+Keyword Property ArmorBody
+Keyword Function Get()
+	return (GetForm(0x31) as DefaultObjectManager).GetForm("SKAB") as Keyword
+EndFunction
+EndProperty
+
+Keyword Property ClothingBody
+Keyword Function Get()
+	return (GetForm(0x31) as DefaultObjectManager).GetForm("SKCB") as Keyword
+EndFunction
+EndProperty
+
+Keyword Property ArmorHead
+Keyword Function Get()
+	return (GetForm(0x31) as DefaultObjectManager).GetForm("SKAO") as Keyword
+EndFunction
+EndProperty
+
+Keyword Property ClothingHead
+Keyword Function Get()
+	return (GetForm(0x31) as DefaultObjectManager).GetForm("SKCO") as Keyword
+EndFunction
+EndProperty
