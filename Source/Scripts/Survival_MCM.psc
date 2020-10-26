@@ -7,10 +7,14 @@ int Property DEFAULT_INDEX  = 0  AutoReadOnly
 int Property DISABLED_INDEX = 1  AutoReadOnly
 int Property ENABLED_INDEX  = 2  AutoReadOnly
 
+float Property WARMTH_MIN = 0.0  AutoReadOnly
+float Property WARMTH_MAX = 60.0  AutoReadOnly
+
 String[] MenuEntries
 int[] MenuOptions
 int FrostfallToggle
 int CloakWarmthToggle
+
 int BodyNormalSlider
 int BodyWarmSlider
 int BodyColdSlider
@@ -26,6 +30,8 @@ int FeetColdSlider
 int CloakNormalSlider
 int CloakWarmSlider
 int CloakColdSlider
+int TorchSlider
+int ScalarSlider
 
 Event OnInit()
 	parent.OnInit()
@@ -89,6 +95,10 @@ Event OnPageReset(String a_page)
 		FeetNormalSlider = AddSliderOption("$Feet Normal Bonus", GetGameSettingFloat("fSurvNormalFeetBonus"))
 		FeetWarmSlider = AddSliderOption("$Feet Warm Bonus", GetGameSettingFloat("fSurvWarmFeetBonus"))
 		FeetColdSlider = AddSliderOption("$Feet Cold Bonus", GetGameSettingFloat("fSurvColdFeetBonus"))
+
+		AddHeaderOption("$Other")
+		ScalarSlider = AddSliderOption("$Scaling Factor", GetGameSettingFloat("fSurvArmorScalar"), "{2}")
+		TorchSlider = AddSliderOption("$Torch Bonus", GetGameSettingFloat("fSurvTorchBonus"))
 	endif
 EndEvent
 
@@ -163,49 +173,84 @@ Event OnOptionSliderOpen(int a_option)
 	elseif a_option == BodyWarmSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvWarmBodyBonus"))
 		SetSliderDialogDefaultValue(54.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == BodyColdSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvColdBodyBonus"))
 		SetSliderDialogDefaultValue(17.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == HeadNormalSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvNormalHeadBonus"))
 		SetSliderDialogDefaultValue(18.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == HeadWarmSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvWarmHeadBonus"))
 		SetSliderDialogDefaultValue(29.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == HeadColdSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvColdHeadBonus"))
 		SetSliderDialogDefaultValue(8.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == HandsNormalSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvNormalHandsBonus"))
 		SetSliderDialogDefaultValue(13.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == HandsWarmSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvWarmHandsBonus"))
 		SetSliderDialogDefaultValue(24.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == HandsColdSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvColdHandsBonus"))
 		SetSliderDialogDefaultValue(7.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == FeetNormalSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvNormalFeetBonus"))
 		SetSliderDialogDefaultValue(13.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == FeetWarmSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvWarmFeetBonus"))
 		SetSliderDialogDefaultValue(24.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == FeetColdSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvColdFeetBonus"))
 		SetSliderDialogDefaultValue(7.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == CloakNormalSlider
 		SetSliderDialogStartValue(GetCloakNormalBonus())
 		SetSliderDialogDefaultValue(18.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == CloakWarmSlider
 		SetSliderDialogStartValue(GetCloakWarmBonus())
 		SetSliderDialogDefaultValue(29.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == CloakColdSlider
 		SetSliderDialogStartValue(GetCloakColdBonus())
 		SetSliderDialogDefaultValue(8.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
+	elseif a_option == TorchSlider
+		SetSliderDialogStartValue(GetGameSettingFloat("fSurvTorchBonus"))
+		SetSliderDialogDefaultValue(50.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
+	elseif a_option == ScalarSlider
+		SetSliderDialogStartValue(GetGameSettingFloat("fSurvArmorScalar"))
+		SetSliderDialogDefaultValue(1.0)
+		SetSliderDialogRange(0.0, 2.0)
+		SetSliderDialogInterval(0.01)
 	endif
-
-	SetSliderDialogRange(0.0, 60.0)
-	SetSliderDialogInterval(1.0)
 EndEvent
 
 Event OnOptionSliderAccept(int a_option, float a_value)
@@ -254,5 +299,11 @@ Event OnOptionSliderAccept(int a_option, float a_value)
 	elseif a_option == CloakColdSlider
 		SetCloakColdBonus(a_value)
 		SetSliderOptionValue(CloakColdSlider, a_value)
+	elseif a_option == TorchSlider
+		SetGameSettingFloat("fSurvTorchBonus", a_value)
+		SetSliderOptionValue(TorchSlider, a_value)
+	elseif a_option == ScalarSlider
+		SetGameSettingFloat("fSurvArmorScalar", a_value)
+		SetSliderOptionValue(ScalarSlider, a_value)
 	endif
 EndEvent
