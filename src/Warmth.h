@@ -4,8 +4,8 @@ namespace Survival
 {
 	enum class WarmthClass : int32_t
 	{
-		Warm = 0,
-		Normal = 1,
+		Normal = 0,
+		Warm = 1,
 		Cold = 2,
 	};
 
@@ -18,16 +18,6 @@ namespace Survival
 			return settings;
 		}
 
-		float GetCloakWarmBonus()
-		{
-			return _cloakWarmBonus.data;
-		}
-
-		void SetCloakWarmBonus(float warmth)
-		{
-			_cloakWarmBonus.data = warmth;
-		}
-
 		float GetCloakNormalBonus()
 		{
 			return _cloakNormalBonus.data;
@@ -36,6 +26,16 @@ namespace Survival
 		void SetCloakNormalBonus(float warmth)
 		{
 			_cloakNormalBonus.data = warmth;
+		}
+
+		float GetCloakWarmBonus()
+		{
+			return _cloakWarmBonus.data;
+		}
+
+		void SetCloakWarmBonus(float warmth)
+		{
+			_cloakWarmBonus.data = warmth;
 		}
 
 		float GetCloakColdBonus()
@@ -69,8 +69,8 @@ namespace Survival
 	private:
 		WarmthSettings()
 		{
-			_cloakWarmBonus.data = 29.0f;
 			_cloakNormalBonus.data = 18.0f;
+			_cloakWarmBonus.data = 29.0f;
 			_cloakColdBonus.data = 8.0f;
 		}
 
@@ -84,12 +84,12 @@ namespace Survival
 		};
 		static_assert(sizeof(GameSetting) == sizeof(RE::Setting));
 
-		GameSetting _cloakWarmBonus;
 		GameSetting _cloakNormalBonus;
+		GameSetting _cloakWarmBonus;
 		GameSetting _cloakColdBonus;
 
-		GameSetting* _cloakWarmBonusPtr = &_cloakWarmBonus;
 		GameSetting* _cloakNormalBonusPtr = &_cloakNormalBonus;
+		GameSetting* _cloakWarmBonusPtr = &_cloakWarmBonus;
 		GameSetting* _cloakColdBonusPtr = &_cloakColdBonus;
 	};
 }
