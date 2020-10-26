@@ -81,6 +81,7 @@ private:
 		if (warmthSettings.WarmthOverrides.find(armorForm->formID) != warmthSettings.WarmthOverrides.end())
 		{
 			warmthClass = warmthSettings.WarmthOverrides[armorForm->formID];
+			*info->warmthValues = GetWarmthSettings(warmthClass);
 		}
 
 		if (warmthSettings.EnableWarmthForCloaks)
