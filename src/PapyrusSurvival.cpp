@@ -113,6 +113,24 @@ namespace PapyrusSurvival
 		return settings->UserPreference == Survival::Preference::AlwaysDisabled;
 	}
 
+	void EnableFrostfallKeywords(RE::StaticFunctionTag*)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		settings.EnableFrostfallKeywords = true;
+	}
+
+	void DisableFrostfallKeywords(RE::StaticFunctionTag*)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		settings.EnableFrostfallKeywords = false;
+	}
+
+	bool AreFrostfallKeywordsEnabled(RE::StaticFunctionTag*)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		return settings.EnableFrostfallKeywords;
+	}
+
 	void EnableCloakWarmth(RE::StaticFunctionTag*)
 	{
 		auto& settings = Survival::WarmthSettings::GetSingleton();
@@ -176,17 +194,24 @@ namespace PapyrusSurvival
 		a_vm->RegisterFunction("UserEnable", "Survival", UserEnable);
 		a_vm->RegisterFunction("UserDisable", "Survival", UserDisable);
 		a_vm->RegisterFunction("UserReset", "Survival", UserReset);
+
 		a_vm->RegisterFunction("IsEnabledByMods", "Survival", IsEnabledByMods);
 		a_vm->RegisterFunction("IsDisabledByMods", "Survival", IsDisabledByMods);
 		a_vm->RegisterFunction("IsEnabledByUser", "Survival", IsEnabledByUser);
 		a_vm->RegisterFunction("IsDisabledByUser", "Survival", IsDisabledByUser);
 
+		a_vm->RegisterFunction("EnableFrostfallKeywords", "Survival", EnableFrostfallKeywords);
+		a_vm->RegisterFunction("DisableFrostfallKeywords", "Survival", DisableFrostfallKeywords);
+		a_vm->RegisterFunction("AreFrostfallKeywordsEnabled", "Survival", AreFrostfallKeywordsEnabled);
+
 		a_vm->RegisterFunction("EnableCloakWarmth", "Survival", EnableCloakWarmth);
 		a_vm->RegisterFunction("DisableCloakWarmth", "Survival", DisableCloakWarmth);
 		a_vm->RegisterFunction("IsCloakWarmthEnabled", "Survival", IsCloakWarmthEnabled);
+
 		a_vm->RegisterFunction("SetCloakNormalBonus", "Survival", SetCloakNormalBonus);
 		a_vm->RegisterFunction("SetCloakWarmBonus", "Survival", SetCloakWarmBonus);
 		a_vm->RegisterFunction("SetCloakColdBonus", "Survival", SetCloakColdBonus);
+
 		a_vm->RegisterFunction("GetCloakNormalBonus", "Survival", GetCloakNormalBonus);
 		a_vm->RegisterFunction("GetCloakWarmBonus", "Survival", GetCloakWarmBonus);
 		a_vm->RegisterFunction("GetCloakColdBonus", "Survival", GetCloakColdBonus);

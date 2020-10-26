@@ -22,13 +22,17 @@ namespace PapyrusSurvival
 	bool IsEnabledByUser(RE::StaticFunctionTag*, Feature a_feature);
 	bool IsDisabledByUser(RE::StaticFunctionTag*, Feature a_feature);
 
+	void EnableFrostfallKeywords(RE::StaticFunctionTag*);
+	void DisableFrostfallKeywords(RE::StaticFunctionTag*);
+	bool AreFrostfallKeywordsEnabled(RE::StaticFunctionTag*);
+
 	void EnableCloakWarmth(RE::StaticFunctionTag*);
 	void DisableCloakWarmth(RE::StaticFunctionTag*);
 	bool IsCloakWarmthEnabled(RE::StaticFunctionTag*);
 
-	void SetCloakNormalBonus(RE::StaticFunctionTag*, float warmth);
-	void SetCloakWarmBonus(RE::StaticFunctionTag*, float warmth);
-	void SetCloakColdBonus(RE::StaticFunctionTag*, float warmth);
+	void SetCloakNormalBonus(RE::StaticFunctionTag*, float a_warmth);
+	void SetCloakWarmBonus(RE::StaticFunctionTag*, float a_warmth);
+	void SetCloakColdBonus(RE::StaticFunctionTag*, float a_warmth);
 
 	float GetCloakNormalBonus(RE::StaticFunctionTag*);
 	float GetCloakWarmBonus(RE::StaticFunctionTag*);

@@ -44,6 +44,15 @@ bool Function IsEnabledByUser(int aiFeature) global native
 ; Indicates whether the requested Survival feature was disabled by the user.
 bool Function IsDisabledByUser(int aiFeature) global native
 
+; Enables support for Frostfall keywords in Survival Mode.
+Function EnableFrostfallKeywords() global native
+
+; Disables support for Frostfall keywords in Survival Mode.
+Function DisableFrostfallKeywords() global native
+
+; Get whether Frostfall keywords for Survival Mode are enabled.
+bool Function AreFrostfallKeywordsEnabled() global native
+
 ; Enables warmth ratings for cloaks (slot 46).
 Function EnableCloakWarmth() global native
 

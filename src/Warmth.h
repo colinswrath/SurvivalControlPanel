@@ -48,12 +48,11 @@ namespace Survival
 			_cloakColdBonus.data = warmth;
 		}
 
-		RE::Setting** GetCloakSetting(WarmthClass warmthClass)
+		RE::Setting** GetCloakSettings(WarmthClass warmthClass)
 		{
 			// Actually, the game expects an array of 4 pointers, but if we set
 			// the "slot mask" to 0x1, it will only read one.
-			switch (warmthClass)
-			{
+			switch (warmthClass) {
 			case WarmthClass::Warm:
 				return reinterpret_cast<RE::Setting**>(&_cloakWarmBonusPtr);
 			case WarmthClass::Cold:
