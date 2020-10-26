@@ -18,13 +18,6 @@ namespace Survival
 			return settings;
 		}
 
-		WarmthSettings()
-		{
-			_cloakWarmBonus.data = 29.0f;
-			_cloakNormalBonus.data = 18.0f;
-			_cloakColdBonus.data = 8.0f;
-		}
-
 		float GetCloakWarmBonus()
 		{
 			return _cloakWarmBonus.data;
@@ -75,6 +68,13 @@ namespace Survival
 		std::map<RE::FormID, WarmthClass> WarmthOverrides;
 
 	private:
+		WarmthSettings()
+		{
+			_cloakWarmBonus.data = 29.0f;
+			_cloakNormalBonus.data = 18.0f;
+			_cloakColdBonus.data = 8.0f;
+		}
+
 		// Fake game setting to pass to the warmth function. As long as the code does
 		// nothing else but read the float, it won't crash.
 		struct GameSetting
