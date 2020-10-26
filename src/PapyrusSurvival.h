@@ -38,5 +38,11 @@ namespace PapyrusSurvival
 	float GetCloakWarmBonus(RE::StaticFunctionTag*);
 	float GetCloakColdBonus(RE::StaticFunctionTag*);
 
+	void SetArmorWarmthNormal(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor);
+	void SetArmorWarmthWarm(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor);
+	void SetArmorWarmthCold(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor);
+	void ResetArmorWarmthToDefault(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor);
+	void ResetAllArmorWarmthToDefault(RE::StaticFunctionTag*);
+
 	bool RegisterFuncs(VM* a_vm);
 }

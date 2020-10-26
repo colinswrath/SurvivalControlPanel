@@ -1,5 +1,6 @@
 #include "PapyrusSurvival.h"
 #include "Warmth.h"
+#include "WarmthManager.h"
 
 namespace PapyrusSurvival
 {
@@ -185,6 +186,56 @@ namespace PapyrusSurvival
 		return settings.GetCloakColdBonus();
 	}
 
+	void SetArmorWarmthNormal(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+
+		auto it = settings.WarmthOverrides.find(a_armor->formID);
+		if (it != settings.WarmthOverrides.end())
+			settings.WarmthOverrides.erase(it);
+
+		if (WarmthManager::GetWarmthClass(a_armor) != Survival::WarmthClass::Normal)
+			settings.WarmthOverrides[a_armor->formID] = Survival::WarmthClass::Normal;
+	}
+
+	void SetArmorWarmthWarm(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+
+		auto it = settings.WarmthOverrides.find(a_armor->formID);
+		if (it != settings.WarmthOverrides.end())
+			settings.WarmthOverrides.erase(it);
+
+		if (WarmthManager::GetWarmthClass(a_armor) != Survival::WarmthClass::Warm)
+			settings.WarmthOverrides[a_armor->formID] = Survival::WarmthClass::Warm;
+	}
+
+	void SetArmorWarmthCold(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+
+		auto it = settings.WarmthOverrides.find(a_armor->formID);
+		if (it != settings.WarmthOverrides.end())
+			settings.WarmthOverrides.erase(it);
+
+		if (WarmthManager::GetWarmthClass(a_armor) != Survival::WarmthClass::Cold)
+			settings.WarmthOverrides[a_armor->formID] = Survival::WarmthClass::Cold;
+	}
+
+	void ResetArmorWarmthToDefault(RE::StaticFunctionTag*, RE::TESObjectARMO* a_armor)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		auto it = settings.WarmthOverrides.find(a_armor->formID);
+		if (it != settings.WarmthOverrides.end())
+			settings.WarmthOverrides.erase(it);
+	}
+
+	void ResetAllArmorWarmthToDefault(RE::StaticFunctionTag*)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		settings.WarmthOverrides.clear();
+	}
+
 
 	bool RegisterFuncs(VM* a_vm)
 	{
@@ -215,6 +266,12 @@ namespace PapyrusSurvival
 		a_vm->RegisterFunction("GetCloakNormalBonus", "Survival", GetCloakNormalBonus);
 		a_vm->RegisterFunction("GetCloakWarmBonus", "Survival", GetCloakWarmBonus);
 		a_vm->RegisterFunction("GetCloakColdBonus", "Survival", GetCloakColdBonus);
+
+		a_vm->RegisterFunction("SetArmorWarmthNormal", "Survival", SetArmorWarmthNormal);
+		a_vm->RegisterFunction("SetArmorWarmthWarm", "Survival", SetArmorWarmthWarm);
+		a_vm->RegisterFunction("SetArmorWarmthCold", "Survival", SetArmorWarmthCold);
+		a_vm->RegisterFunction("ResetArmorWarmthToDefault", "Survival", ResetArmorWarmthToDefault);
+		a_vm->RegisterFunction("ResetAllArmorWarmthToDefault", "Survival", ResetAllArmorWarmthToDefault);
 
 		return true;
 	}

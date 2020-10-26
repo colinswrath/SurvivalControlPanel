@@ -9,9 +9,12 @@ $Cloak	Cloak
 $Cloak Cold Bonus	Cloak Cold Bonus
 $Cloak Normal Bonus	Cloak Normal Bonus
 $Cloak Warm Bonus	Cloak Warm Bonus
+$Cold	Cold
+$Current Equipment	CurrentEquipment
 $Default	Default
 $Enable Cloak Warmth	Enable Cloak Warmth
 $Enable Frostfall Keywords	Enable Frostfall Keywords
+$Equipment	Equipment
 $Feet	Feet
 $Feet Cold Bonus	Feet Cold Bonus
 $Feet Normal Bonus	Feet Normal Bonus
@@ -27,11 +30,15 @@ $Head Warm Bonus	Head Warm Bonus
 $HUD indicators	HUD indicators
 $Inventory UI	Inventory UI
 $Lockpick weight	Lockpick weight
+$NormalW	Normal
 $Other	Other
+$Reset all	Reset all
+$Reset all to default	Reset all to default
 $Scaling Factor	Scaling Factor
 $Sleep to level up	Sleep to level up
 $Survival Mode Core	Survival Mode Core
 $Survival Mode Features	Survival Mode Features
 $Survival Mode Patches	Survival Mode Patches
 $Torch Bonus	Torch Bonus
-$Warmth Options	Warmth Options
+$Warm	Warm
+$Warmth Settings	Warmth Settings

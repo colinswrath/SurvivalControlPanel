@@ -16,6 +16,19 @@ public:
 		logger::info("Installed hook for armor warmth"sv);
 	}
 
+	inline static Survival::WarmthClass GetWarmthClass(RE::TESObjectARMO* armor)
+	{
+		int32_t slotMask;
+		RE::Setting** warmthValues;
+
+		ArmorWarmthInfo info;
+		info.slotMask = &slotMask;
+		info.warmthValues = &warmthValues;
+
+		GetWarmthInfo(armor, &info);
+		return GetWarmthClass(&info);
+	}
+
 private:
 	struct ArmorWarmthInfo
 	{
