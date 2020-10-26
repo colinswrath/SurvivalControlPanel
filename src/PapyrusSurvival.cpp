@@ -207,9 +207,6 @@ namespace PapyrusSurvival
 	{
 		auto& settings = Survival::WarmthSettings::GetSingleton();
 		settings.ResetWarmthOverride(a_armor);
-		auto it = settings.WarmthOverrides.find(a_armor->formID);
-		if (it != settings.WarmthOverrides.end())
-			settings.WarmthOverrides.erase(it);
 	}
 
 	void ResetAllArmorWarmthToDefault(RE::StaticFunctionTag*)
