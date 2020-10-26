@@ -12,6 +12,7 @@ namespace PapyrusSurvival
 	void ForceEnable(RE::StaticFunctionTag*, Feature a_feature);
 	void RequestDisable(RE::StaticFunctionTag*, Feature a_feature);
 
+	void ModReset(RE::StaticFunctionTag*, Feature a_feature);
 	void UserEnable(RE::StaticFunctionTag*, Feature a_feature);
 	void UserDisable(RE::StaticFunctionTag*, Feature a_feature);
 	void UserReset(RE::StaticFunctionTag*, Feature a_feature);
