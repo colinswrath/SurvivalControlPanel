@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Offsets.h"
-
 namespace Survival
 {
 	enum class WarmthClass : int32_t
