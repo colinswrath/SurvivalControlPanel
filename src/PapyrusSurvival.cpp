@@ -113,6 +113,24 @@ namespace PapyrusSurvival
 		return settings->UserPreference == Survival::Preference::AlwaysDisabled;
 	}
 
+	void EnableCloakWarmth(RE::StaticFunctionTag*)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		settings.EnableWarmthForCloaks = true;
+	}
+
+	void DisableCloakWarmth(RE::StaticFunctionTag*)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		settings.EnableWarmthForCloaks = false;
+	}
+
+	bool IsCloakWarmthEnabled(RE::StaticFunctionTag*)
+	{
+		auto& settings = Survival::WarmthSettings::GetSingleton();
+		return settings.EnableWarmthForCloaks;
+	}
+
 	void SetCloakNormalBonus(RE::StaticFunctionTag*, float a_warmth)
 	{
 		auto& settings = Survival::WarmthSettings::GetSingleton();
@@ -163,6 +181,9 @@ namespace PapyrusSurvival
 		a_vm->RegisterFunction("IsEnabledByUser", "Survival", IsEnabledByUser);
 		a_vm->RegisterFunction("IsDisabledByUser", "Survival", IsDisabledByUser);
 
+		a_vm->RegisterFunction("EnableCloakWarmth", "Survival", EnableCloakWarmth);
+		a_vm->RegisterFunction("DisableCloakWarmth", "Survival", DisableCloakWarmth);
+		a_vm->RegisterFunction("IsCloakWarmthEnabled", "Survival", IsCloakWarmthEnabled);
 		a_vm->RegisterFunction("SetCloakNormalBonus", "Survival", SetCloakNormalBonus);
 		a_vm->RegisterFunction("SetCloakWarmBonus", "Survival", SetCloakWarmBonus);
 		a_vm->RegisterFunction("SetCloakColdBonus", "Survival", SetCloakColdBonus);

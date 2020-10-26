@@ -44,6 +44,15 @@ bool Function IsEnabledByUser(int aiFeature) global native
 ; Indicates whether the requested Survival feature was disabled by the user.
 bool Function IsDisabledByUser(int aiFeature) global native
 
+; Enables warmth ratings for cloaks (slot 46).
+Function EnableCloakWarmth() global native
+
+; Disables warmth ratings for cloaks (slot 46).
+Function DisableCloakWarmth() global native
+
+; Get whether warmth ratings are enabled for cloaks.
+bool Function IsCloakWarmthEnabled() global native
+
 ; Sets the warmth rating cloaks should have by default (not classified as warm
 ; or cold).
 Function SetCloakNormalBonus(float afWarmth) global native

@@ -9,6 +9,8 @@ int Property ENABLED_INDEX  = 2  AutoReadOnly
 
 String[] MenuEntries
 int[] MenuOptions
+int FrostfallToggle
+int CloakWarmthToggle
 int BodyNormalSlider
 int BodyWarmSlider
 int BodyColdSlider
@@ -52,8 +54,8 @@ Event OnPageReset(String a_page)
 
 		AddHeaderOption("$Survival Mode Patches")
 
-		AddToggleOption("$Enable Frostfall Keywords", false)
-		AddToggleOption("$Enable Cloak Warmth", true)
+		FrostfallToggle = AddToggleOption("$Enable Frostfall Keywords", false)
+		CloakWarmthToggle = AddToggleOption("$Enable Cloak Warmth", IsCloakWarmthEnabled())
 	elseif a_page == "$Warmth Options"
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
@@ -69,6 +71,9 @@ Event OnPageReset(String a_page)
 
 		AddHeaderOption("$Cloak")
 		int iFlag = OPTION_FLAG_NONE
+		if (!IsCloakWarmthEnabled())
+			iFlag = OPTION_FLAG_DISABLED
+		endif
 		CloakNormalSlider = AddSliderOption("$Cloak Normal Bonus", GetCloakNormalBonus(), a_flags = iFlag)
 		CloakWarmSlider = AddSliderOption("$Cloak Warm Bonus", GetCloakWarmBonus(), a_flags = iFlag)
 		CloakColdSlider = AddSliderOption("$Cloak Cold Bonus", GetCloakColdBonus(), a_flags = iFlag)
@@ -136,6 +141,18 @@ Event OnOptionMenuAccept(int a_option, int index)
 	elseif index == ENABLED_INDEX
 		UserEnable(iFeature)
 		SetMenuOptionValue(a_option, MenuEntries[ENABLED_INDEX])
+	endif
+EndEvent
+
+Event OnOptionSelect(int a_option)
+	if a_option == CloakWarmthToggle
+		if IsCloakWarmthEnabled()
+			DisableCloakWarmth()
+			SetToggleOptionValue(CloakWarmthToggle, false)
+		else
+			EnableCloakWarmth()
+			SetToggleOptionValue(CloakWarmthToggle, true)
+		endif
 	endif
 EndEvent
 
