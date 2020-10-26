@@ -60,7 +60,7 @@ Event OnPageReset(String a_page)
 
 		AddHeaderOption("$Survival Mode Patches")
 
-		FrostfallToggle = AddToggleOption("$Enable Frostfall Keywords", false)
+		FrostfallToggle = AddToggleOption("$Enable Frostfall Keywords", AreFrostfallKeywordsEnabled())
 		CloakWarmthToggle = AddToggleOption("$Enable Cloak Warmth", IsCloakWarmthEnabled())
 	elseif a_page == "$Warmth Options"
 		SetCursorFillMode(TOP_TO_BOTTOM)
@@ -162,6 +162,14 @@ Event OnOptionSelect(int a_option)
 		else
 			EnableCloakWarmth()
 			SetToggleOptionValue(CloakWarmthToggle, true)
+		endif
+	elseif a_option == FrostfallToggle
+		if AreFrostfallKeywordsEnabled()
+			DisableFrostfallKeywords()
+			SetToggleOptionValue(FrostfallToggle, false)
+		else
+			EnableFrostfallKeywords()
+			SetToggleOptionValue(FrostfallToggle, true)
 		endif
 	endif
 EndEvent
