@@ -215,6 +215,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Hooks.cpp" />
+    <ClCompile Include="src\JContainers.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Papyrus.cpp" />
     <ClCompile Include="src\PapyrusSurvival.cpp" />
@@ -232,6 +233,7 @@
     <ClCompile Include="src\Warmth.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\JContainers.h" />
     <ClInclude Include="src\SleepLevelUpManager.h" />
     <ClInclude Include="src\ArrowWeightManager.h" />
     <ClInclude Include="src\Hooks.h" />

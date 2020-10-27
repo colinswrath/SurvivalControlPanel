@@ -1,6 +1,7 @@
 ﻿#include "version.h"
 #include "Hooks.h"
 #include "Papyrus.h"
+#include "JContainers.h"
 
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
@@ -59,6 +60,15 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	Papyrus::Register();
 	Hooks::Install();
+
+	auto messaging = reinterpret_cast<SKSE::MessagingInterface*>(
+		a_skse->QueryInterface(SKSE::LoadInterface::kMessaging));
+
+	// JContainers
+	messaging->RegisterListener(JC_PLUGIN_NAME, [](SKSE::MessagingInterface::Message* msg) {
+		if (msg && msg->type == jc::message_root_interface)
+			JContainers::OnJCAPIAvailable(jc::root_interface::from_void(msg->data));
+	});
 
 	return true;
 }
