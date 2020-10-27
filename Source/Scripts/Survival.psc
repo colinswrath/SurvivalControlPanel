@@ -44,6 +44,15 @@ bool Function IsEnabledByUser(int aiFeature) global native
 ; Indicates whether the requested Survival feature was disabled by the user.
 bool Function IsDisabledByUser(int aiFeature) global native
 
+; Enables support for Frostfall keywords in Survival Mode.
+Function EnableFrostfallKeywords() global native
+
+; Disables support for Frostfall keywords in Survival Mode.
+Function DisableFrostfallKeywords() global native
+
+; Get whether Frostfall keywords for Survival Mode are enabled.
+bool Function AreFrostfallKeywordsEnabled() global native
+
 ; Enables warmth ratings for cloaks (slot 46).
 Function EnableCloakWarmth() global native
 
@@ -72,3 +81,18 @@ float Function GetCloakWarmBonus() global native
 
 ; Gets the warmth rating cloaks should have if they are classified as cold.
 float Function GetCloakColdBonus() global native
+
+; Sets the armor's warmth classification to normal regardless of keywords.
+Function SetArmorWarmthNormal(Armor akArmor) global native
+
+; Sets the armor's warmth classification to warm regardless of keywords.
+Function SetArmorWarmthWarm(Armor akArmor) global native
+
+; Sets the armor's warmth classification to cold regardless of keywords.
+Function SetArmorWarmthCold(Armor akArmor) global native
+
+; Resets the armor's overridden warmth classification.
+Function ResetArmorWarmthToDefault(Armor akArmor) global native
+
+; Resets all overridden warmth classifications.
+Function ResetAllArmorWarmthToDefault() global native
