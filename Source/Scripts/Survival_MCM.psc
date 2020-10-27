@@ -406,7 +406,7 @@ Event OnOptionSliderAccept(int a_option, float a_value)
 		SetSliderOptionValue(TorchSlider, a_value)
 	elseif a_option == ScalarSlider
 		SetGameSettingFloat("fSurvArmorScalar", a_value)
-		SetSliderOptionValue(ScalarSlider, a_value)
+		SetSliderOptionValue(ScalarSlider, a_value, "{2}")
 	endif
 EndEvent
 
