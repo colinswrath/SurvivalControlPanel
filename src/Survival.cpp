@@ -72,7 +72,6 @@ namespace Survival
 		}
 	}
 
-	//TODO -> remove logging for values
 	bool Settings::SerializeSave(SKSE::SerializationInterface* a_intfc)
 	{
 		std::vector<Survival::Preference> prefVector = { ModPreference, UserPreference };
@@ -91,17 +90,14 @@ namespace Survival
 					logger::error("Failed to write data for elem!");
 					break;
 				}
-				logger::info(FMT_STRING("Serializing {}"), elem);
-				logger::info(FMT_STRING("element size {}"), size);
 			}
 		}
 
 		return true;
 	}
 
-	//TODO -> remove value logging
 	/// <summary>
-	/// First element in retrieved vector is Mod, second is user
+	/// First element in retrieved vector is Mod prefs, second is user
 	/// </summary>
 	/// <param name="a_intfc"></param>
 	/// <returns></returns>
@@ -127,7 +123,6 @@ namespace Survival
 			}
 			else
 			{
-				logger::info(FMT_STRING("deserialized {}"), elem);
 				settings.push_back(elem);
 			}
 		}
