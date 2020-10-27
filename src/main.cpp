@@ -102,7 +102,8 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 
 	while (a_intfc->GetNextRecordInfo(type, version, length))
 	{
-		if (version != kSerializationVersion) {
+		if (version != kSerializationVersion)
+		{
 			logger::error("Loaded data is out of date! Read (%u), expected (%u) for type code (%s)", version, kSerializationVersion, type);
 			continue;
 		}

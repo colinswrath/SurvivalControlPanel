@@ -105,7 +105,6 @@ namespace Survival
 	{
 		std::vector<Survival::Preference> settings;
 
-
 		std::size_t size;
 		if (!a_intfc->ReadRecordData(size))
 		{
@@ -118,7 +117,7 @@ namespace Survival
 			Survival::Preference elem;
 			if (!a_intfc->ReadRecordData(elem))
 			{
-				logger::error(FMT_STRING("Failed to load setting element!"));
+				logger::error("Failed to load setting element!");
 				return false;
 			}
 			else
