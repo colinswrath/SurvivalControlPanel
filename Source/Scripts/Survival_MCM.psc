@@ -127,7 +127,7 @@ Event OnPageReset(String a_page)
 		AddHeaderOption("$Current Equipment")
 
 		BodyOverrideMenu = AddEquipmentOptions("$Body", 32, ArmorBody, ClothingBody)
-		HeadOverrideMenu = AddEquipmentOptions("$Head", 42, ArmorHead, ClothingHead)
+		HeadOverrideMenu = AddEquipmentOptions("$Head", 31, ArmorHead, ClothingHead)
 		HandsOverrideMenu = AddEquipmentOptions("$Hands", 33, ArmorHands, ClothingHands)
 		FeetOverrideMenu = AddEquipmentOptions("$Feet", 37, ArmorFeet, ClothingFeet)
 		if IsCloakWarmthEnabled()
@@ -215,7 +215,7 @@ Event OnOptionMenuAccept(int a_option, int index)
 		if a_option == BodyOverrideMenu
 			kArmor = GetPlayer().GetEquippedArmorInSlot(32)
 		elseif a_option == HeadOverrideMenu
-			kArmor = GetPlayer().GetEquippedArmorInSlot(42)
+			kArmor = GetPlayer().GetEquippedArmorInSlot(31)
 		elseif a_option == HandsOverrideMenu
 			kArmor = GetPlayer().GetEquippedArmorInSlot(33)
 		elseif a_option == FeetOverrideMenu
@@ -416,7 +416,7 @@ int Function GuessDefaultWarmth(int a_option)
 			return COLD_INDEX
 		endif
 	elseif a_option == HeadOverrideMenu
-		Armor kHead = GetPlayer().GetEquippedArmorInSlot(42)
+		Armor kHead = GetPlayer().GetEquippedArmorInSlot(31)
 		float fWarmth = kHead.GetWarmthRating()
 		if fWarmth == GetGameSettingFloat("fSurvNormalHeadBonus")
 			return NORMAL_INDEX
@@ -452,7 +452,7 @@ EndFunction
 
 Function RecomputeArmorWarmths()
 	Armor kBody = GetPlayer().GetEquippedArmorInSlot(32)
-	Armor kHead = GetPlayer().GetEquippedArmorInSlot(42)
+	Armor kHead = GetPlayer().GetEquippedArmorInSlot(31)
 	Armor kHands = GetPlayer().GetEquippedArmorInSlot(33)
 	Armor kFeet = GetPlayer().GetEquippedArmorInSlot(37)
 	Armor kCloak = GetPlayer().GetEquippedArmorInSlot(46)
