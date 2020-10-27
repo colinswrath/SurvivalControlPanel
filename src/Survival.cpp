@@ -59,7 +59,7 @@ namespace Survival
 		}
 	}
 
-	bool Settings::SerializeSave(SKSE::SerializationInterface* a_intfc, UINT32 a_type, UINT32 a_version)
+	bool Settings::SerializeSave(SKSE::SerializationInterface* a_intfc, uint32_t a_type, uint32_t a_version)
 	{
 		if (!a_intfc->OpenRecord(a_type, a_version))
 		{
@@ -112,7 +112,7 @@ namespace Survival
 			return false;
 		}
 
-		for (UINT32 i = 0; i < size; ++i)
+		for (std::size_t i = 0; i < size; ++i)
 		{
 			Survival::Preference elem;
 			if (!a_intfc->ReadRecordData(elem))

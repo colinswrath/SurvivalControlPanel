@@ -2,6 +2,7 @@
 #include "Hooks.h"
 #include "Papyrus.h"
 #include "Survival.h"
+#include "Warmth.h"
 
 enum
 {
@@ -11,6 +12,7 @@ enum
 	kSleepToLevelUp = 'STLS',
 	kArrowWeight = 'ARWS',
 	kLockpickWeight = 'LKPS',
+	kWarmthSettings = 'WRMT',
 };
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
@@ -66,6 +68,7 @@ void SaveCallback(SKSE::SerializationInterface* a_intfc)
 	auto HUDSettings = Survival::GetSettings(Survival::Feature::HUDIndicators);
 	auto lockSettings = Survival::GetSettings(Survival::Feature::LockpickWeight);
 	auto SleepSettings = Survival::GetSettings(Survival::Feature::SleepToLevelUp);
+	auto& warmthSettings = Survival::WarmthSettings::GetSingleton();
 
 	if (!arrowSettings->SerializeSave(a_intfc, kArrowWeight, kSerializationVersion)) {
 		logger::error("Failed to save arrow settings!\n");
@@ -85,6 +88,10 @@ void SaveCallback(SKSE::SerializationInterface* a_intfc)
 
 	if (!SleepSettings->SerializeSave(a_intfc, kSleepToLevelUp, kSerializationVersion)) {
 		logger::error("Failed to save Sleep to level Settings!\n");
+	}
+
+	if (!warmthSettings.SerializeSave(a_intfc, kWarmthSettings, kSerializationVersion)) {
+		logger::error("Failed to save Warmth Settings!\n");
 	}
 }
 
