@@ -15,6 +15,12 @@ int Property RESET_INDEX  = 3  AutoReadOnly
 float Property WARMTH_MIN = 0.0  AutoReadOnly
 float Property WARMTH_MAX = 60.0  AutoReadOnly
 
+int Property BodySlot = 32  AutoReadOnly
+int Property HeadSlot = 31  AutoReadOnly
+int Property HandsSlot = 33  AutoReadOnly
+int Property FeetSlot = 37  AutoReadOnly
+int Property CloakSlot = 46  AutoReadOnly
+
 ; Survival Mode Core
 String[] FeatureMenuEntries
 int[] FeatureMenuOptions
@@ -126,12 +132,12 @@ Event OnPageReset(String a_page)
 
 		AddHeaderOption("$Current Equipment")
 
-		BodyOverrideMenu = AddEquipmentOptions("$Body", 32, ArmorBody, ClothingBody)
-		HeadOverrideMenu = AddEquipmentOptions("$Head", 31, ArmorHead, ClothingHead)
-		HandsOverrideMenu = AddEquipmentOptions("$Hands", 33, ArmorHands, ClothingHands)
-		FeetOverrideMenu = AddEquipmentOptions("$Feet", 37, ArmorFeet, ClothingFeet)
+		BodyOverrideMenu = AddEquipmentOptions("$Body", BodySlot, ArmorBody, ClothingBody)
+		HeadOverrideMenu = AddEquipmentOptions("$Head", HeadSlot, ArmorHead, ClothingHead)
+		HandsOverrideMenu = AddEquipmentOptions("$Hands", HandsSlot, ArmorHands, ClothingHands)
+		FeetOverrideMenu = AddEquipmentOptions("$Feet", FeetSlot, ArmorFeet, ClothingFeet)
 		if IsCloakWarmthEnabled()
-			AddEquipmentOptions("$Cloak", 46)
+			AddEquipmentOptions("$Cloak", CloakSlot)
 		endif
 
 		SetCursorPosition(1)
@@ -213,13 +219,13 @@ Event OnOptionMenuAccept(int a_option, int index)
 	elseif CurrentPage == "$Equipment"
 		Armor kArmor
 		if a_option == BodyOverrideMenu
-			kArmor = GetPlayer().GetEquippedArmorInSlot(32)
+			kArmor = GetPlayer().GetEquippedArmorInSlot(BodySlot)
 		elseif a_option == HeadOverrideMenu
-			kArmor = GetPlayer().GetEquippedArmorInSlot(31)
+			kArmor = GetPlayer().GetEquippedArmorInSlot(HeadSlot)
 		elseif a_option == HandsOverrideMenu
-			kArmor = GetPlayer().GetEquippedArmorInSlot(33)
+			kArmor = GetPlayer().GetEquippedArmorInSlot(HandsSlot)
 		elseif a_option == FeetOverrideMenu
-			kArmor = GetPlayer().GetEquippedArmorInSlot(37)
+			kArmor = GetPlayer().GetEquippedArmorInSlot(FeetSlot)
 		else
 			return
 		endif
@@ -406,7 +412,7 @@ EndEvent
 
 int Function GuessDefaultWarmth(int a_option)
 	if a_option == BodyOverrideMenu
-		Armor kBody = GetPlayer().GetEquippedArmorInSlot(32)
+		Armor kBody = GetPlayer().GetEquippedArmorInSlot(BodySlot)
 		float fWarmth = kBody.GetWarmthRating()
 		if fWarmth == GetGameSettingFloat("fSurvNormalBodyBonus")
 			return NORMAL_INDEX
@@ -416,7 +422,7 @@ int Function GuessDefaultWarmth(int a_option)
 			return COLD_INDEX
 		endif
 	elseif a_option == HeadOverrideMenu
-		Armor kHead = GetPlayer().GetEquippedArmorInSlot(31)
+		Armor kHead = GetPlayer().GetEquippedArmorInSlot(HeadSlot)
 		float fWarmth = kHead.GetWarmthRating()
 		if fWarmth == GetGameSettingFloat("fSurvNormalHeadBonus")
 			return NORMAL_INDEX
@@ -426,7 +432,7 @@ int Function GuessDefaultWarmth(int a_option)
 			return COLD_INDEX
 		endif
 	elseif a_option == HandsOverrideMenu
-		Armor kHands = GetPlayer().GetEquippedArmorInSlot(33)
+		Armor kHands = GetPlayer().GetEquippedArmorInSlot(HandsSlot)
 		float fWarmth = kHands.GetWarmthRating()
 		if fWarmth == GetGameSettingFloat("fSurvNormalHandsBonus")
 			return NORMAL_INDEX
@@ -436,7 +442,7 @@ int Function GuessDefaultWarmth(int a_option)
 			return COLD_INDEX
 		endif
 	elseif a_option == FeetOverrideMenu
-		Armor kFeet = GetPlayer().GetEquippedArmorInSlot(37)
+		Armor kFeet = GetPlayer().GetEquippedArmorInSlot(FeetSlot)
 		float fWarmth = kFeet.GetWarmthRating()
 		if fWarmth == GetGameSettingFloat("fSurvNormalFeetBonus")
 			return NORMAL_INDEX
@@ -451,11 +457,11 @@ int Function GuessDefaultWarmth(int a_option)
 EndFunction
 
 Function RecomputeArmorWarmths()
-	Armor kBody = GetPlayer().GetEquippedArmorInSlot(32)
-	Armor kHead = GetPlayer().GetEquippedArmorInSlot(31)
-	Armor kHands = GetPlayer().GetEquippedArmorInSlot(33)
-	Armor kFeet = GetPlayer().GetEquippedArmorInSlot(37)
-	Armor kCloak = GetPlayer().GetEquippedArmorInSlot(46)
+	Armor kBody = GetPlayer().GetEquippedArmorInSlot(BodySlot)
+	Armor kHead = GetPlayer().GetEquippedArmorInSlot(HeadSlot)
+	Armor kHands = GetPlayer().GetEquippedArmorInSlot(HandsSlot)
+	Armor kFeet = GetPlayer().GetEquippedArmorInSlot(FeetSlot)
+	Armor kCloak = GetPlayer().GetEquippedArmorInSlot(CloakSlot)
 
 	if kBody && (kBody.HasKeyword(ArmorBody) || kBody.HasKeyword(ClothingBody))
 		SetMenuOptionValue(BodyOverrideMenu, GetWarmthRatingAsString(kBody))
