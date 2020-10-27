@@ -164,7 +164,6 @@ int Function AddEquipmentOptions(String a_name, int a_slot, Keyword a_keyword1 =
 		option = AddMenuOption(kArmor.GetName(), GetWarmthRatingAsString(kArmor))
 	else
 		AddTextOption(a_name, "$None", a_flags = OPTION_FLAG_DISABLED)
-		option = AddEmptyOption()
 	endif
 	return option
 EndFunction
