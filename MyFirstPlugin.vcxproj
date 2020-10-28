@@ -232,6 +232,7 @@
     <ClCompile Include="src\Warmth.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Serialization.h" />
     <ClInclude Include="src\HUDIndicatorManager.h" />
     <ClInclude Include="src\SleepLevelUpManager.h" />
     <ClInclude Include="src\ArrowWeightManager.h" />

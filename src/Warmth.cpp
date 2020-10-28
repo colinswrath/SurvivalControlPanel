@@ -1,5 +1,6 @@
 #include "Warmth.h"
 #include "WarmthManager.h"
+#include "Serialization.h"
 
 namespace Survival
 {
@@ -83,28 +84,15 @@ namespace Survival
 	bool WarmthSettings::SerializeSave(SKSE::SerializationInterface* a_intfc)
 	{
 		std::vector<float> cloakSetting = { GetCloakColdBonus(), GetCloakNormalBonus(), GetCloakWarmBonus() };
-		std::array<bool,2> toggles = { EnableWarmthForCloaks, EnableFrostfallKeywords };
+		std::array<bool, 2> toggles = { EnableWarmthForCloaks, EnableFrostfallKeywords };
 
-		//Write cloak setting data
-		std::size_t size = cloakSetting.size();
-		if (!a_intfc->WriteRecordData(size))
+		if (!Serialization::Save(a_intfc,cloakSetting))
 		{
-			logger::error("Failed to write size of record data!");
-		}
-		else
-		{
-			for (auto& elem : cloakSetting)
-			{
-				if (!a_intfc->WriteRecordData(elem))
-				{
-					logger::error("Failed to write data for warmth elem!");
-					break;
-				}
-			}
+			logger::error("Failed to write data!");
 		}
 
 		//Write toggle data
-		size = toggles.size();
+		std::size_t size = toggles.size();
 		if (!a_intfc->WriteRecordData(size))
 		{
 			logger::error("Failed to write size of record data!");
@@ -120,37 +108,20 @@ namespace Survival
 				}
 			}
 		}
-
 		return true;
 	}
 
-	//todo finish
 	bool WarmthSettings::DeserializeLoad(SKSE::SerializationInterface* a_intfc)
 	{
 		std::vector<float> cloakSetting;
-		std::array<bool, 2> toggles;
+		bool toggles[2];
+
+		if (!Serialization::Load(a_intfc, cloakSetting))
+		{
+			logger::error("Failed to load data!");
+		}
 
 		std::size_t size;
-		if (!a_intfc->ReadRecordData(size))
-		{
-			logger::error("Failed to load size!");
-			return false;
-		}
-
-		for (std::size_t i = 0; i < size; ++i)
-		{
-			float elem;
-			if (!a_intfc->ReadRecordData(elem))
-			{
-				logger::error("Failed to load setting element!");
-				return false;
-			}
-			else
-			{
-				cloakSetting.push_back(elem);
-			}
-		}
-
 		if (!a_intfc->ReadRecordData(size))
 		{
 			logger::error("Failed to load size!");

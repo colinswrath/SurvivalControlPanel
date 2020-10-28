@@ -102,6 +102,7 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 	auto HUDSettings = Survival::GetSettings(Survival::Feature::HUDIndicators);
 	auto lockSettings = Survival::GetSettings(Survival::Feature::LockpickWeight);
 	auto SleepSettings = Survival::GetSettings(Survival::Feature::SleepToLevelUp);
+	auto& warmthSettings = Survival::WarmthSettings::GetSingleton();
 
 	uint32_t type;
 	uint32_t version;
@@ -155,9 +156,15 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 				logger::error("Failed to load UI settings!\n");
 			}
 			break;
+		case kWarmthSettings:
 
+			if (!warmthSettings.DeserializeLoad(a_intfc))
+			{
+				logger::error("Failed to load warmth settings!");
+			}
+			break;
 		default:
-			logger::error("Unrecognized signature type!");
+			logger::error(FMT_STRING("Unrecognized signature type! {}"), type);
 			break;
 		}
 	}
