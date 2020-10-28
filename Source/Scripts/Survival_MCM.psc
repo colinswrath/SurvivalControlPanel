@@ -58,11 +58,6 @@ int ResetOverrideButton
 ; Profiles
 bool CreatedNewFile = false
 String CurrentFile = ""
-int NewFileInput
-int BrowseFilesMenu
-int LoadFileButton
-int SaveFileButton
-int DeleteFileButton
 
 Event OnInit()
 	parent.OnInit()
