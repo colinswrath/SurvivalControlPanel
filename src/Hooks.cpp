@@ -4,6 +4,7 @@
 #include "SleepLevelUpManager.h"
 #include "InventoryUIManager.h"
 #include "WarmthManager.h"
+#include "HUDIndicatorManager.h"
 
 namespace Hooks
 {
@@ -14,6 +15,7 @@ namespace Hooks
 		SleepLevelUpManager::Install();
 		InventoryUIManager::Install();
 		WarmthManager::Install();
+		HUDIndicatorManager::Install();
 
 		logger::info("Installed all hooks"sv);
 	}
