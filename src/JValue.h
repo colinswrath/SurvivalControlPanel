@@ -70,8 +70,8 @@ namespace JContainers
 			_setInt(default_domain, ID, key, value);
 		}
 
-		void setObj(JString key, int32_t value) {
-			_setObj(default_domain, ID, key, value);
+		void setObj(JString key, JValue value) {
+			_setObj(default_domain, ID, key, value.ID);
 		}
 
 		static void init(const jc::reflection_interface* refl)
