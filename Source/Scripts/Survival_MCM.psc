@@ -166,10 +166,10 @@ Event OnPageReset(String a_page)
 		int iLoadSaveFlag = OPTION_FLAG_DISABLED
 		int iDeleteFlag = OPTION_FLAG_DISABLED
 		if bJCValid
-			if CurrentFile != ""
-				iLoadSaveFlag = OPTION_FLAG_NONE
+			if CreatedNewFile
 				iDeleteFlag = OPTION_FLAG_NONE
-			elseif CreatedNewFile
+			elseif CurrentFile != ""
+				iLoadSaveFlag = OPTION_FLAG_NONE
 				iDeleteFlag = OPTION_FLAG_NONE
 			endif
 		endif
