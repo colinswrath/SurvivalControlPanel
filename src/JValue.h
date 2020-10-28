@@ -12,6 +12,8 @@ namespace JContainers
 		assert(func);
 	}
 
+	using JString = const char*;
+
 	class JValue
 	{
 	public:
@@ -21,7 +23,7 @@ namespace JContainers
 			return ID;
 		}
 
-		void writeToFile(const char* filePath)
+		void writeToFile(JString filePath)
 		{
 			_writeToFile(default_domain, ID, filePath);
 		}
@@ -35,13 +37,13 @@ namespace JContainers
 	protected:
 		JValue(int32_t id) : ID(id) { }
 
-		JValue(const char* filePath) : ID(_readFromFile(default_domain, filePath)) { }
+		JValue(JString filePath) : ID(_readFromFile(default_domain, filePath)) { }
 
 	private:
-		using readFromFile_t = int32_t(void*, const char* filePath);
+		using readFromFile_t = int32_t(void*, JString filePath);
 		inline static readFromFile_t* _readFromFile;
 
-		using writeToFile_t = void(void*, int32_t object, const char* filePath);
+		using writeToFile_t = void(void*, int32_t object, JString filePath);
 		inline static writeToFile_t* _writeToFile;
 	};
 
@@ -50,25 +52,25 @@ namespace JContainers
 	public:
 		JMap() : JValue(_object(default_domain)) { }
 		JMap(int32_t id) : JValue(id) { }
-		JMap(const char* filePath) : JValue(filePath) { }
+		JMap(JString filePath) : JValue(filePath) { }
 
 		operator int32_t() {
 			return ID;
 		}
 
-		int32_t getInt(const char* key) {
+		int32_t getInt(JString key) {
 			return _getInt(default_domain, ID, key);
 		}
 
-		int32_t getObj(const char* key) {
+		int32_t getObj(JString key) {
 			return _getObj(default_domain, ID, key);
 		}
 
-		void setInt(const char* key, int32_t value) {
+		void setInt(JString key, int32_t value) {
 			_setInt(default_domain, ID, key, value);
 		}
 
-		void setObj(const char* key, int32_t value) {
+		void setObj(JString key, int32_t value) {
 			_setObj(default_domain, ID, key, value);
 		}
 
@@ -85,19 +87,19 @@ namespace JContainers
 		using object_t = int32_t(void*);
 		inline static object_t* _object;
 
-		using getInt_t = int32_t(void*, int32_t map, const char* key);
+		using getInt_t = int32_t(void*, int32_t map, JString key);
 		inline static getInt_t* _getInt;
 
-		using getObj_t = int32_t(void*, int32_t map, const char* key);
+		using getObj_t = int32_t(void*, int32_t map, JString key);
 		inline static getObj_t* _getObj;
 
-		using setInt_t = void(void*, int32_t map, const char* key, int32_t value);
+		using setInt_t = void(void*, int32_t map, JString key, int32_t value);
 		inline static setInt_t* _setInt;
 
-		using setObj_t = void(void*, int32_t map, const char* key, int32_t value);
+		using setObj_t = void(void*, int32_t map, JString key, int32_t value);
 		inline static setObj_t* _setObj;
 
-		using writeToFile_t = void(void*, int32_t object, const char* filePath);
+		using writeToFile_t = void(void*, int32_t object, JString filePath);
 		inline static writeToFile_t* _writeToFile;
 	};
 
