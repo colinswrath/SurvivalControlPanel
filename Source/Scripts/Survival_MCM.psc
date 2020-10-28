@@ -457,10 +457,14 @@ EndEvent
 
 State NewFile
 Event OnInputAcceptST(String a_input)
-	if (a_input)
-		CurrentFile = a_input
-		CreatedNewFile = true
-		ForcePageReset()
+	if a_input != ""
+		String sProfileDir = JContainersProfileDir()
+		if sProfileDir != ""
+			Survival_JContainers.Save(sProfileDir + a_input + ".json")
+			CurrentFile = a_input
+			CreatedNewFile = true
+			ForcePageReset()
+		endif
 	endif
 EndEvent
 EndState
@@ -468,15 +472,19 @@ EndState
 State Browse
 Event OnMenuOpenST()
 	String sProfileDir = JContainersProfileDir()
-	if sProfileDir
-		BrowseFileEntries = JContainers.contentsOfDirectoryAtPath(sProfileDir)
+	if sProfileDir != ""
+		BrowseFileEntries = JContainers.contentsOfDirectoryAtPath(sProfileDir, ".json")
 		SetMenuDialogOptions(BrowseFileEntries)
 	endif
 EndEvent
 
 Event OnMenuAcceptST(int a_index)
-	CurrentFile = BrowseFileEntries[a_index]
-	ForcePageReset()
+	String sFile = BrowseFileEntries[a_index]
+	if sFile != ""
+		CurrentFile = sFile
+		ForcePageReset()
+		CreatedNewFile = false
+	endif
 EndEvent
 EndState
 
@@ -592,7 +600,7 @@ EndFunction
 
 String Function JContainersProfileDir()
 	String sUserDir = JContainers.userDirectory()
-	if sUserDir
+	if sUserDir != ""
 		return sUserDir + "Survival/"
 	endif
 	return ""
