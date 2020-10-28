@@ -72,10 +72,6 @@ namespace JContainers
 			_setObj(default_domain, ID, key, value);
 		}
 
-		void writeToFile(const char* filePath) {
-			_writeToFile(default_domain, ID, filePath);
-		}
-
 		static void init(const jc::reflection_interface* refl)
 		{
 			obtain_func(refl, "object", "JMap", _object);
@@ -83,7 +79,6 @@ namespace JContainers
 			obtain_func(refl, "getObj", "JMap", _getObj);
 			obtain_func(refl, "setInt", "JMap", _setInt);
 			obtain_func(refl, "setObj", "JMap", _setObj);
-			obtain_func(refl, "writeToFile", "JValue", _writeToFile);
 		}
 
 	private:
