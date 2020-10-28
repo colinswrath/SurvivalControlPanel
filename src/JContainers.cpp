@@ -6,12 +6,12 @@ using namespace Survival;
 
 namespace JContainers
 {
-	int32_t Store(RE::StaticFunctionTag*)
+	void Save(RE::StaticFunctionTag*, RE::BSString a_filePath)
 	{
 		if (!default_domain)
 		{
 			logger::error("Failed to load JContainers!"sv);
-			return 0;
+			return;
 		}
 
 		auto hudIndicators = Settings::GetSingleton(Feature::HUDIndicators);
@@ -62,10 +62,10 @@ namespace JContainers
 		jWarmth.setObj("WarmthOverrides", jOverrides);
 		jSettings.setObj("WarmthSettings", jWarmth);
 
-		return jSettings;
+		jSettings.writeToFile(a_filePath.c_str());
 	}
 
-	void Retrieve(RE::StaticFunctionTag*, int32_t a_obj)
+	void Load(RE::StaticFunctionTag*, RE::BSString a_filePath)
 	{
 		if (!default_domain)
 		{
@@ -80,7 +80,7 @@ namespace JContainers
 		auto lockpickWeight = Settings::GetSingleton(Feature::LockpickWeight);
 		auto warmth = WarmthSettings::GetSingleton();
 
-		JMap jSettings{ a_obj };
+		JMap jSettings{ readFromFile(a_filePath.c_str()) };
 
 		JMap jHUD{ jSettings.getObj("HUDIndicators") };
 		hudIndicators->ModPreference = static_cast<Preference>(jHUD.getInt("ModPreference"));
@@ -120,8 +120,8 @@ namespace JContainers
 
 	bool RegisterFuncs(VM* a_vm)
 	{
-		a_vm->RegisterFunction("Store"sv, "Survival_JContainers"sv, Store);
-		a_vm->RegisterFunction("Retrieve"sv, "Survival_JContainers"sv, Retrieve);
+		a_vm->RegisterFunction("Save"sv, "Survival_JContainers"sv, Save);
+		a_vm->RegisterFunction("Load"sv, "Survival_JContainers"sv, Load);
 
 		return true;
 	}

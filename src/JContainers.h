@@ -16,6 +16,13 @@ namespace JContainers
 		assert(func);
 	}
 
+	using readFromFile_t = int32_t(void*, const char* filePath);
+	inline static readFromFile_t* _readFromFile;
+
+	inline int32_t readFromFile(const char* filePath) {
+		return _readFromFile(default_domain, filePath);
+	}
+
 	struct JMap
 	{
 		int32_t ID = _object(default_domain);
@@ -40,6 +47,10 @@ namespace JContainers
 			_setObj(default_domain, ID, key, value);
 		}
 
+		void writeToFile(const char* filePath) {
+			_writeToFile(default_domain, ID, filePath);
+		}
+
 		static void init(const jc::reflection_interface* refl)
 		{
 			obtain_func(refl, "object", "JMap", _object);
@@ -47,6 +58,7 @@ namespace JContainers
 			obtain_func(refl, "getObj", "JMap", _getObj);
 			obtain_func(refl, "setInt", "JMap", _setInt);
 			obtain_func(refl, "setObj", "JMap", _setObj);
+			obtain_func(refl, "writeToFile", "JValue", _writeToFile);
 		}
 
 	private:
@@ -64,6 +76,9 @@ namespace JContainers
 
 		using setObj_t = void(void*, int32_t map, const char* key, int32_t value);
 		inline static setObj_t* _setObj;
+
+		using writeToFile_t = void(void*, int32_t object, const char* filePath);
+		inline static writeToFile_t* _writeToFile;
 	};
 
 	struct JFormMap
@@ -122,14 +137,15 @@ namespace JContainers
 
 		auto refl = root->query_interface<jc::reflection_interface>();
 
+		obtain_func(refl, "readFromFile", "JValue", _readFromFile);
 		JMap::init(refl);
 		JFormMap::init(refl);
 
 		default_domain = root->query_interface<jc::domain_interface>()->get_default_domain();
 	}
 
-	int32_t Store(RE::StaticFunctionTag*);
-	void Retrieve(RE::StaticFunctionTag*, int32_t a_obj);
+	void Save(RE::StaticFunctionTag*, RE::BSString a_filePath);
+	void Load(RE::StaticFunctionTag*, RE::BSString a_filePath);
 
 	bool RegisterFuncs(VM* a_vm);
 }

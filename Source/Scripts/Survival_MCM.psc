@@ -55,6 +55,15 @@ int FeetOverrideMenu
 int CloakOverrideMenu
 int ResetOverrideButton
 
+; Profiles
+bool CreatedNewFile = false
+String CurrentFile = ""
+int NewFileInput
+int BrowseFilesMenu
+int LoadFileButton
+int SaveFileButton
+int DeleteFileButton
+
 Event OnInit()
 	parent.OnInit()
 
@@ -66,7 +75,7 @@ Event OnInit()
 	FeatureMenuOptions = new int[5]
 
 	WarmthMenuEntries = new String[4]
-	WarmthMenuEntries[NORMAL_INDEX] = "$NormalW"
+	WarmthMenuEntries[NORMAL_INDEX] = "$NormalWarmth"
 	WarmthMenuEntries[WARM_INDEX] = "$Warm"
 	WarmthMenuEntries[COLD_INDEX] = "$Cold"
 	WarmthMenuEntries[RESET_INDEX] = "$Default"
@@ -144,6 +153,45 @@ Event OnPageReset(String a_page)
 
 		AddHeaderOption("$Reset all")
 		ResetOverrideButton = AddTextOption("$Reset all to default", "")
+	elseif a_page == "$Profiles"
+		; This page will use state-based MCM since the options are non-homogenous
+		SetCursorFillMode(TOP_TO_BOTTOM)
+
+		int iFlag = OPTION_FLAG_DISABLED
+		bool bJCValid = IsJContainersValid()
+		if (bJCValid)
+			iFlag = OPTION_FLAG_NONE
+		endif
+
+		AddHeaderOption("$Profiles")
+		AddInputOptionST("NewFile", "$New", "", a_flags = iFlag)
+		AddMenuOptionST("Browse", "$Browse", CurrentFile, a_flags = iFlag)
+
+		int iLoadSaveFlag = OPTION_FLAG_DISABLED
+		int iDeleteFlag = OPTION_FLAG_DISABLED
+		if bJCValid
+			if CurrentFile != ""
+				iLoadSaveFlag = OPTION_FLAG_NONE
+				iDeleteFlag = OPTION_FLAG_NONE
+			elseif CreatedNewFile
+				iDeleteFlag = OPTION_FLAG_NONE
+			endif
+		endif
+
+		AddTextOptionST("Load", "$Load", "", a_flags = iLoadSaveFlag)
+		AddTextOptionST("Save", "$Save", "", a_flags = iLoadSaveFlag)
+		AddTextOptionST("Delete", "$DeleteFile", "", a_flags = iDeleteFlag)
+		AddHeaderOption("")
+
+		SetCursorPosition(20)
+		AddHeaderOption("JContainers")
+		if !JContainers.isInstalled()
+			AddTextOption("$API", "$Not installed")
+		else
+			String sVersion = JContainers.APIVersion()
+			sVersion = sVersion + "." + JContainers.featureVersion() + ".x"
+			AddTextOption("$API", sVersion)
+		endif
 	endif
 EndEvent
 
@@ -169,7 +217,7 @@ int Function AddEquipmentOptions(String a_name, int a_slot, Keyword a_keyword1 =
 	if kArmor && (!a_keyword1 || kArmor.HasKeyword(a_keyword1) || kArmor.HasKeyword(a_keyword2))
 		option = AddMenuOption(kArmor.GetName(), GetWarmthRatingAsString(kArmor))
 	else
-		AddTextOption(a_name, "$None", a_flags = OPTION_FLAG_DISABLED)
+		AddTextOption(a_name, "$NoEquipment", a_flags = OPTION_FLAG_DISABLED)
 	endif
 	return option
 EndFunction
@@ -410,6 +458,52 @@ Event OnOptionSliderAccept(int a_option, float a_value)
 	endif
 EndEvent
 
+State NewFile
+Event OnInputAcceptST(String a_input)
+	if (a_input)
+		CurrentFile = a_input
+		CreatedNewFile = true
+		ForcePageReset()
+	endif
+EndEvent
+EndState
+
+State Browse
+Event OnMenuOpenST()
+	String sProfileDir = JContainersProfileDir()
+	if sProfileDir
+		SetMenuDialogOptions(JContainers.contentsOfDirectoryAtPath(sProfileDir))
+	endif
+EndEvent
+EndState
+
+State Load
+Event OnSelectST()
+	; TODO confirmation dialog (This will replace all current settings)
+	String sProfileDir = JContainersProfileDir()
+	Survival_JContainers.Load(sProfileDir + CurrentFile)
+EndEvent
+EndState
+
+State Save
+Event OnSelectST()
+	; TODO confirmation dialog (This will overwrite saved settings)
+	String sProfileDir = JContainersProfileDir()
+	Survival_JContainers.Save(sProfileDir + CurrentFile)
+EndEvent
+EndState
+
+State Delete
+Event OnSelectST()
+	; TODO confirmation dialog (This cannot be undone)
+	String sProfileDir = JContainersProfileDir()
+	JContainers.removeFileAtPath(sProfileDir + CurrentFile)
+	CurrentFile = ""
+	CreatedNewFile = false
+	ForcePageReset()
+EndEvent
+EndState
+
 int Function GuessDefaultWarmth(int a_option)
 	if a_option == BodyOverrideMenu
 		Armor kBody = GetPlayer().GetEquippedArmorInSlot(BodySlot)
@@ -484,6 +578,18 @@ String Function GetWarmthRatingAsString(Armor a_armor)
 	string sWarmth = a_armor.GetWarmthRating() as string
 	sWarmth = StringUtil.Substring(sWarmth, 0, StringUtil.Find(sWarmth, "."))
 	return sWarmth
+EndFunction
+
+bool Function IsJContainersValid()
+	return JContainers.APIVersion() >= 4
+EndFunction
+
+String Function JContainersProfileDir()
+	String sUserDir = JContainers.userDirectory()
+	if sUserDir
+		return sUserDir + "Survival/"
+	endif
+	return ""
 EndFunction
 
 Keyword Property ArmorHands

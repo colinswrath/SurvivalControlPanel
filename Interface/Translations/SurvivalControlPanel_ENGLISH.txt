@@ -1,10 +1,12 @@
 $Always Disabled	Always Disabled
 $Always Enabled	Always Enabled
+$API	API
 $Arrow weight	Arrow weight
 $Body	Body
 $Body Cold Bonus	Body Cold Bonus
 $Body Normal Bonus	Body Normal Bonus
 $Body Warm Bonus	Body Warm Bonus
+$Browse	Browse
 $Cloak	Cloak
 $Cloak Cold Bonus	Cloak Cold Bonus
 $Cloak Normal Bonus	Cloak Normal Bonus
@@ -12,6 +14,7 @@ $Cloak Warm Bonus	Cloak Warm Bonus
 $Cold	Cold
 $Current Equipment	Current Equipment
 $Default	Default
+$DeleteFile	Delete
 $Enable Cloak Warmth	Enable Cloak Warmth
 $Enable Frostfall Keywords	Enable Frostfall Keywords
 $Equipment	Equipment
@@ -29,11 +32,17 @@ $Head Normal Bonus	Head Normal Bonus
 $Head Warm Bonus	Head Warm Bonus
 $HUD indicators	HUD indicators
 $Inventory UI	Inventory UI
+$Load	Load
 $Lockpick weight	Lockpick weight
-$NormalW	Normal
+$New	New
+$NoEquipment	None
+$NormalWarmth	Normal
+$Not installed	Not installed
 $Other	Other
+$Profiles	Profiles
 $Reset all	Reset all
 $Reset all to default	Reset all to default
+$Save	Save
 $Scaling Factor	Scaling Factor
 $Sleep to level up	Sleep to level up
 $Survival Mode Core	Survival Mode Core

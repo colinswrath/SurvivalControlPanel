@@ -1,7 +1,7 @@
 Scriptname Survival_JContainers Hidden
 
-; Store current settings into a JContainers object
-int Function Store() global native
+; Save current settings to file
+Function Save(String asFilePath) global native
 
-; Retrieves current settings from a JContainers object
-Function Retrieve(int akObj) global native
+; Load settings from saved file
+Function Load(String asFilePath) global native
