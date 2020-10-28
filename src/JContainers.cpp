@@ -113,6 +113,9 @@ namespace JContainers
 		for (int32_t i = 0; i < count; i++)
 		{
 			auto form = keyArray[i];
+			if (!form)
+				continue;
+
 			auto value = jOverrides.getInt(form);
 			warmth.WarmthOverrides[form->formID] = static_cast<WarmthClass>(value);
 		}
