@@ -80,7 +80,7 @@ namespace JContainers
 		auto lockpickWeight = Settings::GetSingleton(Feature::LockpickWeight);
 		auto warmth = WarmthSettings::GetSingleton();
 
-		JMap jSettings{ readFromFile(a_filePath.c_str()) };
+		JMap jSettings{ a_filePath.c_str() };
 
 		JMap jHUD{ jSettings.getObj("HUDIndicators") };
 		hudIndicators->ModPreference = static_cast<Preference>(jHUD.getInt("ModPreference"));
@@ -118,7 +118,7 @@ namespace JContainers
 		}
 	}
 
-	bool RegisterFuncs(VM* a_vm)
+	bool RegisterFuncs(RE::BSScript::IVirtualMachine* a_vm)
 	{
 		a_vm->RegisterFunction("Save"sv, "Survival_JContainers"sv, Save);
 		a_vm->RegisterFunction("Load"sv, "Survival_JContainers"sv, Load);

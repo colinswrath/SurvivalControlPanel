@@ -234,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\JContainers.h" />
+    <ClInclude Include="src\JValue.h" />
     <ClInclude Include="src\SleepLevelUpManager.h" />
     <ClInclude Include="src\ArrowWeightManager.h" />
     <ClInclude Include="src\Hooks.h" />

@@ -74,6 +74,9 @@
     <ClInclude Include="src\JContainers.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\JValue.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".clang-format" />
