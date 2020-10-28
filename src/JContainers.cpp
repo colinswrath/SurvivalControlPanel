@@ -82,31 +82,31 @@ namespace JContainers
 
 		JMap jSettings{ a_filePath.c_str() };
 
-		JMap jHUD{ jSettings.getObj("HUDIndicators") };
+		auto jHUD = jSettings.getObj<JMap>("HUDIndicators");
 		hudIndicators->ModPreference = static_cast<Preference>(jHUD.getInt("ModPreference"));
 		hudIndicators->UserPreference = static_cast<Preference>(jHUD.getInt("UserPreference"));
 
-		JMap jInventory{ jSettings.getObj("InventoryUI") };
+		auto jInventory = jSettings.getObj<JMap>("InventoryUI");
 		inventoryUI->ModPreference = static_cast<Preference>(jInventory.getInt("ModPreference"));
 		inventoryUI->UserPreference = static_cast<Preference>(jInventory.getInt("UserPreference"));
 
-		JMap jLvlUp{ jSettings.getObj("SleepToLevelUp") };
+		auto jLvlUp = jSettings.getObj<JMap>("SleepToLevelUp");
 		sleepToLevelUp->ModPreference = static_cast<Preference>(jLvlUp.getInt("ModPreference"));
 		sleepToLevelUp->UserPreference = static_cast<Preference>(jLvlUp.getInt("UserPreference"));
 
-		JMap jArrow{ jSettings.getObj("ArrowWeight") };
+		auto jArrow = jSettings.getObj<JMap>("ArrowWeight");
 		arrowWeight->ModPreference = static_cast<Preference>(jArrow.getInt("ModPreference"));
 		arrowWeight->UserPreference = static_cast<Preference>(jArrow.getInt("UserPreference"));
 
-		JMap jLockpick{ jSettings.getObj("LockpickWeight") };
+		auto jLockpick = jSettings.getObj<JMap>("LockpickWeight");
 		lockpickWeight->ModPreference = static_cast<Preference>(jLockpick.getInt("ModPreference"));
 		lockpickWeight->UserPreference = static_cast<Preference>(jLockpick.getInt("UserPreference"));
 
-		JMap jWarmth{ jSettings.getObj("WarmthSettings") };
+		auto jWarmth = jSettings.getObj<JMap>("WarmthSettings");
 		warmth.EnableFrostfallKeywords = jWarmth.getInt("EnableFrostfallKeywords");
 		warmth.EnableWarmthForCloaks = jWarmth.getInt("EnableWarmthForCloaks");
 
-		JFormMap jOverrides{ jWarmth.getObj("WarmthOverrides") };
+		auto jOverrides = jWarmth.getObj<JFormMap>("WarmthOverrides");
 		int32_t count = jOverrides.count();
 		auto keyArray = jOverrides.allKeys();
 

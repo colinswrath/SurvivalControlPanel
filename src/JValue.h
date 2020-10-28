@@ -62,8 +62,9 @@ namespace JContainers
 			return _getInt(default_domain, ID, key);
 		}
 
-		int32_t getObj(JString key) {
-			return _getObj(default_domain, ID, key);
+		template <typename T = int32_t>
+		T getObj(JString key) {
+			return T(_getObj(default_domain, ID, key));
 		}
 
 		void setInt(JString key, int32_t value) {
