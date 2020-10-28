@@ -58,6 +58,7 @@ int ResetOverrideButton
 ; Profiles
 bool CreatedNewFile = false
 String CurrentFile = ""
+String[] BrowseFileEntries
 
 Event OnInit()
 	parent.OnInit()
@@ -468,8 +469,14 @@ State Browse
 Event OnMenuOpenST()
 	String sProfileDir = JContainersProfileDir()
 	if sProfileDir
-		SetMenuDialogOptions(JContainers.contentsOfDirectoryAtPath(sProfileDir))
+		BrowseFileEntries = JContainers.contentsOfDirectoryAtPath(sProfileDir)
+		SetMenuDialogOptions(BrowseFileEntries)
 	endif
+EndEvent
+
+Event OnMenuAcceptST(int a_index)
+	CurrentFile = BrowseFileEntries[a_index]
+	ForcePageReset()
 EndEvent
 EndState
 
