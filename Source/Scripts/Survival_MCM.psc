@@ -305,9 +305,10 @@ Event OnOptionSelect(int a_option)
 			SetToggleOptionValue(FrostfallToggle, true)
 		endif
 	elseif a_option == ResetOverrideButton
-		; TODO Confirmation dialog
-		ResetAllArmorWarmthToDefault()
-		RecomputeArmorWarmths()
+		if ShowMessage("$This will reset all equipment settings to default.")
+			ResetAllArmorWarmthToDefault()
+			RecomputeArmorWarmths()
+		endif
 	endif
 EndEvent
 
@@ -474,28 +475,31 @@ EndState
 
 State Load
 Event OnSelectST()
-	; TODO confirmation dialog (This will replace all current settings)
-	String sProfileDir = JContainersProfileDir()
-	Survival_JContainers.Load(sProfileDir + CurrentFile)
+	if ShowMessage("$This will replace all current settings.")
+		String sProfileDir = JContainersProfileDir()
+		Survival_JContainers.Load(sProfileDir + CurrentFile)
+	endif
 EndEvent
 EndState
 
 State Save
 Event OnSelectST()
-	; TODO confirmation dialog (This will overwrite saved settings)
-	String sProfileDir = JContainersProfileDir()
-	Survival_JContainers.Save(sProfileDir + CurrentFile)
+	if ShowMessage("$This will overwrite saved settings.")
+		String sProfileDir = JContainersProfileDir()
+		Survival_JContainers.Save(sProfileDir + CurrentFile)
+	endif
 EndEvent
 EndState
 
 State Delete
 Event OnSelectST()
-	; TODO confirmation dialog (This cannot be undone)
-	String sProfileDir = JContainersProfileDir()
-	JContainers.removeFileAtPath(sProfileDir + CurrentFile)
-	CurrentFile = ""
-	CreatedNewFile = false
-	ForcePageReset()
+	if ShowMessage("$This cannot be undone.")
+		String sProfileDir = JContainersProfileDir()
+		JContainers.removeFileAtPath(sProfileDir + CurrentFile)
+		CurrentFile = ""
+		CreatedNewFile = false
+		ForcePageReset()
+	endif
 EndEvent
 EndState
 

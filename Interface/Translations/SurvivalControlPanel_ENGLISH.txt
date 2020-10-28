@@ -48,6 +48,10 @@ $Sleep to level up	Sleep to level up
 $Survival Mode Core	Survival Mode Core
 $Survival Mode Features	Survival Mode Features
 $Survival Mode Patches	Survival Mode Patches
+$This cannot be undone.	This cannot be undone.
+$This will overwrite saved settings.	This will overwrite saved settings.
+$This will replace all current settings.	This will replace all current settings.
+$This will reset all equipment settings to default.	This will reset all equipment settings to default.
 $Torch Bonus	Torch Bonus
 $Warm	Warm
 $Warmth Settings	Warmth Settings
