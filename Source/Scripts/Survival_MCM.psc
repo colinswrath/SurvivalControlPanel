@@ -56,7 +56,7 @@ int CloakOverrideMenu
 int ResetOverrideButton
 
 ; Profiles
-bool CreatedNewFile = false
+bool SettingsMatchProfile = false
 String CurrentFile = ""
 String[] BrowseFileEntries
 
@@ -166,7 +166,7 @@ Event OnPageReset(String a_page)
 		int iLoadSaveFlag = OPTION_FLAG_DISABLED
 		int iDeleteFlag = OPTION_FLAG_DISABLED
 		if bJCValid
-			if CreatedNewFile
+			if SettingsMatchProfile
 				iDeleteFlag = OPTION_FLAG_NONE
 			elseif CurrentFile != ""
 				iLoadSaveFlag = OPTION_FLAG_NONE
@@ -181,7 +181,7 @@ Event OnPageReset(String a_page)
 
 		SetCursorPosition(20)
 		AddHeaderOption("JContainers")
-		if !JContainers.isInstalled() || !Survival_JContainers.IsAvailable()
+		if !bJCValid
 			AddTextOption("$API", "$Not installed")
 		else
 			String sVersion = JContainers.APIVersion()
@@ -458,12 +458,12 @@ EndEvent
 State NewFile
 Event OnInputAcceptST(String a_input)
 	if a_input != ""
-		String sProfileDir = JContainersProfileDir()
-		if sProfileDir != ""
-			Survival_JContainers.Save(sProfileDir + a_input + ".json")
+		if SaveProfile(a_input)
 			CurrentFile = a_input
-			CreatedNewFile = true
+			SettingsMatchProfile = true
 			ForcePageReset()
+		else
+			ShowMessage("$Error: Failed to save profile.", a_withCancel = false)
 		endif
 	endif
 EndEvent
@@ -483,7 +483,7 @@ Event OnMenuAcceptST(int a_index)
 	if sFile != ""
 		CurrentFile = sFile
 		ForcePageReset()
-		CreatedNewFile = false
+		SettingsMatchProfile = false
 	endif
 EndEvent
 EndState
@@ -491,8 +491,11 @@ EndState
 State Load
 Event OnSelectST()
 	if ShowMessage("$This will replace all current settings.")
-		String sProfileDir = JContainersProfileDir()
-		Survival_JContainers.Load(sProfileDir + CurrentFile)
+		if LoadProfile(CurrentFile)
+			SettingsMatchProfile = true
+		else
+			ShowMessage("$Error: Failed to load profile.", a_withCancel = false)
+		endif
 	endif
 EndEvent
 EndState
@@ -500,8 +503,11 @@ EndState
 State Save
 Event OnSelectST()
 	if ShowMessage("$This will overwrite saved settings.")
-		String sProfileDir = JContainersProfileDir()
-		Survival_JContainers.Save(sProfileDir + CurrentFile)
+		if SaveProfile(CurrentFile)
+			SettingsMatchProfile = true
+		else
+			ShowMessage("$Error: Failed to save profile.", a_withCancel = false)
+		endif
 	endif
 EndEvent
 EndState
@@ -509,11 +515,13 @@ EndState
 State Delete
 Event OnSelectST()
 	if ShowMessage("$This cannot be undone.")
-		String sProfileDir = JContainersProfileDir()
-		JContainers.removeFileAtPath(sProfileDir + CurrentFile)
-		CurrentFile = ""
-		CreatedNewFile = false
-		ForcePageReset()
+		if DeleteProfile(CurrentFile)
+			CurrentFile = ""
+			SettingsMatchProfile = false
+			ForcePageReset()
+		else
+			ShowMessage("$Error: Failed to delete profile.", a_withCancel = false)
+		endif
 	endif
 EndEvent
 EndState
@@ -592,6 +600,45 @@ String Function GetWarmthRatingAsString(Armor a_armor)
 	string sWarmth = a_armor.GetWarmthRating() as string
 	sWarmth = StringUtil.Substring(sWarmth, 0, StringUtil.Find(sWarmth, "."))
 	return sWarmth
+EndFunction
+
+bool Function SaveProfile(String a_name)
+	String sFilePath = GetProfilePath(a_name)
+	if sFilePath != ""
+		Survival_JContainers.Save(sFilePath)
+		return JContainers.fileExistsAtPath(sFilePath)
+	else
+		return false
+	endif
+EndFunction
+
+bool Function LoadProfile(String a_name)
+	String sFilePath = GetProfilePath(a_name)
+	if sFilePath != ""
+		Survival_JContainers.Load(sFilePath)
+		return true
+	else
+		return false
+	endif
+EndFunction
+
+bool Function DeleteProfile(String a_name)
+	String sFilePath = GetProfilePath(a_name)
+	if sFilePath != ""
+		JContainers.removeFileAtPath(sFilePath)
+		return !JContainers.fileExistsAtPath(sFilePath)
+	else
+		return false
+	endif
+EndFunction
+
+String Function GetProfilePath(String a_name)
+	String sProfileDir = JContainersProfileDir()
+	if sProfileDir != ""
+		return sProfileDir + a_name + ".json"
+	else
+		return ""
+	endif
 EndFunction
 
 bool Function IsJContainersValid()

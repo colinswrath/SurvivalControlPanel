@@ -18,6 +18,9 @@ $DeleteFile	Delete
 $Enable Cloak Warmth	Enable Cloak Warmth
 $Enable Frostfall Keywords	Enable Frostfall Keywords
 $Equipment	Equipment
+$Error: Failed to delete profile.	Error: Failed to delete profile.
+$Error: Failed to load profile.	Error: Failed to load profile.
+$Error: Failed to save profile.	Error: Failed to save profile.
 $Feet	Feet
 $Feet Cold Bonus	Feet Cold Bonus
 $Feet Normal Bonus	Feet Normal Bonus
