@@ -19,6 +19,7 @@ namespace Serialization
 				{
 					logger::error("Failed to write data for warmth elem!");
 					return false;
+					break;
 				}
 			}
 		}
@@ -41,6 +42,7 @@ namespace Serialization
 			if (!a_intfc->ReadRecordData(elem))
 			{
 				logger::error("Failed to load setting element!");
+				break;
 			}
 			else
 			{

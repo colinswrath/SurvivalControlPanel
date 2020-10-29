@@ -86,7 +86,7 @@ namespace Survival
 		std::vector<float> cloakSetting = { GetCloakColdBonus(), GetCloakNormalBonus(), GetCloakWarmBonus() };
 		std::array<bool, 2> toggles = { EnableWarmthForCloaks, EnableFrostfallKeywords };
 
-		if (!Serialization::Save(a_intfc,cloakSetting))
+		if (!Serialization::Save(a_intfc, cloakSetting))
 		{
 			logger::error("Failed to write data!");
 		}
@@ -104,9 +104,35 @@ namespace Survival
 				if (!a_intfc->WriteRecordData(elem))
 				{
 					logger::error("Failed to write data for warmth elem!");
-					break;
+					return false;
 				}
 			}
+		}
+
+		//Serialize override table
+		const std::size_t mapNums = WarmthOverrides.size();
+
+		if (!a_intfc->WriteRecordData(mapNums))
+		{
+			logger::error("Failed to write size of record data!");
+			return false;
+		}
+
+		for (auto& warmth : WarmthOverrides)
+		{
+			if (!a_intfc->WriteRecordData(warmth.first))
+			{
+				logger::error("Failed to write warmth elem ({} : {})!",warmth.first, warmth.second);
+				return false;
+			}
+
+			if (!a_intfc->WriteRecordData(warmth.second))
+			{
+				logger::error("Failed to write warmth elem ({} : {})!", warmth.first, warmth.second);
+				return false;
+			}
+
+			logger::error("Wrote warmth elem ({} : {})!", warmth.first, warmth.second);
 		}
 		return true;
 	}
@@ -116,10 +142,14 @@ namespace Survival
 		std::vector<float> cloakSetting;
 		bool toggles[2];
 
+		//Load cloak info
+
 		if (!Serialization::Load(a_intfc, cloakSetting))
 		{
 			logger::error("Failed to load data!");
 		}
+
+		//Load toggles
 
 		std::size_t size;
 		if (!a_intfc->ReadRecordData(size))
@@ -140,6 +170,50 @@ namespace Survival
 			{
 				toggles[i] = elem;
 			}
+		}
+
+		//Load warmth table
+
+		if (!a_intfc->ReadRecordData(size))
+		{
+			logger::error("Failed to load setting element!");
+			return false;
+		}
+
+		WarmthOverrides.clear();		//Clean table to get loaded data
+
+		RE::FormID form;
+		Survival::WarmthClass warmth;
+
+		for (std::size_t i = 0; i < size; ++i)
+		{
+			if (!a_intfc->ReadRecordData(form))
+			{
+				logger::error("Failed to load override form!");
+				return false;
+			}
+
+			if (!a_intfc->ResolveFormID(form, form))
+			{
+				logger::error("Failed to resolve formID.");
+				return false;
+			}
+
+			if (!a_intfc->ReadRecordData(warmth))
+			{
+				logger::error("Failed to load override warmth setting!");
+				return false;
+			}
+
+			auto result = WarmthOverrides.insert(std::make_pair(form, warmth));		//load parsed data into table
+
+			if (!result.second)
+			{
+				logger::error("Failed to insert into table.");
+				return false;
+			}
+
+			logger::info("Loaded {} and {} into table", form, warmth);
 		}
 
 		SetCloakColdBonus(cloakSetting[0]);
