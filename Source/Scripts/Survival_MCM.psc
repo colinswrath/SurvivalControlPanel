@@ -181,7 +181,7 @@ Event OnPageReset(String a_page)
 
 		SetCursorPosition(20)
 		AddHeaderOption("JContainers")
-		if !JContainers.isInstalled()
+		if !JContainers.isInstalled() || !Survival_JContainers.IsAvailable()
 			AddTextOption("$API", "$Not installed")
 		else
 			String sVersion = JContainers.APIVersion()
@@ -595,7 +595,7 @@ String Function GetWarmthRatingAsString(Armor a_armor)
 EndFunction
 
 bool Function IsJContainersValid()
-	return JContainers.APIVersion() >= 4
+	return JContainers.APIVersion() >= 4 && Survival_JContainers.IsAvailable()
 EndFunction
 
 String Function JContainersProfileDir()

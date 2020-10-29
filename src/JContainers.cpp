@@ -6,6 +6,11 @@ using namespace Survival;
 
 namespace JContainers
 {
+	bool IsAvailable(RE::StaticFunctionTag*)
+	{
+		return (default_domain != nullptr);
+	}
+
 	void Save(RE::StaticFunctionTag*, RE::BSString a_filePath)
 	{
 		if (!default_domain)
@@ -123,6 +128,7 @@ namespace JContainers
 
 	bool RegisterFuncs(RE::BSScript::IVirtualMachine* a_vm)
 	{
+		a_vm->RegisterFunction("IsAvailable"sv, "Survival_JContainers"sv, IsAvailable);
 		a_vm->RegisterFunction("Save"sv, "Survival_JContainers"sv, Save);
 		a_vm->RegisterFunction("Load"sv, "Survival_JContainers"sv, Load);
 

@@ -18,6 +18,7 @@ namespace JContainers
 		default_domain = root->query_interface<jc::domain_interface>()->get_default_domain();
 	}
 
+	bool IsAvailable(RE::StaticFunctionTag*);
 	void Save(RE::StaticFunctionTag*, RE::BSString a_filePath);
 	void Load(RE::StaticFunctionTag*, RE::BSString a_filePath);
 
