@@ -81,6 +81,7 @@ namespace Survival
 		}
 	}
 
+	//TODO Remove extra logging when no longer needed
 	bool WarmthSettings::SerializeSave(SKSE::SerializationInterface* a_intfc)
 	{
 		std::vector<float> cloakSetting = { GetCloakColdBonus(), GetCloakNormalBonus(), GetCloakWarmBonus() };
@@ -132,11 +133,12 @@ namespace Survival
 				return false;
 			}
 
-			logger::error("Wrote warmth elem ({} : {})!", warmth.first, warmth.second);
+			logger::info("Wrote warmth elem ({} : {})!", warmth.first, warmth.second);
 		}
 		return true;
 	}
 
+	//TODO Remove extra logging when no longer needed
 	bool WarmthSettings::DeserializeLoad(SKSE::SerializationInterface* a_intfc)
 	{
 		std::vector<float> cloakSetting;
