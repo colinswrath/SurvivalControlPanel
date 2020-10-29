@@ -40,10 +40,10 @@ namespace JContainers
 		JValue(JString filePath) : ID(_readFromFile(default_domain, filePath)) { }
 
 	private:
-		using readFromFile_t = int32_t(void*, JString filePath);
+		using readFromFile_t = int32_t (void*, JString filePath);
 		inline static readFromFile_t* _readFromFile;
 
-		using writeToFile_t = void(void*, int32_t object, JString filePath);
+		using writeToFile_t = void (void*, int32_t object, JString filePath);
 		inline static writeToFile_t* _writeToFile;
 	};
 
@@ -85,22 +85,22 @@ namespace JContainers
 		}
 
 	private:
-		using object_t = int32_t(void*);
+		using object_t = int32_t (void*);
 		inline static object_t* _object;
 
-		using getInt_t = int32_t(void*, int32_t map, JString key);
+		using getInt_t = int32_t (void*, int32_t map, JString key);
 		inline static getInt_t* _getInt;
 
-		using getObj_t = int32_t(void*, int32_t map, JString key);
+		using getObj_t = int32_t (void*, int32_t map, JString key);
 		inline static getObj_t* _getObj;
 
-		using setInt_t = void(void*, int32_t map, JString key, int32_t value);
+		using setInt_t = void (void*, int32_t map, JString key, int32_t value);
 		inline static setInt_t* _setInt;
 
-		using setObj_t = void(void*, int32_t map, JString key, int32_t value);
+		using setObj_t = void (void*, int32_t map, JString key, int32_t value);
 		inline static setObj_t* _setObj;
 
-		using writeToFile_t = void(void*, int32_t object, JString filePath);
+		using writeToFile_t = void (void*, int32_t object, JString filePath);
 		inline static writeToFile_t* _writeToFile;
 	};
 
@@ -140,19 +140,19 @@ namespace JContainers
 		}
 
 	private:
-		using object_t = int32_t(void*);
+		using object_t = int32_t (void*);
 		inline static object_t* _object;
 
-		using count_t = int32_t(void*, int32_t map);
+		using count_t = int32_t (void*, int32_t map);
 		inline static count_t* _count;
 
-		using allKeysPArray_t = RE::TESForm**(void*, int32_t map);
+		using allKeysPArray_t = RE::TESForm** (void*, int32_t map);
 		inline static allKeysPArray_t* _allKeysPArray;
 
-		using getInt_t = int32_t(void*, int32_t map, RE::TESForm* key);
+		using getInt_t = int32_t (void*, int32_t map, RE::TESForm* key);
 		inline static getInt_t* _getInt;
 
-		using setInt_t = void(void*, int32_t map, RE::TESForm* key, int32_t value);
+		using setInt_t = void (void*, int32_t map, RE::TESForm* key, int32_t value);
 		inline static setInt_t* _setInt;
 	};
 }
