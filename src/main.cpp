@@ -3,6 +3,7 @@
 #include "Papyrus.h"
 #include "Survival.h"
 #include "Warmth.h"
+#include "Json.h"
 
 enum
 {
@@ -184,6 +185,24 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	s_interface->SetUniqueID('SURV');						//<-Handle ID
 	s_interface->SetSaveCallback(SaveCallback);
 	s_interface->SetLoadCallback(LoadCallBack);
+
+	auto m_interface = SKSE::GetMessagingInterface();
+	m_interface->RegisterListener("SKSE", [](SKSE::MessagingInterface::Message* a_msg) {
+		if (a_msg && a_msg->type == SKSE::MessagingInterface::kNewGame)
+		{
+			auto userDir = Json::GetUserDirectory();
+			auto userDefault = userDir / "default.json";
+			auto dataDefault = std::filesystem::path{ "Data/Survival.json" };
+			if (std::filesystem::directory_entry{ userDefault }.exists())
+			{
+				Json::Load(userDefault);
+			}
+			else if (std::filesystem::directory_entry{ dataDefault }.exists())
+			{
+				Json::Load(dataDefault);
+			}
+		}
+	});
 
 	return true;
 }
