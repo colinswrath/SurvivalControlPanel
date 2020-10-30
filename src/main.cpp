@@ -42,11 +42,11 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 	spdlog::set_default_logger(std::move(log));
 	spdlog::set_pattern("%g(%#): [%^%l%$] %v"s);
 
-	logger::info(FMT_STRING("Survival Decoupler v{}"), MYFP_VERSION_VERSTRING);
+	logger::info(FMT_STRING("Survival Control Panel v{}"), SRCP_VERSION_VERSTRING);
 
 	a_info->infoVersion = SKSE::PluginInfo::kVersion;
-	a_info->name = "Survival Decoupler";
-	a_info->version = MYFP_VERSION_MAJOR;
+	a_info->name = "Survival Control Panel";
+	a_info->version = SRCP_VERSION_MAJOR;
 
 	if (a_skse->IsEditor()) {
 		logger::critical("Loaded in editor, marking as incompatible"sv);
@@ -173,7 +173,7 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
-	logger::info("Survival Decoupler loaded");
+	logger::info("Survival Control Panel loaded");
 
 	SKSE::Init(a_skse);
 	SKSE::AllocTrampoline(84);
