@@ -218,6 +218,7 @@
     <ClCompile Include="src\Json.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Papyrus.cpp" />
+    <ClCompile Include="src\PapyrusJson.cpp" />
     <ClCompile Include="src\PapyrusSurvival.cpp" />
     <ClCompile Include="src\PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -234,6 +235,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Json.h" />
+    <ClInclude Include="src\PapyrusJson.h" />
     <ClInclude Include="src\Serialization.h" />
     <ClInclude Include="src\HUDIndicatorManager.h" />
     <ClInclude Include="src\SleepLevelUpManager.h" />

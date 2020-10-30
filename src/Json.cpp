@@ -59,54 +59,19 @@ namespace Json
 			return dataHandler->LookupForm(relativeID, plugin);
 		}
 
-		std::filesystem::path GetUserDirectory()
-		{
-			char mydocuments[MAX_PATH];
-			SHGetFolderPath(nullptr, CSIDL_MYDOCUMENTS, nullptr, SHGFP_TYPE_CURRENT, mydocuments);
-
-			std::filesystem::path path{ mydocuments };
-			path = path / "My Games" / "Skyrim Special Edition" / "SurvivalCP";
-			return path;
-		}
 	}
 
-	std::vector<RE::BSFixedString> ListFiles(RE::StaticFunctionTag*)
+	std::filesystem::path GetUserDirectory()
 	{
-		std::vector<RE::BSFixedString> files;
-		auto userDir = GetUserDirectory();
-		std::filesystem::directory_entry dir_entry{ userDir };
-		if (!dir_entry.exists())
-		{
-			return files;
-		}
+		char mydocuments[MAX_PATH];
+		SHGetFolderPath(nullptr, CSIDL_MYDOCUMENTS, nullptr, SHGFP_TYPE_CURRENT, mydocuments);
 
-		std::filesystem::directory_iterator dirContents{ userDir };
-
-		for (auto file : dirContents)
-		{
-			if (!file.is_regular_file())
-				continue;
-
-			if (file.path().extension() == ".json")
-			{
-				files.push_back(RE::BSFixedString{ file.path().stem().string() });
-			}
-		}
-
-		return files;
+		std::filesystem::path path{ mydocuments };
+		path = path / "My Games" / "Skyrim Special Edition" / "SurvivalCP";
+		return path;
 	}
 
-	bool Exists(RE::StaticFunctionTag*, RE::BSString a_filePath)
-	{
-		auto fullPath = GetUserDirectory() / std::string_view{ a_filePath };
-		fullPath += ".json";
-
-		std::filesystem::directory_entry dir_entry{ fullPath };
-
-		return dir_entry.exists();
-	}
-
-	bool Save(RE::StaticFunctionTag*, RE::BSString a_filePath)
+	bool Save(std::filesystem::path filePath)
 	{
 		auto settings = RE::GameSettingCollection::GetSingleton();
 		auto hudIndicators = Settings::GetSingleton(Feature::HUDIndicators);
@@ -166,16 +131,20 @@ namespace Json
 			std::filesystem::create_directory(userDir);
 		}
 
-		auto fullPath = userDir / std::string_view{ a_filePath };
-		fullPath += ".json";
-		std::ofstream stream{ fullPath };
+		std::ofstream stream{ filePath };
 		stream << JValue{ jSettings }.serialize(true);
 
 		return true;
 	}
 
-	bool Load(RE::StaticFunctionTag*, RE::BSString a_filePath)
+	bool Load(std::filesystem::path filePath)
 	{
+		std::filesystem::directory_entry dir_entry{ filePath };
+		if (!dir_entry.exists())
+		{
+			return false;
+		}
+
 		auto settings = RE::GameSettingCollection::GetSingleton();
 		auto hudIndicators = Settings::GetSingleton(Feature::HUDIndicators);
 		auto inventoryUI = Settings::GetSingleton(Feature::InventoryUI);
@@ -184,16 +153,7 @@ namespace Json
 		auto lockpickWeight = Settings::GetSingleton(Feature::LockpickWeight);
 		auto& warmth = WarmthSettings::GetSingleton();
 
-		auto userDir = GetUserDirectory();
-		std::filesystem::directory_entry dir_entry{ userDir };
-		if (!dir_entry.exists())
-		{
-			return false;
-		}
-
-		auto fullPath = userDir / std::string_view{ a_filePath };
-		fullPath += ".json";
-		std::ifstream stream{ fullPath };
+		std::ifstream stream{ filePath };
 
 		JValue v;
 		std::string err = picojson::parse(v, stream);
@@ -252,32 +212,6 @@ namespace Json
 
 			warmth.WarmthOverrides[form->formID] = static_cast<WarmthClass>(value.get<double>());
 		}
-
-		return true;
-	}
-
-	bool Delete(RE::StaticFunctionTag*, RE::BSString a_filePath)
-	{
-		auto userDir = GetUserDirectory();
-		std::filesystem::directory_entry dir_entry{ userDir };
-		if (!dir_entry.exists())
-		{
-			return false;
-		}
-
-		auto fullPath = userDir / std::string_view{ a_filePath };
-		fullPath += ".json";
-		std::filesystem::remove(fullPath);
-		return true;
-	}
-
-	bool RegisterFuncs(RE::BSScript::IVirtualMachine* a_vm)
-	{
-		a_vm->RegisterFunction("ListFiles"sv, "Survival_Json"sv, ListFiles);
-		a_vm->RegisterFunction("Exists"sv, "Survival_Json"sv, Exists);
-		a_vm->RegisterFunction("Save"sv, "Survival_Json"sv, Save);
-		a_vm->RegisterFunction("Load"sv, "Survival_Json"sv, Load);
-		a_vm->RegisterFunction("Delete"sv, "Survival_Json"sv, Delete);
 
 		return true;
 	}

@@ -30,6 +30,9 @@
     <ClCompile Include="src\Json.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\PapyrusJson.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\PCH.h">
@@ -78,6 +81,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Serialization.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PapyrusJson.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

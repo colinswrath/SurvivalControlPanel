@@ -1,6 +1,6 @@
 #include "Papyrus.h"
 #include "PapyrusSurvival.h"
-#include "Json.h"
+#include "PapyrusJson.h"
 
 namespace Papyrus
 {
@@ -9,7 +9,7 @@ namespace Papyrus
 		auto papyrus = SKSE::GetPapyrusInterface();
 
 		papyrus->Register(PapyrusSurvival::RegisterFuncs);
-		papyrus->Register(Json::RegisterFuncs);
+		papyrus->Register(PapyrusJson::RegisterFuncs);
 		logger::info("Registered Survival script");
 	}
 }
