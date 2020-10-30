@@ -234,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Json.h" />
+    <ClInclude Include="src\Serialization.h" />
     <ClInclude Include="src\HUDIndicatorManager.h" />
     <ClInclude Include="src\SleepLevelUpManager.h" />
     <ClInclude Include="src\ArrowWeightManager.h" />

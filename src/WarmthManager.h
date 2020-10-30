@@ -112,11 +112,14 @@ private:
 
 	inline static Survival::WarmthClass GetWarmthClass(ArmorWarmthInfo* info)
 	{
-		if (*info->warmthValues == GetWarmthSettings(Survival::WarmthClass::Warm))
+		auto& warmthSettings = Survival::WarmthSettings::GetSingleton();
+		if (*info->warmthValues == GetWarmthSettings(Survival::WarmthClass::Warm) ||
+			*info->warmthValues == warmthSettings.GetCloakSettings(Survival::WarmthClass::Warm))
 		{
 			return Survival::WarmthClass::Warm;
 		}
-		else if (*info->warmthValues == GetWarmthSettings(Survival::WarmthClass::Cold))
+		else if (*info->warmthValues == GetWarmthSettings(Survival::WarmthClass::Cold) ||
+			*info->warmthValues == warmthSettings.GetCloakSettings(Survival::WarmthClass::Cold))
 		{
 			return Survival::WarmthClass::Cold;
 		}

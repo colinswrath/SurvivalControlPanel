@@ -6,7 +6,6 @@
 class HUDIndicatorManager
 {
 public:
-	//TODO DOES NOT WORK NEED TO FIX
 	inline static void Install()
 	{
 		/*

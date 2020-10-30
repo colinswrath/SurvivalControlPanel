@@ -142,7 +142,7 @@ Event OnPageReset(String a_page)
 		HandsOverrideMenu = AddEquipmentOptions("$Hands", HandsSlot, ArmorHands, ClothingHands)
 		FeetOverrideMenu = AddEquipmentOptions("$Feet", FeetSlot, ArmorFeet, ClothingFeet)
 		if IsCloakWarmthEnabled()
-			AddEquipmentOptions("$Cloak", CloakSlot)
+			CloakOverrideMenu = AddEquipmentOptions("$Cloak", CloakSlot)
 		endif
 
 		SetCursorPosition(1)
@@ -254,6 +254,8 @@ Event OnOptionMenuAccept(int a_option, int index)
 			kArmor = GetPlayer().GetEquippedArmorInSlot(HandsSlot)
 		elseif a_option == FeetOverrideMenu
 			kArmor = GetPlayer().GetEquippedArmorInSlot(FeetSlot)
+		elseif a_option == CloakOverrideMenu
+			kArmor = GetPlayer().GetEquippedArmorInSlot(CloakSlot)
 		else
 			return
 		endif
@@ -305,6 +307,8 @@ Event OnOptionSliderOpen(int a_option)
 	if a_option == BodyNormalSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvNormalBodyBonus"))
 		SetSliderDialogDefaultValue(27.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == BodyWarmSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvWarmBodyBonus"))
 		SetSliderDialogDefaultValue(54.0)
