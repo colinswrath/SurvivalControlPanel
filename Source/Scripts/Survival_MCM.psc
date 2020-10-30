@@ -137,7 +137,7 @@ Event OnPageReset(String a_page)
 		HandsOverrideMenu = AddEquipmentOptions("$Hands", HandsSlot, ArmorHands, ClothingHands)
 		FeetOverrideMenu = AddEquipmentOptions("$Feet", FeetSlot, ArmorFeet, ClothingFeet)
 		if IsCloakWarmthEnabled()
-			AddEquipmentOptions("$Cloak", CloakSlot)
+			CloakOverrideMenu = AddEquipmentOptions("$Cloak", CloakSlot)
 		endif
 
 		SetCursorPosition(1)
@@ -226,6 +226,8 @@ Event OnOptionMenuAccept(int a_option, int index)
 			kArmor = GetPlayer().GetEquippedArmorInSlot(HandsSlot)
 		elseif a_option == FeetOverrideMenu
 			kArmor = GetPlayer().GetEquippedArmorInSlot(FeetSlot)
+		elseif a_option == CloakOverrideMenu
+			kArmor = GetPlayer().GetEquippedArmorInSlot(CloakSlot)
 		else
 			return
 		endif
