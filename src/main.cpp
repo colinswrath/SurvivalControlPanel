@@ -175,7 +175,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	logger::info("Survival Decoupler loaded");
 
 	SKSE::Init(a_skse);
-	SKSE::AllocTrampoline(84); // TODO figure out exactly how much we need
+	SKSE::AllocTrampoline(84);
 
 	Papyrus::Register();
 	Hooks::Install();
