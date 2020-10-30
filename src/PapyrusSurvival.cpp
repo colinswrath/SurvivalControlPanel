@@ -229,6 +229,9 @@ namespace PapyrusSurvival
 
 	bool RegisterFuncs(VM* a_vm)
 	{
+		a_vm->RegisterFunction("GetVersion", "Survival", GetVersion);
+		a_vm->RegisterFunction("GetVersionMinor", "Survival", GetVersionMinor);
+
 		a_vm->RegisterFunction("ForceEnable", "Survival", ForceEnable);
 		a_vm->RegisterFunction("RequestDisable", "Survival", RequestDisable);
 		a_vm->RegisterFunction("ModReset", "Survival", ModReset);
