@@ -105,12 +105,13 @@ namespace Json
 
 	bool Save(RE::StaticFunctionTag*, RE::BSString a_filePath)
 	{
+		auto settings = RE::GameSettingCollection::GetSingleton();
 		auto hudIndicators = Settings::GetSingleton(Feature::HUDIndicators);
 		auto inventoryUI = Settings::GetSingleton(Feature::InventoryUI);
 		auto sleepToLevelUp = Settings::GetSingleton(Feature::SleepToLevelUp);
 		auto arrowWeight = Settings::GetSingleton(Feature::ArrowWeight);
 		auto lockpickWeight = Settings::GetSingleton(Feature::LockpickWeight);
-		auto warmth = WarmthSettings::GetSingleton();
+		auto& warmth = WarmthSettings::GetSingleton();
 
 		JObject jSettings;
 		jSettings["HUDIndicators"] = JValue{ static_cast<double>(hudIndicators->UserPreference) };
@@ -123,10 +124,25 @@ namespace Json
 		jWarmth["EnableFrostfallKeywords"] = JValue{ static_cast<double>(warmth.EnableFrostfallKeywords) };
 		jWarmth["EnableWarmthForCloaks"] = JValue{ static_cast<double>(warmth.EnableWarmthForCloaks) };
 
-		// TODO save standard game settings and cloak settings
+		jWarmth["NormalBodyBonus"] = JValue{ settings->GetSetting("fSurvNormalBodyBonus")->GetFloat() };
+		jWarmth["WarmBodyBonus"] = JValue{ settings->GetSetting("fSurvWarmBodyBonus")->GetFloat() };
+		jWarmth["ColdBodyBonus"] = JValue{ settings->GetSetting("fSurvColdBodyBonus")->GetFloat() };
+		jWarmth["NormalHandsBonus"] = JValue{ settings->GetSetting("fSurvNormalHandsBonus")->GetFloat() };
+		jWarmth["WarmHandsBonus"] = JValue{ settings->GetSetting("fSurvWarmHandsBonus")->GetFloat() };
+		jWarmth["ColdHandsBonus"] = JValue{ settings->GetSetting("fSurvColdHandsBonus")->GetFloat() };
+		jWarmth["NormalHeadBonus"] = JValue{ settings->GetSetting("fSurvNormalHeadBonus")->GetFloat() };
+		jWarmth["WarmHeadBonus"] = JValue{ settings->GetSetting("fSurvWarmHeadBonus")->GetFloat() };
+		jWarmth["ColdHeadBonus"] = JValue{ settings->GetSetting("fSurvColdHeadBonus")->GetFloat() };
+		jWarmth["NormalFeetBonus"] = JValue{ settings->GetSetting("fSurvNormalFeetBonus")->GetFloat() };
+		jWarmth["WarmFeetBonus"] = JValue{ settings->GetSetting("fSurvWarmFeetBonus")->GetFloat() };
+		jWarmth["ColdFeetBonus"] = JValue{ settings->GetSetting("fSurvColdFeetBonus")->GetFloat() };
+		jWarmth["NormalCloakBonus"] = JValue{ warmth.GetCloakNormalBonus() };
+		jWarmth["WarmCloakBonus"] = JValue{ warmth.GetCloakWarmBonus() };
+		jWarmth["ColdCloakBonus"] = JValue{ warmth.GetCloakColdBonus() };
+		jWarmth["TorchBonus"] = JValue{ settings->GetSetting("fSurvTorchBonus")->GetFloat() };
+		jWarmth["ArmorScalar"] = JValue{ settings->GetSetting("fSurvArmorScalar")->GetFloat() };
 
 		JObject jOverrides;
-		jOverrides["__metaInfo"] = JValue{ JObject{ { "typeName", JValue{ "JFormMap"} } } };
 
 		for (auto [formID, value] : warmth.WarmthOverrides)
 		{
@@ -134,6 +150,7 @@ namespace Json
 			jOverrides[idString] = JValue{ static_cast<double>(value) };
 		}
 
+		jOverrides["__metaInfo"] = JValue{ JObject{ { "typeName", JValue{ "JFormMap"} } } };
 		jWarmth["WarmthOverrides"] = JValue{ jOverrides };
 		jSettings["WarmthSettings"] = JValue{ jWarmth };
 
@@ -154,12 +171,13 @@ namespace Json
 
 	bool Load(RE::StaticFunctionTag*, RE::BSString a_filePath)
 	{
+		auto settings = RE::GameSettingCollection::GetSingleton();
 		auto hudIndicators = Settings::GetSingleton(Feature::HUDIndicators);
 		auto inventoryUI = Settings::GetSingleton(Feature::InventoryUI);
 		auto sleepToLevelUp = Settings::GetSingleton(Feature::SleepToLevelUp);
 		auto arrowWeight = Settings::GetSingleton(Feature::ArrowWeight);
 		auto lockpickWeight = Settings::GetSingleton(Feature::LockpickWeight);
-		auto warmth = WarmthSettings::GetSingleton();
+		auto& warmth = WarmthSettings::GetSingleton();
 
 		auto userDir = GetUserDirectory();
 		std::filesystem::directory_entry dir_entry{ userDir };
@@ -196,7 +214,26 @@ namespace Json
 		warmth.EnableFrostfallKeywords = jWarmth["EnableFrostfallKeywords"].get<double>();
 		warmth.EnableWarmthForCloaks = jWarmth["EnableWarmthForCloaks"].get<double>();
 
-		// TODO load standard game settings and cloak settings
+#pragma warning( push )
+#pragma warning( disable : 4244 )
+		settings->GetSetting("fSurvNormalBodyBonus")->data.f = jWarmth["NormalBodyBonus"].get<double>();
+		settings->GetSetting("fSurvWarmBodyBonus")->data.f = jWarmth["WarmBodyBonus"].get<double>();
+		settings->GetSetting("fSurvColdBodyBonus")->data.f = jWarmth["ColdBodyBonus"].get<double>();
+		settings->GetSetting("fSurvNormalHandsBonus")->data.f = jWarmth["NormalHandsBonus"].get<double>();
+		settings->GetSetting("fSurvWarmHandsBonus")->data.f = jWarmth["WarmHandsBonus"].get<double>();
+		settings->GetSetting("fSurvColdHandsBonus")->data.f = jWarmth["ColdHandsBonus"].get<double>();
+		settings->GetSetting("fSurvNormalHeadBonus")->data.f = jWarmth["NormalHeadBonus"].get<double>();
+		settings->GetSetting("fSurvWarmHeadBonus")->data.f = jWarmth["WarmHeadBonus"].get<double>();
+		settings->GetSetting("fSurvColdHeadBonus")->data.f = jWarmth["ColdHeadBonus"].get<double>();
+		settings->GetSetting("fSurvNormalFeetBonus")->data.f = jWarmth["NormalFeetBonus"].get<double>();
+		settings->GetSetting("fSurvWarmFeetBonus")->data.f = jWarmth["WarmFeetBonus"].get<double>();
+		settings->GetSetting("fSurvColdFeetBonus")->data.f = jWarmth["ColdFeetBonus"].get<double>();
+		warmth.SetCloakNormalBonus(jWarmth["NormalCloakBonus"].get<double>());
+		warmth.SetCloakWarmBonus(jWarmth["WarmCloakBonus"].get<double>());
+		warmth.SetCloakColdBonus(jWarmth["ColdCloakBonus"].get<double>());
+		settings->GetSetting("fSurvTorchBonus")->data.f = jWarmth["TorchBonus"].get<double>();
+		settings->GetSetting("fSurvArmorScalar")->data.f = jWarmth["ArmorScalar"].get<double>();
+#pragma warning( pop )
 
 		auto jOverrides = jWarmth["WarmthOverrides"].get<JObject>();
 		for (auto [formData, value] : jOverrides)
