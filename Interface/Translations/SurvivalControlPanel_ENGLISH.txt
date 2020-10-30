@@ -36,6 +36,7 @@ $HUD indicators	HUD indicators
 $Inventory UI	Inventory UI
 $Load	Load
 $Lockpick weight	Lockpick weight
+$Main	Main
 $New	New
 $NoEquipment	None
 $NormalWarmth	Normal
@@ -46,7 +47,6 @@ $Reset all to default	Reset all to default
 $Save	Save
 $Scaling Factor	Scaling Factor
 $Sleep to level up	Sleep to level up
-$Survival Mode Core	Survival Mode Core
 $Survival Mode Features	Survival Mode Features
 $Survival Mode Patches	Survival Mode Patches
 $This cannot be undone.	This cannot be undone.
