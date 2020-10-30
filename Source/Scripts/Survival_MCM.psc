@@ -21,7 +21,7 @@ int Property HandsSlot = 33  AutoReadOnly
 int Property FeetSlot = 37  AutoReadOnly
 int Property CloakSlot = 46  AutoReadOnly
 
-; Survival Mode Core
+; Main
 String[] FeatureMenuEntries
 int[] FeatureMenuOptions
 int FrostfallToggle
@@ -78,7 +78,7 @@ Event OnInit()
 EndEvent
 
 Event OnPageReset(String a_page)
-	if a_page == "$Survival Mode Core"
+	if a_page == "$Main"
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
 		AddHeaderOption("$Survival Mode Features")
@@ -209,7 +209,7 @@ int Function AddEquipmentOptions(String a_name, int a_slot, Keyword a_keyword1 =
 EndFunction
 
 Event OnOptionMenuOpen(int a_option)
-	if CurrentPage == "$Survival Mode Core"
+	if CurrentPage == "$Main"
 		int iFeature = 0
 		while a_option != FeatureMenuOptions[iFeature] && iFeature < 5
 			iFeature += 1
@@ -234,7 +234,7 @@ Event OnOptionMenuOpen(int a_option)
 EndEvent
 
 Event OnOptionMenuAccept(int a_option, int index)
-	if CurrentPage == "$Survival Mode Core"
+	if CurrentPage == "$Main"
 		int iFeature = 0
 		while a_option != FeatureMenuOptions[iFeature] && iFeature < 5
 			iFeature += 1
