@@ -8,19 +8,18 @@ class HUDIndicatorManager
 public:
 	inline static void Install()
 	{
-		/*
-		REL::Relocation<std::uintptr_t> HUDWidget_Hook{ TweenMenu_Sub_offset, 0x7B };
+		REL::Relocation<std::uintptr_t> HUDIndicator_Hook{ HUDMenu_Update_offset, 0xD5D };
 
 		auto& trampoline = SKSE::GetTrampoline();
-		trampoline.write_call<5>(HUDWidget_Hook.address(), IsHUDIndicatorEnabled);
-
-		logger::info("Installed hook for HUD Indicator."sv);
-		*/
+		_CheckSurvivalHUD = trampoline.write_call<5>(HUDIndicator_Hook.address(), CheckSurvivalHUD);
 	}
 
 private:
-	inline static bool IsHUDIndicatorEnabled()
+	inline static int32_t CheckSurvivalHUD(void* menu, bool survivalModeToggle)
 	{
-		return Survival::FeatureIsEnabled(Survival::Feature::HUDIndicators);
+		bool isEnabled = Survival::FeatureIsEnabled(Survival::Feature::HUDIndicators);
+		return _CheckSurvivalHUD(menu, isEnabled);
 	}
+
+	inline static REL::Relocation<decltype(CheckSurvivalHUD)> _CheckSurvivalHUD;
 };
