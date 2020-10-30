@@ -12,6 +12,8 @@ public:
 
 		auto& trampoline = SKSE::GetTrampoline();
 		_CheckSurvivalHUD = trampoline.write_call<5>(HUDIndicator_Hook.address(), CheckSurvivalHUD);
+
+		logger::info("Installed hook for HUD indicator."sv);
 	}
 
 private:

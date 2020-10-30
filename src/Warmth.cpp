@@ -214,8 +214,6 @@ namespace Survival
 				logger::error("Failed to insert into table.");
 				return false;
 			}
-
-			logger::info("Loaded {} and {} into table", form, warmth);
 		}
 
 		SetCloakColdBonus(cloakSetting[0]);
