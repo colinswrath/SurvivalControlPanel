@@ -450,8 +450,16 @@ EndEvent
 
 State NewFile
 Event OnInputAcceptST(String a_input)
+	bool doSave = false
 	if a_input != ""
-		if SaveProfile(a_input)
+		if Survival_Json.Exists(a_input)
+			doSave = ShowMessage("$This will overwrite previously saved settings.")
+		else
+			doSave = true
+		endif
+	endif
+	if doSave
+		if Survival_Json.Save(a_input)
 			CurrentFile = a_input
 			SettingsMatchProfile = true
 			ForcePageReset()
@@ -481,7 +489,7 @@ EndState
 State Load
 Event OnSelectST()
 	if ShowMessage("$This will replace all current settings.")
-		if LoadProfile(CurrentFile)
+		if Survival_Json.Load(CurrentFile)
 			SettingsMatchProfile = true
 			ForcePageReset()
 		else
@@ -493,8 +501,8 @@ EndState
 
 State Save
 Event OnSelectST()
-	if ShowMessage("$This will overwrite saved settings.")
-		if SaveProfile(CurrentFile)
+	if ShowMessage("$This will overwrite previously saved settings.")
+		if Survival_Json.Save(CurrentFile)
 			SettingsMatchProfile = true
 			ForcePageReset()
 		else
@@ -507,7 +515,7 @@ EndState
 State Delete
 Event OnSelectST()
 	if ShowMessage("$This cannot be undone.")
-		if DeleteProfile(CurrentFile)
+		if Survival_Json.Delete(CurrentFile)
 			CurrentFile = ""
 			SettingsMatchProfile = false
 			ForcePageReset()
@@ -592,27 +600,6 @@ String Function GetWarmthRatingAsString(Armor a_armor)
 	string sWarmth = a_armor.GetWarmthRating() as string
 	sWarmth = StringUtil.Substring(sWarmth, 0, StringUtil.Find(sWarmth, "."))
 	return sWarmth
-EndFunction
-
-bool Function SaveProfile(String a_name)
-	if a_name != ""
-		return Survival_Json.Save(a_name)
-	endif
-	return false
-EndFunction
-
-bool Function LoadProfile(String a_name)
-	if a_name != ""
-		return Survival_Json.Load(a_name)
-	endif
-	return false
-EndFunction
-
-bool Function DeleteProfile(String a_name)
-	if a_name != ""
-		return Survival_Json.Delete(a_name)
-	endif
-	return false
 EndFunction
 
 Keyword Property ArmorHands
