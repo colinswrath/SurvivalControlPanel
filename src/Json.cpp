@@ -6,6 +6,9 @@
 using namespace Survival;
 namespace Json
 {
+	// Change this when we change the format
+	const int32_t version = 1;
+
 	using JObject = picojson::object;
 	using JValue = picojson::value;
 
@@ -114,6 +117,8 @@ namespace Json
 		auto& warmth = WarmthSettings::GetSingleton();
 
 		JObject jSettings;
+		jSettings["__version"] = JValue{ static_cast<double>(version) };
+
 		jSettings["HUDIndicators"] = JValue{ static_cast<double>(hudIndicators->UserPreference) };
 		jSettings["InventoryUI"] = JValue{ static_cast<double>(inventoryUI->UserPreference) };
 		jSettings["SleepToLevelUp"] = JValue{ static_cast<double>(sleepToLevelUp->UserPreference) };
@@ -143,6 +148,7 @@ namespace Json
 		jWarmth["ArmorScalar"] = JValue{ settings->GetSetting("fSurvArmorScalar")->GetFloat() };
 
 		JObject jOverrides;
+		jOverrides["__metaInfo"] = JValue{ JObject{ { "typeName", JValue{ "JFormMap"} } } };
 
 		for (auto [formID, value] : warmth.WarmthOverrides)
 		{
@@ -150,7 +156,6 @@ namespace Json
 			jOverrides[idString] = JValue{ static_cast<double>(value) };
 		}
 
-		jOverrides["__metaInfo"] = JValue{ JObject{ { "typeName", JValue{ "JFormMap"} } } };
 		jWarmth["WarmthOverrides"] = JValue{ jOverrides };
 		jSettings["WarmthSettings"] = JValue{ jWarmth };
 
@@ -203,6 +208,9 @@ namespace Json
 		}
 
 		auto jSettings = v.get<JObject>();
+
+		// In the future, we may need to check version and defer to different loading functions/classes
+		//int32_t version = static_cast<int32_t>(jSettings["__version"].get<double>());
 
 		hudIndicators->UserPreference = static_cast<Preference>(jSettings["HUDIndicators"].get<double>());
 		inventoryUI->UserPreference = static_cast<Preference>(jSettings["InventoryUI"].get<double>());
