@@ -27,6 +27,9 @@
     <ClCompile Include="src\Warmth.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Json.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\PCH.h">
@@ -62,13 +65,16 @@
     <ClInclude Include="src\InventoryUIManager.h">
       <Filter>src</Filter>
     </ClInclude>
-	<ClInclude Include="src\HUDIndicatorManager.h">
+    <ClInclude Include="src\HUDIndicatorManager.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\WarmthManager.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Warmth.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Json.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

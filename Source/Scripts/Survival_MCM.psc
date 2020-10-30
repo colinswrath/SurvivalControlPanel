@@ -55,6 +55,11 @@ int FeetOverrideMenu
 int CloakOverrideMenu
 int ResetOverrideButton
 
+; Profiles
+bool SettingsMatchProfile = false
+String CurrentFile = ""
+String[] BrowseFileEntries
+
 Event OnInit()
 	parent.OnInit()
 
@@ -66,7 +71,7 @@ Event OnInit()
 	FeatureMenuOptions = new int[5]
 
 	WarmthMenuEntries = new String[4]
-	WarmthMenuEntries[NORMAL_INDEX] = "$NormalW"
+	WarmthMenuEntries[NORMAL_INDEX] = "$NormalWarmth"
 	WarmthMenuEntries[WARM_INDEX] = "$Warm"
 	WarmthMenuEntries[COLD_INDEX] = "$Cold"
 	WarmthMenuEntries[RESET_INDEX] = "$Default"
@@ -144,6 +149,28 @@ Event OnPageReset(String a_page)
 
 		AddHeaderOption("$Reset all")
 		ResetOverrideButton = AddTextOption("$Reset all to default", "")
+	elseif a_page == "$Profiles"
+		; This page will use state-based MCM since the options are non-homogenous
+		SetCursorFillMode(TOP_TO_BOTTOM)
+
+		int iFlag = OPTION_FLAG_NONE
+
+		AddHeaderOption("$Profiles")
+		AddInputOptionST("NewFile", "$New", "")
+		AddMenuOptionST("Browse", "$Browse", CurrentFile)
+
+		int iLoadSaveFlag = OPTION_FLAG_DISABLED
+		int iDeleteFlag = OPTION_FLAG_DISABLED
+		if CurrentFile != ""
+			if !SettingsMatchProfile
+				iLoadSaveFlag = OPTION_FLAG_NONE
+			endif
+			iDeleteFlag = OPTION_FLAG_NONE
+		endif
+
+		AddTextOptionST("Load", "$Load", "", a_flags = iLoadSaveFlag)
+		AddTextOptionST("Save", "$Save", "", a_flags = iLoadSaveFlag)
+		AddTextOptionST("Delete", "$DeleteFile", "", a_flags = iDeleteFlag)
 	endif
 EndEvent
 
@@ -169,7 +196,7 @@ int Function AddEquipmentOptions(String a_name, int a_slot, Keyword a_keyword1 =
 	if kArmor && (!a_keyword1 || kArmor.HasKeyword(a_keyword1) || kArmor.HasKeyword(a_keyword2))
 		option = AddMenuOption(kArmor.GetName(), GetWarmthRatingAsString(kArmor))
 	else
-		AddTextOption(a_name, "$None", a_flags = OPTION_FLAG_DISABLED)
+		AddTextOption(a_name, "$NoEquipment", a_flags = OPTION_FLAG_DISABLED)
 	endif
 	return option
 EndFunction
@@ -216,6 +243,7 @@ Event OnOptionMenuAccept(int a_option, int index)
 			UserEnable(iFeature)
 			SetMenuOptionValue(a_option, FeatureMenuEntries[ENABLED_INDEX])
 		endif
+		SettingsMatchProfile = false
 	elseif CurrentPage == "$Equipment"
 		Armor kArmor
 		if a_option == BodyOverrideMenu
@@ -241,6 +269,7 @@ Event OnOptionMenuAccept(int a_option, int index)
 		endif
 
 		SetMenuOptionValue(a_option, GetWarmthRatingAsString(kArmor))
+		SettingsMatchProfile = false
 	endif
 EndEvent
 
@@ -253,6 +282,7 @@ Event OnOptionSelect(int a_option)
 			EnableCloakWarmth()
 			SetToggleOptionValue(CloakWarmthToggle, true)
 		endif
+		SettingsMatchProfile = false
 	elseif a_option == FrostfallToggle
 		if AreFrostfallKeywordsEnabled()
 			DisableFrostfallKeywords()
@@ -261,10 +291,13 @@ Event OnOptionSelect(int a_option)
 			EnableFrostfallKeywords()
 			SetToggleOptionValue(FrostfallToggle, true)
 		endif
+		SettingsMatchProfile = false
 	elseif a_option == ResetOverrideButton
-		; TODO Confirmation dialog
-		ResetAllArmorWarmthToDefault()
-		RecomputeArmorWarmths()
+		if ShowMessage("$This will reset all equipment settings to default.")
+			ResetAllArmorWarmthToDefault()
+			RecomputeArmorWarmths()
+			SettingsMatchProfile = false
+		endif
 	endif
 EndEvent
 
@@ -408,7 +441,78 @@ Event OnOptionSliderAccept(int a_option, float a_value)
 		SetGameSettingFloat("fSurvArmorScalar", a_value)
 		SetSliderOptionValue(ScalarSlider, a_value, "{2}")
 	endif
+	SettingsMatchProfile = false
 EndEvent
+
+State NewFile
+Event OnInputAcceptST(String a_input)
+	if a_input != ""
+		if SaveProfile(a_input)
+			CurrentFile = a_input
+			SettingsMatchProfile = true
+			ForcePageReset()
+		else
+			ShowMessage("$Error: Failed to save profile.", a_withCancel = false)
+		endif
+	endif
+EndEvent
+EndState
+
+State Browse
+Event OnMenuOpenST()
+	BrowseFileEntries = Survival_Json.ListFiles()
+	SetMenuDialogOptions(BrowseFileEntries)
+EndEvent
+
+Event OnMenuAcceptST(int a_index)
+	String sFile = BrowseFileEntries[a_index]
+	if sFile != ""
+		CurrentFile = sFile
+		ForcePageReset()
+		SettingsMatchProfile = false
+	endif
+EndEvent
+EndState
+
+State Load
+Event OnSelectST()
+	if ShowMessage("$This will replace all current settings.")
+		if LoadProfile(CurrentFile)
+			SettingsMatchProfile = true
+			ForcePageReset()
+		else
+			ShowMessage("$Error: Failed to load profile.", a_withCancel = false)
+		endif
+	endif
+EndEvent
+EndState
+
+State Save
+Event OnSelectST()
+	if ShowMessage("$This will overwrite saved settings.")
+		if SaveProfile(CurrentFile)
+			SettingsMatchProfile = true
+			ForcePageReset()
+		else
+			ShowMessage("$Error: Failed to save profile.", a_withCancel = false)
+		endif
+	endif
+EndEvent
+EndState
+
+State Delete
+Event OnSelectST()
+	if ShowMessage("$This cannot be undone.")
+		if DeleteProfile(CurrentFile)
+			CurrentFile = ""
+			SettingsMatchProfile = false
+			ForcePageReset()
+		else
+			ShowMessage("$Error: Failed to delete profile.", a_withCancel = false)
+		endif
+	endif
+EndEvent
+EndState
 
 int Function GuessDefaultWarmth(int a_option)
 	if a_option == BodyOverrideMenu
@@ -484,6 +588,27 @@ String Function GetWarmthRatingAsString(Armor a_armor)
 	string sWarmth = a_armor.GetWarmthRating() as string
 	sWarmth = StringUtil.Substring(sWarmth, 0, StringUtil.Find(sWarmth, "."))
 	return sWarmth
+EndFunction
+
+bool Function SaveProfile(String a_name)
+	if a_name != ""
+		return Survival_Json.Save(a_name)
+	endif
+	return false
+EndFunction
+
+bool Function LoadProfile(String a_name)
+	if a_name != ""
+		return Survival_Json.Load(a_name)
+	endif
+	return false
+EndFunction
+
+bool Function DeleteProfile(String a_name)
+	if a_name != ""
+		return Survival_Json.Delete(a_name)
+	endif
+	return false
 EndFunction
 
 Keyword Property ArmorHands
