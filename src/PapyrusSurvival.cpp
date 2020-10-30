@@ -1,8 +1,19 @@
 #include "PapyrusSurvival.h"
 #include "Warmth.h"
+#include "version.h"
 
 namespace PapyrusSurvival
 {
+	int GetVersion(RE::StaticFunctionTag*)
+	{
+		return SRCP_VERSION_MAJOR;
+	}
+
+	int GetVersionMinor(RE::StaticFunctionTag*)
+	{
+		return SRCP_VERSION_MINOR;
+	}
+
 	void ForceEnable(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);

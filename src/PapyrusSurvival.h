@@ -9,6 +9,9 @@ namespace PapyrusSurvival
 	using Severity = RE::BSScript::ErrorLogger::Severity;
 	using Feature = Survival::Feature;
 
+	int GetVersion(RE::StaticFunctionTag*);
+	int GetVersionMinor(RE::StaticFunctionTag*);
+
 	void ForceEnable(RE::StaticFunctionTag*, Feature a_feature);
 	void RequestDisable(RE::StaticFunctionTag*, Feature a_feature);
 
