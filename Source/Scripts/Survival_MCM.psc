@@ -157,7 +157,14 @@ Event OnPageReset(String a_page)
 
 		AddHeaderOption("$Profiles")
 		AddInputOptionST("NewFile", "$New", "")
-		AddMenuOptionST("Browse", "$Browse", CurrentFile)
+
+		BrowseFileEntries = Survival_Json.ListFiles()
+		int iBrowseFlag = OPTION_FLAG_DISABLED
+		if BrowseFileEntries.Length > 0
+			iBrowseFlag = OPTION_FLAG_NONE
+		endif
+
+		AddMenuOptionST("Browse", "$Browse", CurrentFile, a_flags = iBrowseFlag)
 
 		int iLoadSaveFlag = OPTION_FLAG_DISABLED
 		int iDeleteFlag = OPTION_FLAG_DISABLED
@@ -472,7 +479,6 @@ EndState
 
 State Browse
 Event OnMenuOpenST()
-	BrowseFileEntries = Survival_Json.ListFiles()
 	SetMenuDialogOptions(BrowseFileEntries)
 EndEvent
 
