@@ -1,4 +1,5 @@
 #include "Survival.h"
+#include "Serialization.h"
 
 namespace Survival
 {
@@ -59,7 +60,7 @@ namespace Survival
 		}
 	}
 
-	bool Settings::SerializeSave(SKSE::SerializationInterface* a_intfc, UINT32 a_type, UINT32 a_version)
+	bool Settings::SerializeSave(SKSE::SerializationInterface* a_intfc, uint32_t a_type, uint32_t a_version)
 	{
 		if (!a_intfc->OpenRecord(a_type, a_version))
 		{
@@ -76,21 +77,9 @@ namespace Survival
 	{
 		std::vector<Survival::Preference> prefVector = { ModPreference, UserPreference };
 
-		std::size_t size = prefVector.size();
-		if (!a_intfc->WriteRecordData(size))
+		if (!Serialization::Save(a_intfc, prefVector))
 		{
-			logger::error("Failed to write size of record!");
-		}
-		else
-		{
-			for (auto& elem : prefVector)
-			{
-				if (!a_intfc->WriteRecordData(elem))
-				{
-					logger::error("Failed to write data for elem!");
-					break;
-				}
-			}
+			logger::error("Failed to write data!");
 		}
 
 		return true;
@@ -105,25 +94,9 @@ namespace Survival
 	{
 		std::vector<Survival::Preference> settings;
 
-		std::size_t size;
-		if (!a_intfc->ReadRecordData(size))
+		if (!Serialization::Load(a_intfc, settings))
 		{
-			logger::error("Failed to load size!");
-			return false;
-		}
-
-		for (UINT32 i = 0; i < size; ++i)
-		{
-			Survival::Preference elem;
-			if (!a_intfc->ReadRecordData(elem))
-			{
-				logger::error("Failed to load setting element!");
-				return false;
-			}
-			else
-			{
-				settings.push_back(elem);
-			}
+			logger::error("Failed to load data!");
 		}
 
 		ModPreference = settings[0];

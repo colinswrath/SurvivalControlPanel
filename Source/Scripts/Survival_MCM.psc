@@ -272,6 +272,8 @@ Event OnOptionSliderOpen(int a_option)
 	if a_option == BodyNormalSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvNormalBodyBonus"))
 		SetSliderDialogDefaultValue(27.0)
+		SetSliderDialogRange(WARMTH_MIN, WARMTH_MAX)
+		SetSliderDialogInterval(1.0)
 	elseif a_option == BodyWarmSlider
 		SetSliderDialogStartValue(GetGameSettingFloat("fSurvWarmBodyBonus"))
 		SetSliderDialogDefaultValue(54.0)
