@@ -26,7 +26,7 @@ namespace Json
 			}
 			if (modIndex == 0xFE)
 			{
-				uint16_t lightModIndex = relativeID >> 12;
+				uint16_t lightModIndex = static_cast<uint16_t>(relativeID >> 12);
 				relativeID %= 1 << 12;
 				auto file = dataHandler->LookupLoadedLightModByIndex(lightModIndex);
 				plugin = file->fileName;
