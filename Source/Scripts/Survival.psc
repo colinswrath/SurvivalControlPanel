@@ -8,6 +8,12 @@ int Property SLEEP_TO_LEVEL_UP = 2  AutoReadOnly
 int Property ARROW_WEIGHT      = 3  AutoReadOnly
 int Property LOCKPICK_WEIGHT   = 4  AutoReadOnly
 
+; Returns the major version of Survival Control Panel.
+int Function GetVersion() global native
+
+; Returns the minor version of Survival Control Panel.
+int Function GetVersionMinor() global native
+
 ; Enable the requested Survival feature unless overridden by the user.
 Function ForceEnable(int aiFeature) global native
 

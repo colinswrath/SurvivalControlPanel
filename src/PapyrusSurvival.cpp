@@ -1,8 +1,19 @@
 #include "PapyrusSurvival.h"
 #include "Warmth.h"
+#include "version.h"
 
 namespace PapyrusSurvival
 {
+	int GetVersion(RE::StaticFunctionTag*)
+	{
+		return SRCP_VERSION_MAJOR;
+	}
+
+	int GetVersionMinor(RE::StaticFunctionTag*)
+	{
+		return SRCP_VERSION_MINOR;
+	}
+
 	void ForceEnable(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
@@ -218,6 +229,9 @@ namespace PapyrusSurvival
 
 	bool RegisterFuncs(VM* a_vm)
 	{
+		a_vm->RegisterFunction("GetVersion", "Survival", GetVersion);
+		a_vm->RegisterFunction("GetVersionMinor", "Survival", GetVersionMinor);
+
 		a_vm->RegisterFunction("ForceEnable", "Survival", ForceEnable);
 		a_vm->RegisterFunction("RequestDisable", "Survival", RequestDisable);
 		a_vm->RegisterFunction("ModReset", "Survival", ModReset);
