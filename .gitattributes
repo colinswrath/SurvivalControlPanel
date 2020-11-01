@@ -2,4 +2,4 @@
 * text=auto
 
 # MCM translations as Unicode LE BOM
-Interface/Translations/*.txt text working-tree-encoding=UTF-16LE-BOM eol=CRLF
+Data/Interface/Translations/*.txt text working-tree-encoding=UTF-16LE-BOM eol=CRLF
