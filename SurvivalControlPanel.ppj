@@ -29,6 +29,7 @@
       <Include>SKSE\Plugins\@filename.dll</Include>
       <Include NoRecurse="true">Scripts</Include>
       <Include NoRecurse="true">Source\Scripts</Include>
+      <Include NoRecurse="true">Interface\Translations</Include>
     </ZipFile>
   </ZipFiles>
 </PapyrusProject>
