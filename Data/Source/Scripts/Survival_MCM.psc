@@ -78,6 +78,14 @@ Event OnInit()
 EndEvent
 
 Event OnPageReset(String a_page)
+	
+	If(a_page == "")
+        LoadCustomContent("SurvivalLogo.dds")
+        return
+    Else
+        UnloadCustomContent()
+	EndIf
+	
 	if a_page == "$Main"
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
