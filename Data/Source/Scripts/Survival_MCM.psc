@@ -469,7 +469,18 @@ Event OnInputAcceptST(String a_input)
 		if Survival_Json.Save(a_input)
 			CurrentFile = a_input
 			SettingsMatchProfile = true
-			ForcePageReset()
+			GotoState("Browse")
+			SetMenuOptionValueST(a_input)
+			BrowseFileEntries = Survival_Json.ListFiles()
+			if BrowseFileEntries.Length > 0
+				SetOptionFlagsST(OPTION_FLAG_NONE)
+			endif
+			GotoState("Load")
+			SetOptionFlagsST(OPTION_FLAG_NONE)
+			GotoState("Save")
+			SetOptionFlagsST(OPTION_FLAG_NONE)
+			GotoState("Delete")
+			SetOptionFlagsST(OPTION_FLAG_NONE)
 		else
 			ShowMessage("$Error: Failed to save profile.", a_withCancel = false)
 		endif
@@ -486,8 +497,14 @@ Event OnMenuAcceptST(int a_index)
 	String sFile = BrowseFileEntries[a_index]
 	if sFile != ""
 		CurrentFile = sFile
-		ForcePageReset()
 		SettingsMatchProfile = false
+		SetMenuOptionValueST(sFile)
+		GotoState("Load")
+		SetOptionFlagsST(OPTION_FLAG_NONE)
+		GotoState("Save")
+		SetOptionFlagsST(OPTION_FLAG_NONE)
+		GotoState("Delete")
+		SetOptionFlagsST(OPTION_FLAG_NONE)
 	endif
 EndEvent
 EndState
@@ -497,7 +514,9 @@ Event OnSelectST()
 	if ShowMessage("$This will replace all current settings.")
 		if Survival_Json.Load(CurrentFile)
 			SettingsMatchProfile = true
-			ForcePageReset()
+			SetOptionFlagsST(OPTION_FLAG_DISABLED)
+			GotoState("Save")
+			SetOptionFlagsST(OPTION_FLAG_DISABLED)
 		else
 			ShowMessage("$Error: Failed to load profile.", a_withCancel = false)
 		endif
@@ -510,7 +529,9 @@ Event OnSelectST()
 	if ShowMessage("$This will overwrite previously saved settings.")
 		if Survival_Json.Save(CurrentFile)
 			SettingsMatchProfile = true
-			ForcePageReset()
+			SetOptionFlagsST(OPTION_FLAG_DISABLED)
+			GotoState("Load")
+			SetOptionFlagsST(OPTION_FLAG_DISABLED)
 		else
 			ShowMessage("$Error: Failed to save profile.", a_withCancel = false)
 		endif
@@ -524,7 +545,17 @@ Event OnSelectST()
 		if Survival_Json.Delete(CurrentFile)
 			CurrentFile = ""
 			SettingsMatchProfile = false
-			ForcePageReset()
+			SetOptionFlagsST(OPTION_FLAG_DISABLED)
+			GotoState("Browse")
+			SetMenuOptionValueST("")
+			BrowseFileEntries = Survival_Json.ListFiles()
+			if BrowseFileEntries.Length == 0
+				SetOptionFlagsST(OPTION_FLAG_DISABLED)
+			endif
+			GotoState("Load")
+			SetOptionFlagsST(OPTION_FLAG_DISABLED)
+			GotoState("Save")
+			SetOptionFlagsST(OPTION_FLAG_DISABLED)
 		else
 			ShowMessage("$Error: Failed to delete profile.", a_withCancel = false)
 		endif
