@@ -80,10 +80,10 @@ EndEvent
 Event OnPageReset(String a_page)
 	
 	If(a_page == "")
-        LoadCustomContent("SurvivalLogo.dds")
-        return
-    Else
-        UnloadCustomContent()
+        LoadCustomContent("SurvivalCP/SCP_splash.dds")
+		return
+	Else
+		UnloadCustomContent()
 	EndIf
 	
 	if a_page == "$Main"
