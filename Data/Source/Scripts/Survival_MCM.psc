@@ -79,12 +79,12 @@ EndEvent
 
 Event OnPageReset(String a_page)
 	
-	If(a_page == "")
+	if a_page == ""
         LoadCustomContent("SurvivalCP/SCP_splash.dds")
 		return
-	Else
+	else
 		UnloadCustomContent()
-	EndIf
+	endif
 	
 	if a_page == "$Main"
 		SetCursorFillMode(TOP_TO_BOTTOM)
