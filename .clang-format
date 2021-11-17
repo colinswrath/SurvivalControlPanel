@@ -23,7 +23,6 @@ AlwaysBreakBeforeMultilineStrings: 'true'
 AlwaysBreakTemplateDeclarations: 'Yes'
 BinPackArguments: 'true'
 BinPackParameters: 'true'
-BitFieldColonSpacing: After
 BraceWrapping:
     AfterCaseLabel: 'true'
     AfterClass: 'true'
