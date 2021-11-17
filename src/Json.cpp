@@ -2,6 +2,8 @@
 #include "Json.h"
 #include "Survival.h"
 #include "Warmth.h"
+#include <windows.h>
+#include "ShlObj_core.h"
 
 using namespace Survival;
 namespace Json
@@ -63,7 +65,8 @@ namespace Json
 
 	std::filesystem::path GetUserDirectory()
 	{
-		char mydocuments[MAX_PATH];
+		//char mydocuments[MAX_PATH];
+		wchar_t mydocuments[MAX_PATH];
 		SHGetFolderPath(nullptr, CSIDL_MYDOCUMENTS, nullptr, SHGFP_TYPE_CURRENT, mydocuments);
 
 		std::filesystem::path path{ mydocuments };

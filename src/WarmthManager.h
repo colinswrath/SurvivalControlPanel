@@ -8,7 +8,7 @@ class WarmthManager
 public:
 	inline static void Install()
 	{
-		REL::Relocation<std::uintptr_t> GetWarmthRating_Hook{ TESBoundObject_GetWarmthRating_offset, 0x6E };
+		REL::Relocation<std::uintptr_t> GetWarmthRating_Hook{ REL::Offset(TESBoundObject_GetWarmthRating_offset.offset() + 0x6C) };
 
 		auto& trampoline = SKSE::GetTrampoline();
 		_GetWarmthInfo = trampoline.write_call<5>(GetWarmthRating_Hook.address(), GetWarmthInfo);
