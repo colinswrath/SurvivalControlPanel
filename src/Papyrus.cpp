@@ -1,6 +1,6 @@
 #include "Papyrus.h"
-#include "PapyrusSurvival.h"
 #include "PapyrusJson.h"
+#include "PapyrusSurvival.h"
 
 namespace Papyrus
 {

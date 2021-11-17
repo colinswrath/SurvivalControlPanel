@@ -1,10 +1,10 @@
 #include "Hooks.h"
 #include "ArrowWeightManager.h"
+#include "HUDIndicatorManager.h"
+#include "InventoryUIManager.h"
 #include "LockpickWeightManager.h"
 #include "SleepLevelUpManager.h"
-#include "InventoryUIManager.h"
 #include "WarmthManager.h"
-#include "HUDIndicatorManager.h"
 
 namespace Hooks
 {
@@ -12,7 +12,7 @@ namespace Hooks
 	{
 		ArrowWeightManager::Install();
 		LockpickWeightManager::Install();
-		SleepLevelUpManager::Install();		//This one is fucked up
+		SleepLevelUpManager::Install();  //This one is fucked up
 		InventoryUIManager::Install();
 		WarmthManager::Install();
 		HUDIndicatorManager::Install();

@@ -1,9 +1,9 @@
-#include "Version.h"
 #include "Hooks.h"
+#include "Json.h"
 #include "Papyrus.h"
 #include "Survival.h"
+#include "Version.h"
 #include "Warmth.h"
-#include "Json.h"
 
 enum
 {
@@ -46,14 +46,14 @@ void InitLogger()
 }
 
 extern "C" DLLEXPORT constexpr auto SKSEPlugin_Version =
-[]() {
-	SKSE::PluginVersionData v{};
-	v.pluginVersion = Version::MAJOR;
-	v.PluginName(Version::PROJECT);
-	v.AuthorName("Parapets and colinswrath"sv);
-	v.CompatibleVersions({ SKSE::RUNTIME_1_6_318 });
-	return v;
-}();
+	[]() {
+		SKSE::PluginVersionData v{};
+		v.pluginVersion = Version::MAJOR;
+		v.PluginName(Version::PROJECT);
+		v.AuthorName("Parapets and colinswrath"sv);
+		v.CompatibleVersions({ SKSE::RUNTIME_1_6_318 });
+		return v;
+	}();
 
 void SaveCallback(SKSE::SerializationInterface* a_intfc)
 {
@@ -90,7 +90,6 @@ void SaveCallback(SKSE::SerializationInterface* a_intfc)
 		logger::error("Failed to save Warmth Settings!"sv);
 	}
 	logger::trace("Save callback stop");
-
 }
 
 void LoadCallBack(SKSE::SerializationInterface* a_intfc)
@@ -107,58 +106,49 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 	uint32_t version;
 	uint32_t length;
 
-	while (a_intfc->GetNextRecordInfo(type, version, length))
-	{
-		if (version != kSerializationVersion)
-		{
+	while (a_intfc->GetNextRecordInfo(type, version, length)) {
+		if (version != kSerializationVersion) {
 			logger::error("Loaded data is out of date! Read (%u), expected (%u) for type code (%s)"sv, version, kSerializationVersion, type);
 			continue;
 		}
 
-		switch (type)
-		{
+		switch (type) {
 		case kArrowWeight:
-			if (!arrowSettings->DeserializeLoad(a_intfc))
-			{
+			if (!arrowSettings->DeserializeLoad(a_intfc)) {
 				logger::error("Failed to load arrow settings!"sv);
 			}
 			break;
 
 		case kInventoryUI:
 
-			if (!uiSettings->DeserializeLoad(a_intfc))
-			{
+			if (!uiSettings->DeserializeLoad(a_intfc)) {
 				logger::error("Failed to load UI settings!"sv);
 			}
 			break;
 
 		case kHUDIndicators:
 
-			if (!HUDSettings->DeserializeLoad(a_intfc))
-			{
+			if (!HUDSettings->DeserializeLoad(a_intfc)) {
 				logger::error("Failed to load UI settings!"sv);
 			}
 			break;
 
 		case kLockpickWeight:
 
-			if (!lockSettings->DeserializeLoad(a_intfc))
-			{
+			if (!lockSettings->DeserializeLoad(a_intfc)) {
 				logger::error("Failed to load UI settings!"sv);
 			}
 			break;
 
 		case kSleepToLevelUp:
 
-			if (!SleepSettings->DeserializeLoad(a_intfc))
-			{
+			if (!SleepSettings->DeserializeLoad(a_intfc)) {
 				logger::error("Failed to load UI settings!"sv);
 			}
 			break;
 		case kWarmthSettings:
 
-			if (!warmthSettings.DeserializeLoad(a_intfc))
-			{
+			if (!warmthSettings.DeserializeLoad(a_intfc)) {
 				logger::error("Failed to load warmth settings!"sv);
 			}
 			break;
@@ -183,24 +173,20 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	logger::info("Registered Papyrus functions"sv);
 
 	auto s_interface = SKSE::GetSerializationInterface();
-	s_interface->SetUniqueID('SURV');						//<-Handle ID
+	s_interface->SetUniqueID('SURV');  //<-Handle ID
 	s_interface->SetSaveCallback(SaveCallback);
 	s_interface->SetLoadCallback(LoadCallBack);
 	logger::trace("Callbacks set"sv);
 
 	auto m_interface = SKSE::GetMessagingInterface();
 	m_interface->RegisterListener("SKSE", [](SKSE::MessagingInterface::Message* a_msg) {
-		if (a_msg && a_msg->type == SKSE::MessagingInterface::kNewGame)
-		{
+		if (a_msg && a_msg->type == SKSE::MessagingInterface::kNewGame) {
 			auto userDir = Json::GetUserDirectory();
 			auto userDefault = userDir / "default.json";
 			auto dataDefault = std::filesystem::path{ "Data/Survival.json" };
-			if (std::filesystem::directory_entry{ userDefault }.exists())
-			{
+			if (std::filesystem::directory_entry{ userDefault }.exists()) {
 				Json::Load(userDefault);
-			}
-			else if (std::filesystem::directory_entry{ dataDefault }.exists())
-			{
+			} else if (std::filesystem::directory_entry{ dataDefault }.exists()) {
 				Json::Load(dataDefault);
 			}
 		}

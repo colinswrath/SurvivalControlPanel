@@ -17,8 +17,7 @@ namespace PapyrusSurvival
 	void ForceEnable(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return;
 		}
 
@@ -28,8 +27,7 @@ namespace PapyrusSurvival
 	void RequestDisable(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return;
 		}
 
@@ -39,8 +37,7 @@ namespace PapyrusSurvival
 	void ModReset(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return;
 		}
 
@@ -50,8 +47,7 @@ namespace PapyrusSurvival
 	void UserEnable(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return;
 		}
 
@@ -61,8 +57,7 @@ namespace PapyrusSurvival
 	void UserDisable(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return;
 		}
 
@@ -72,8 +67,7 @@ namespace PapyrusSurvival
 	void UserReset(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return;
 		}
 
@@ -83,8 +77,7 @@ namespace PapyrusSurvival
 	bool IsEnabledByMods(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return false;
 		}
 
@@ -94,8 +87,7 @@ namespace PapyrusSurvival
 	bool IsDisabledByMods(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return false;
 		}
 
@@ -105,8 +97,7 @@ namespace PapyrusSurvival
 	bool IsEnabledByUser(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return false;
 		}
 
@@ -116,8 +107,7 @@ namespace PapyrusSurvival
 	bool IsDisabledByUser(RE::StaticFunctionTag*, Feature a_feature)
 	{
 		auto settings = Survival::GetSettings(a_feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return false;
 		}
 
@@ -225,7 +215,6 @@ namespace PapyrusSurvival
 		auto& settings = Survival::WarmthSettings::GetSingleton();
 		settings.WarmthOverrides.clear();
 	}
-
 
 	bool RegisterFuncs(VM* a_vm)
 	{

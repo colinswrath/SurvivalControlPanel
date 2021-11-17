@@ -16,7 +16,6 @@ public:
 		REL::Relocation<std::uintptr_t> StatsCalcEnable_Hook{ REL::Offset(OnEquipped_StatsUpdate_offset.offset() + 0x119) };
 		REL::Relocation<std::uintptr_t> UIDescription_Hook{ REL::Offset(UIDescription_offset.offset() + 0x276) };
 
-
 		auto& trampoline = SKSE::GetTrampoline();
 		trampoline.write_call<5>(Show_Warmth_Hook.address(), IsInventoryUIEnabled);
 
