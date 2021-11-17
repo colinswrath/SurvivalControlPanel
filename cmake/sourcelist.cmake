@@ -1,0 +1,26 @@
+set(SOURCES
+	include/ArrowWeightManager.h
+	include/Hooks.h
+	include/HUDIndicatorManager.h
+	include/InventoryUIManager.h
+	include/Json.h
+	include/LockpickWeightManager.h
+	include/Offsets.h
+	include/PCH.h
+	include/Papyrus.h
+	include/PapyrusJson.h
+	include/PapyrusSurvival.h
+	include/Serialization.h
+	include/SleepLevelUpManager.h
+	include/Survival.h
+	include/Warmth.h
+	include/WarmthManager.h
+	src/Hooks.cpp
+	src/Json.cpp
+	src/Papyrus.cpp
+	src/PapyrusJson.cpp
+	src/PapyrusSurvival.cpp
+	src/Survival.cpp
+	src/Warmth.cpp
+	src/main.cpp
+)

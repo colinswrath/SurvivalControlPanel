@@ -1,13 +1,14 @@
 {
-  "name": "exampleproject",
-  "version-string": "1.0.0",
-  "description": "An example project built using CommonLibSSE",
-  "homepage": "https://github.com/Ryan-rsm-McKenzie/ExamplePlugin-CommonLibSSE",
+  "name": "survivalcontrolpanel",
+  "version-string": "1.0.4",
+  "description": "SKSE Plugin to toggle various survival features",
+  "homepage": "https://github.com/colinswrath/SurvivalControlPanel",
   "license": "MIT",
   "dependencies": [
     "boost-atomic",
     "boost-stl-interfaces",
     "span-lite",
-    "spdlog"
+    "spdlog",
+    "picojson"
   ]
 }
