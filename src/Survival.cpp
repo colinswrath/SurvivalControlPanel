@@ -10,8 +10,7 @@ namespace Survival
 
 	void Settings::RequestDisable()
 	{
-		if (ModPreference == Preference::None)
-		{
+		if (ModPreference == Preference::None) {
 			ModPreference = Preference::AlwaysDisabled;
 		}
 	}
@@ -38,37 +37,25 @@ namespace Survival
 
 	bool Settings::IsEnabled()
 	{
-		if (UserPreference == Preference::AlwaysEnabled)
-		{
+		if (UserPreference == Preference::AlwaysEnabled) {
 			return true;
-		}
-		else if (UserPreference == Preference::AlwaysDisabled)
-		{
+		} else if (UserPreference == Preference::AlwaysDisabled) {
 			return false;
-		}
-		else if (ModPreference == Preference::AlwaysEnabled)
-		{
+		} else if (ModPreference == Preference::AlwaysEnabled) {
 			return true;
-		}
-		else if (ModPreference == Preference::AlwaysDisabled)
-		{
+		} else if (ModPreference == Preference::AlwaysDisabled) {
 			return false;
-		}
-		else
-		{
+		} else {
 			return ModeIsEnabled();
 		}
 	}
 
 	bool Settings::SerializeSave(SKSE::SerializationInterface* a_intfc, uint32_t a_type, uint32_t a_version)
 	{
-		if (!a_intfc->OpenRecord(a_type, a_version))
-		{
+		if (!a_intfc->OpenRecord(a_type, a_version)) {
 			logger::error("Failed to open record for Setting!"sv);
 			return false;
-		}
-		else
-		{
+		} else {
 			return SerializeSave(a_intfc);
 		}
 	}
@@ -77,8 +64,7 @@ namespace Survival
 	{
 		std::vector<Survival::Preference> prefVector = { ModPreference, UserPreference };
 
-		if (!Serialization::Save(a_intfc, prefVector))
-		{
+		if (!Serialization::Save(a_intfc, prefVector)) {
 			logger::error("Failed to write data!"sv);
 		}
 
@@ -94,8 +80,7 @@ namespace Survival
 	{
 		std::vector<Survival::Preference> settings;
 
-		if (!Serialization::Load(a_intfc, settings))
-		{
+		if (!Serialization::Load(a_intfc, settings)) {
 			logger::error("Failed to load data!"sv);
 		}
 

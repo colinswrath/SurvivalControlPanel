@@ -8,20 +8,17 @@ namespace PapyrusJson
 		std::vector<RE::BSFixedString> files;
 		auto userDir = Json::GetUserDirectory();
 		std::filesystem::directory_entry dir_entry{ userDir };
-		if (!dir_entry.exists())
-		{
+		if (!dir_entry.exists()) {
 			return files;
 		}
 
 		std::filesystem::directory_iterator dirContents{ userDir };
 
-		for (auto file : dirContents)
-		{
+		for (auto file : dirContents) {
 			if (!file.is_regular_file())
 				continue;
 
-			if (file.path().extension() == ".json")
-			{
+			if (file.path().extension() == ".json") {
 				files.push_back(RE::BSFixedString{ file.path().stem().string() });
 			}
 		}
@@ -61,8 +58,7 @@ namespace PapyrusJson
 	{
 		auto userDir = Json::GetUserDirectory();
 		std::filesystem::directory_entry dir_entry{ userDir };
-		if (!dir_entry.exists())
-		{
+		if (!dir_entry.exists()) {
 			return false;
 		}
 

@@ -6,10 +6,10 @@ namespace Survival
 {
 	enum class Feature : int32_t
 	{
-		HUDIndicators  = 0,
-		InventoryUI    = 1,
+		HUDIndicators = 0,
+		InventoryUI = 1,
 		SleepToLevelUp = 2,
-		ArrowWeight    = 3,
+		ArrowWeight = 3,
 		LockpickWeight = 4,
 	};
 
@@ -43,8 +43,7 @@ namespace Survival
 			static Settings arrowWeight;
 			static Settings lockpickWeight;
 
-			switch (feature)
-			{
+			switch (feature) {
 			case Feature::HUDIndicators:
 				return &hudIndicators;
 			case Feature::InventoryUI:
@@ -78,12 +77,9 @@ namespace Survival
 	inline bool FeatureIsEnabled(Feature feature)
 	{
 		auto settings = GetSettings(feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return ModeIsEnabled();
-		}
-		else
-		{
+		} else {
 			return settings->IsEnabled();
 		}
 	}

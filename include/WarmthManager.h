@@ -42,24 +42,20 @@ private:
 	{
 		_GetWarmthInfo(form, info);
 		auto armorForm = skyrim_cast<RE::TESObjectARMO*>(form);
-		if (!armorForm)
-		{
+		if (!armorForm) {
 			return;
 		}
 
 		auto warmthClass = GetWarmthClass(info);
 		auto& warmthSettings = Survival::WarmthSettings::GetSingleton();
 
-		if (warmthSettings.EnableFrostfallKeywords)
-		{
+		if (warmthSettings.EnableFrostfallKeywords) {
 			auto dataHandler = RE::TESDataHandler::GetSingleton();
 			auto frostfallEnableKeywordProtection =
 				skyrim_cast<RE::BGSKeyword*>(dataHandler->LookupForm(RE::FormID{ 0x00CC0E28 }, "Update.esm"sv));
 
-			if (frostfallEnableKeywordProtection && form->HasKeyword(frostfallEnableKeywordProtection))
-			{
-				for (uint32_t i = 0; i < form->numKeywords; i++)
-				{
+			if (frostfallEnableKeywordProtection && form->HasKeyword(frostfallEnableKeywordProtection)) {
+				for (uint32_t i = 0; i < form->numKeywords; i++) {
 					auto keyword = form->keywords[i];
 
 					RE::FormID frostfallWarmthPoor{ 0x01CC0E0F };
@@ -69,21 +65,16 @@ private:
 					RE::FormID frostfallWarmthMax{ 0x01CC0E14 };
 					RE::FormID frostfallIsCloakFur{ 0x01CC0E1E };
 
-					if (keyword->formID == frostfallWarmthPoor)
-					{
+					if (keyword->formID == frostfallWarmthPoor) {
 						warmthClass = Survival::WarmthClass::Cold;
 						*info->warmthValues = GetWarmthSettings(Survival::WarmthClass::Cold);
-					}
-					else if (keyword->formID == frostfallWarmthFair ||
-						keyword->formID == frostfallWarmthGood)
-					{
+					} else if (keyword->formID == frostfallWarmthFair ||
+							   keyword->formID == frostfallWarmthGood) {
 						warmthClass = Survival::WarmthClass::Normal;
 						*info->warmthValues = GetWarmthSettings(Survival::WarmthClass::Normal);
-					}
-					else if (keyword->formID == frostfallWarmthExcellent ||
-						keyword->formID == frostfallWarmthMax ||
-						keyword->formID == frostfallIsCloakFur)
-					{
+					} else if (keyword->formID == frostfallWarmthExcellent ||
+							   keyword->formID == frostfallWarmthMax ||
+							   keyword->formID == frostfallIsCloakFur) {
 						warmthClass = Survival::WarmthClass::Warm;
 						*info->warmthValues = GetWarmthSettings(Survival::WarmthClass::Warm);
 					}
@@ -91,19 +82,16 @@ private:
 			}
 		}
 
-		if (warmthSettings.WarmthOverrides.find(armorForm->formID) != warmthSettings.WarmthOverrides.end())
-		{
+		if (warmthSettings.WarmthOverrides.find(armorForm->formID) != warmthSettings.WarmthOverrides.end()) {
 			warmthClass = warmthSettings.WarmthOverrides[armorForm->formID];
 			*info->warmthValues = GetWarmthSettings(warmthClass);
 		}
 
-		if (warmthSettings.EnableWarmthForCloaks)
-		{
+		if (warmthSettings.EnableWarmthForCloaks) {
 			auto kCloak = static_cast<RE::BIPED_MODEL::BipedObjectSlot>(1 << 16);
 			bool isCloak = armorForm->bipedModelData.bipedObjectSlots.any(kCloak);
 
-			if (isCloak)
-			{
+			if (isCloak) {
 				*info->warmthValues = warmthSettings.GetCloakSettings(warmthClass);
 				*info->slotMask = 0x1;
 			}
@@ -114,17 +102,12 @@ private:
 	{
 		auto& warmthSettings = Survival::WarmthSettings::GetSingleton();
 		if (*info->warmthValues == GetWarmthSettings(Survival::WarmthClass::Warm) ||
-			*info->warmthValues == warmthSettings.GetCloakSettings(Survival::WarmthClass::Warm))
-		{
+			*info->warmthValues == warmthSettings.GetCloakSettings(Survival::WarmthClass::Warm)) {
 			return Survival::WarmthClass::Warm;
-		}
-		else if (*info->warmthValues == GetWarmthSettings(Survival::WarmthClass::Cold) ||
-			*info->warmthValues == warmthSettings.GetCloakSettings(Survival::WarmthClass::Cold))
-		{
+		} else if (*info->warmthValues == GetWarmthSettings(Survival::WarmthClass::Cold) ||
+				   *info->warmthValues == warmthSettings.GetCloakSettings(Survival::WarmthClass::Cold)) {
 			return Survival::WarmthClass::Cold;
-		}
-		else
-		{
+		} else {
 			return Survival::WarmthClass::Normal;
 		}
 	}
