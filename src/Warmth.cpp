@@ -72,7 +72,7 @@ namespace Survival
 	{
 		if (!a_intfc->OpenRecord(a_type, a_version))
 		{
-			logger::error("Failed to open record for Warmth info!");
+			logger::error("Failed to open record for Warmth info!"sv);
 			return false;
 		}
 		else
@@ -89,14 +89,14 @@ namespace Survival
 
 		if (!Serialization::Save(a_intfc, cloakSetting))
 		{
-			logger::error("Failed to write data!");
+			logger::error("Failed to write data!"sv);
 		}
 
 		//Write toggle data
 		std::size_t size = toggles.size();
 		if (!a_intfc->WriteRecordData(size))
 		{
-			logger::error("Failed to write size of record data!");
+			logger::error("Failed to write size of record data!"sv);
 		}
 		else
 		{
@@ -104,7 +104,7 @@ namespace Survival
 			{
 				if (!a_intfc->WriteRecordData(elem))
 				{
-					logger::error("Failed to write data for warmth elem!");
+					logger::error("Failed to write data for warmth elem!"sv);
 					return false;
 				}
 			}
@@ -115,7 +115,7 @@ namespace Survival
 
 		if (!a_intfc->WriteRecordData(mapNums))
 		{
-			logger::error("Failed to write size of record data!");
+			logger::error("Failed to write size of record data!"sv);
 			return false;
 		}
 
@@ -123,17 +123,17 @@ namespace Survival
 		{
 			if (!a_intfc->WriteRecordData(warmth.first))
 			{
-				logger::error("Failed to write warmth elem ({} : {})!",warmth.first, warmth.second);
+				logger::error("Failed to write warmth elem ({} : {})!"sv, warmth.first, warmth.second);
 				return false;
 			}
 
 			if (!a_intfc->WriteRecordData(warmth.second))
 			{
-				logger::error("Failed to write warmth elem ({} : {})!", warmth.first, warmth.second);
+				logger::error("Failed to write warmth elem ({} : {})!"sv, warmth.first, warmth.second);
 				return false;
 			}
 
-			logger::info("Wrote warmth elem ({} : {})!", warmth.first, warmth.second);
+			logger::info("Wrote warmth elem ({} : {})!"sv, warmth.first, warmth.second);
 		}
 		return true;
 	}
@@ -148,7 +148,7 @@ namespace Survival
 
 		if (!Serialization::Load(a_intfc, cloakSetting))
 		{
-			logger::error("Failed to load data!");
+			logger::error("Failed to load data!"sv);
 		}
 
 		//Load toggles
@@ -156,7 +156,7 @@ namespace Survival
 		std::size_t size;
 		if (!a_intfc->ReadRecordData(size))
 		{
-			logger::error("Failed to load size!");
+			logger::error("Failed to load size!"sv);
 			return false;
 		}
 
@@ -165,7 +165,7 @@ namespace Survival
 			bool elem;
 			if (!a_intfc->ReadRecordData(elem))
 			{
-				logger::error("Failed to load setting element!");
+				logger::error("Failed to load setting element!"sv);
 				return false;
 			}
 			else
@@ -178,7 +178,7 @@ namespace Survival
 
 		if (!a_intfc->ReadRecordData(size))
 		{
-			logger::error("Failed to load setting element!");
+			logger::error("Failed to load setting element!"sv);
 			return false;
 		}
 
@@ -191,19 +191,19 @@ namespace Survival
 		{
 			if (!a_intfc->ReadRecordData(form))
 			{
-				logger::error("Failed to load override form!");
+				logger::error("Failed to load override form!"sv);
 				return false;
 			}
 
 			if (!a_intfc->ResolveFormID(form, form))
 			{
-				logger::error("Failed to resolve formID.");
+				logger::error("Failed to resolve formID."sv);
 				return false;
 			}
 
 			if (!a_intfc->ReadRecordData(warmth))
 			{
-				logger::error("Failed to load override warmth setting!");
+				logger::error("Failed to load override warmth setting!"sv);
 				return false;
 			}
 
@@ -211,7 +211,7 @@ namespace Survival
 
 			if (!result.second)
 			{
-				logger::error("Failed to insert into table.");
+				logger::error("Failed to insert into table."sv);
 				return false;
 			}
 		}

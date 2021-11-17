@@ -1,4 +1,4 @@
-#include "version.h"
+#include "Version.h"
 #include "Hooks.h"
 #include "Papyrus.h"
 #include "Survival.h"
@@ -57,7 +57,7 @@ extern "C" DLLEXPORT constexpr auto SKSEPlugin_Version =
 
 void SaveCallback(SKSE::SerializationInterface* a_intfc)
 {
-	logger::info("Save callback start");
+	logger::trace("Save callback start"sv);
 
 	auto arrowSettings = Survival::GetSettings(Survival::Feature::ArrowWeight);
 	auto uiSettings = Survival::GetSettings(Survival::Feature::InventoryUI);
@@ -67,35 +67,35 @@ void SaveCallback(SKSE::SerializationInterface* a_intfc)
 	auto& warmthSettings = Survival::WarmthSettings::GetSingleton();
 
 	if (!arrowSettings->SerializeSave(a_intfc, kArrowWeight, kSerializationVersion)) {
-		logger::error("Failed to save arrow settings!\n");
+		logger::error("Failed to save arrow settings!"sv);
 	}
 
 	if (!uiSettings->SerializeSave(a_intfc, kInventoryUI, kSerializationVersion)) {
-		logger::error("Failed to save Inventory UI Settings!\n");
+		logger::error("Failed to save Inventory UI Settings!"sv);
 	}
 
 	if (!HUDSettings->SerializeSave(a_intfc, kHUDIndicators, kSerializationVersion)) {
-		logger::error("Failed to save Hud Settings Settings!\n");
+		logger::error("Failed to save Hud Settings Settings!"sv);
 	}
 
 	if (!lockSettings->SerializeSave(a_intfc, kLockpickWeight, kSerializationVersion)) {
-		logger::error("Failed to save lockpick Settings!\n");
+		logger::error("Failed to save lockpick Settings!"sv);
 	}
 
 	if (!SleepSettings->SerializeSave(a_intfc, kSleepToLevelUp, kSerializationVersion)) {
-		logger::error("Failed to save Sleep to level Settings!\n");
+		logger::error("Failed to save Sleep to level Settings!"sv);
 	}
 
 	if (!warmthSettings.SerializeSave(a_intfc, kWarmthSettings, kSerializationVersion)) {
-		logger::error("Failed to save Warmth Settings!\n");
+		logger::error("Failed to save Warmth Settings!"sv);
 	}
-	logger::info("Save callback stop");
+	logger::trace("Save callback stop");
 
 }
 
 void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 {
-	logger::info("load callback start");
+	logger::trace("load callback start"sv);
 	auto arrowSettings = Survival::GetSettings(Survival::Feature::ArrowWeight);
 	auto uiSettings = Survival::GetSettings(Survival::Feature::InventoryUI);
 	auto HUDSettings = Survival::GetSettings(Survival::Feature::HUDIndicators);
@@ -111,7 +111,7 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 	{
 		if (version != kSerializationVersion)
 		{
-			logger::error("Loaded data is out of date! Read (%u), expected (%u) for type code (%s)", version, kSerializationVersion, type);
+			logger::error("Loaded data is out of date! Read (%u), expected (%u) for type code (%s)"sv, version, kSerializationVersion, type);
 			continue;
 		}
 
@@ -120,7 +120,7 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 		case kArrowWeight:
 			if (!arrowSettings->DeserializeLoad(a_intfc))
 			{
-				logger::error("Failed to load arrow settings!\n");
+				logger::error("Failed to load arrow settings!"sv);
 			}
 			break;
 
@@ -128,7 +128,7 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 
 			if (!uiSettings->DeserializeLoad(a_intfc))
 			{
-				logger::error("Failed to load UI settings!\n");
+				logger::error("Failed to load UI settings!"sv);
 			}
 			break;
 
@@ -136,7 +136,7 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 
 			if (!HUDSettings->DeserializeLoad(a_intfc))
 			{
-				logger::error("Failed to load UI settings!\n");
+				logger::error("Failed to load UI settings!"sv);
 			}
 			break;
 
@@ -144,7 +144,7 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 
 			if (!lockSettings->DeserializeLoad(a_intfc))
 			{
-				logger::error("Failed to load UI settings!\n");
+				logger::error("Failed to load UI settings!"sv);
 			}
 			break;
 
@@ -152,14 +152,14 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 
 			if (!SleepSettings->DeserializeLoad(a_intfc))
 			{
-				logger::error("Failed to load UI settings!\n");
+				logger::error("Failed to load UI settings!"sv);
 			}
 			break;
 		case kWarmthSettings:
 
 			if (!warmthSettings.DeserializeLoad(a_intfc))
 			{
-				logger::error("Failed to load warmth settings!");
+				logger::error("Failed to load warmth settings!"sv);
 			}
 			break;
 		default:
@@ -167,27 +167,26 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 			break;
 		}
 	}
-	logger::info("load callback stop");
+	logger::trace("load callback stop"sv);
 }
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
-	//SKSE::WinAPI::MessageBox(nullptr,"WAIT FOR DEBUGGER","WAIT", 0x00001010L);
 	InitLogger();
-	logger::info("Survival Control Panel loading begin");
+	logger::trace("Survival Control Panel loading begin"sv);
 
 	SKSE::Init(a_skse);
 	SKSE::AllocTrampoline(84);
 
 	Papyrus::Register();
 	Hooks::Install();
-	logger::info("Papyrus registered");
+	logger::info("Registered Papyrus functions"sv);
 
 	auto s_interface = SKSE::GetSerializationInterface();
 	s_interface->SetUniqueID('SURV');						//<-Handle ID
 	s_interface->SetSaveCallback(SaveCallback);
 	s_interface->SetLoadCallback(LoadCallBack);
-	logger::info("Callbacks set");
+	logger::trace("Callbacks set"sv);
 
 	auto m_interface = SKSE::GetMessagingInterface();
 	m_interface->RegisterListener("SKSE", [](SKSE::MessagingInterface::Message* a_msg) {
@@ -206,8 +205,8 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 			}
 		}
 	});
-	
-	logger::info("Survival Control Panel loaded");
+
+	logger::info("{} loaded"sv, Version::PROJECT);
 
 	return true;
 }

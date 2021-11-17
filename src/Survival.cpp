@@ -64,7 +64,7 @@ namespace Survival
 	{
 		if (!a_intfc->OpenRecord(a_type, a_version))
 		{
-			logger::error("Failed to open record for Setting!");
+			logger::error("Failed to open record for Setting!"sv);
 			return false;
 		}
 		else
@@ -79,7 +79,7 @@ namespace Survival
 
 		if (!Serialization::Save(a_intfc, prefVector))
 		{
-			logger::error("Failed to write data!");
+			logger::error("Failed to write data!"sv);
 		}
 
 		return true;
@@ -96,7 +96,7 @@ namespace Survival
 
 		if (!Serialization::Load(a_intfc, settings))
 		{
-			logger::error("Failed to load data!");
+			logger::error("Failed to load data!"sv);
 		}
 
 		ModPreference = settings[0];
