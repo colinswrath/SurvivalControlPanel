@@ -18,7 +18,7 @@ public:
 
 	inline static Survival::WarmthClass GetWarmthClass(RE::TESObjectARMO* armor)
 	{
-		int32_t slotMask;
+		std::int32_t slotMask;
 		RE::Setting** warmthValues;
 
 		ArmorWarmthInfo info;
@@ -33,7 +33,7 @@ private:
 	struct ArmorWarmthInfo
 	{
 		void* _pad_0;
-		int32_t* slotMask;
+		std::int32_t* slotMask;
 		RE::Setting*** warmthValues;
 	};
 	static_assert(sizeof(ArmorWarmthInfo) == 0x18);
@@ -55,7 +55,7 @@ private:
 				skyrim_cast<RE::BGSKeyword*>(dataHandler->LookupForm(RE::FormID{ 0x00CC0E28 }, "Update.esm"sv));
 
 			if (frostfallEnableKeywordProtection && form->HasKeyword(frostfallEnableKeywordProtection)) {
-				for (uint32_t i = 0; i < form->numKeywords; i++) {
+				for (std::uint32_t i = 0; i < form->numKeywords; i++) {
 					auto keyword = form->keywords[i];
 
 					RE::FormID frostfallWarmthPoor{ 0x01CC0E0F };

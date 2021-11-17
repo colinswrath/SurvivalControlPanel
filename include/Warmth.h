@@ -2,7 +2,7 @@
 
 namespace Survival
 {
-	enum class WarmthClass : int32_t
+	enum class WarmthClass : std::int32_t
 	{
 		Normal = 0,
 		Warm = 1,
@@ -36,7 +36,7 @@ namespace Survival
 
 		RE::Setting** GetCloakSettings(WarmthClass warmthClass);
 
-		bool SerializeSave(SKSE::SerializationInterface* a_intfc, uint32_t a_type, uint32_t a_version);
+		bool SerializeSave(SKSE::SerializationInterface* a_intfc, std::uint32_t a_type, std::uint32_t a_version);
 
 		bool SerializeSave(SKSE::SerializationInterface* a_intfc);
 
@@ -58,7 +58,7 @@ namespace Survival
 		// nothing else but read the float, it won't crash.
 		struct GameSetting
 		{
-			int64_t _pad_0 = 0;
+			std::int64_t _pad_0 = 0;
 			float data;
 			char* name = nullptr;
 		};

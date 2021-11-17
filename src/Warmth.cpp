@@ -66,7 +66,7 @@ namespace Survival
 		}
 	}
 
-	bool WarmthSettings::SerializeSave(SKSE::SerializationInterface* a_intfc, uint32_t a_type, uint32_t a_version)
+	bool WarmthSettings::SerializeSave(SKSE::SerializationInterface* a_intfc, std::uint32_t a_type, std::uint32_t a_version)
 	{
 		if (!a_intfc->OpenRecord(a_type, a_version)) {
 			logger::error("Failed to open record for Warmth info!"sv);
