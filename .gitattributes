@@ -1,5 +1,0 @@
-# Auto detect text files and perform LF normalization
-* text=auto
-
-# MCM translations as Unicode LE BOM
-Data/Interface/Translations/*.txt text working-tree-encoding=UTF-16LE-BOM eol=CRLF

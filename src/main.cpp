@@ -1,4 +1,4 @@
-﻿#include "version.h"
+#include "version.h"
 #include "Hooks.h"
 #include "Papyrus.h"
 #include "Survival.h"
@@ -16,6 +16,51 @@ enum
 	kWarmthSettings = 'WRMT',
 };
 
+void InitLogger()
+{
+#ifndef NDEBUG
+	auto sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
+#else
+	auto path = logger::log_directory();
+	if (!path) {
+		return;
+	}
+
+	*path /= fmt::format("{}.log"sv, Version::PROJECT);
+	auto sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true);
+#endif
+
+	auto log = std::make_shared<spdlog::logger>("global log"s, std::move(sink));
+
+#ifndef NDEBUG
+	log->set_level(spdlog::level::trace);
+#else
+	log->set_level(spdlog::level::info);
+	log->flush_on(spdlog::level::info);
+#endif
+
+	spdlog::set_default_logger(std::move(log));
+	spdlog::set_pattern("%s(%#): [%^%l%$] %v"s);
+
+	logger::info(FMT_STRING("{} v{}"), Version::PROJECT, Version::NAME);
+}
+
+extern "C" DLLEXPORT SKSE::PluginVersionData SKSEPlugin_Version =
+{
+	
+	.dataVersion = SKSE::PluginVersionData::kVersion,
+	.pluginVersion = Version::MAJOR,
+	.name = PROJECT_NAME,
+	.author = "Parapets and colinswrath",
+	.supportEmail = "",
+
+
+	.compatibleVersions = { SKSE::RUNTIME_1_6_318.packed(), 0},
+	//.xseMinimum = 0,
+	.seVersionRequired=0,
+};
+
+/*
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
 {
 #ifndef NDEBUG
@@ -61,9 +106,12 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 
 	return true;
 }
+*/
 
 void SaveCallback(SKSE::SerializationInterface* a_intfc)
 {
+	logger::info("Save callback start");
+
 	auto arrowSettings = Survival::GetSettings(Survival::Feature::ArrowWeight);
 	auto uiSettings = Survival::GetSettings(Survival::Feature::InventoryUI);
 	auto HUDSettings = Survival::GetSettings(Survival::Feature::HUDIndicators);
@@ -94,10 +142,13 @@ void SaveCallback(SKSE::SerializationInterface* a_intfc)
 	if (!warmthSettings.SerializeSave(a_intfc, kWarmthSettings, kSerializationVersion)) {
 		logger::error("Failed to save Warmth Settings!\n");
 	}
+	logger::info("Save callback stop");
+
 }
 
 void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 {
+	logger::info("load callback start");
 	auto arrowSettings = Survival::GetSettings(Survival::Feature::ArrowWeight);
 	auto uiSettings = Survival::GetSettings(Survival::Feature::InventoryUI);
 	auto HUDSettings = Survival::GetSettings(Survival::Feature::HUDIndicators);
@@ -169,22 +220,27 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 			break;
 		}
 	}
+	logger::info("load callback stop");
 }
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
-	logger::info("Survival Control Panel loaded");
+	//SKSE::WinAPI::MessageBox(nullptr,"WAIT FOR DEBUGGER","WAIT", 0x00001010L);
+	InitLogger();
+	logger::info("Survival Control Panel loading begin");
 
 	SKSE::Init(a_skse);
 	SKSE::AllocTrampoline(84);
 
 	Papyrus::Register();
 	Hooks::Install();
+	logger::info("Papyrus registered");
 
 	auto s_interface = SKSE::GetSerializationInterface();
 	s_interface->SetUniqueID('SURV');						//<-Handle ID
 	s_interface->SetSaveCallback(SaveCallback);
 	s_interface->SetLoadCallback(LoadCallBack);
+	logger::info("Callbacks set");
 
 	auto m_interface = SKSE::GetMessagingInterface();
 	m_interface->RegisterListener("SKSE", [](SKSE::MessagingInterface::Message* a_msg) {
@@ -203,6 +259,8 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 			}
 		}
 	});
+	
+	logger::info("Survival Control Panel loaded");
 
 	return true;
 }

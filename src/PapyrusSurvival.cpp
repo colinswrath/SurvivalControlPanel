@@ -6,12 +6,12 @@ namespace PapyrusSurvival
 {
 	int GetVersion(RE::StaticFunctionTag*)
 	{
-		return SRCP_VERSION_MAJOR;
+		return Version::MAJOR;
 	}
 
 	int GetVersionMinor(RE::StaticFunctionTag*)
 	{
-		return SRCP_VERSION_MINOR;
+		return Version::MINOR;
 	}
 
 	void ForceEnable(RE::StaticFunctionTag*, Feature a_feature)
