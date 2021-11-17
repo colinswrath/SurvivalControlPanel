@@ -18,7 +18,7 @@ public:
 	}
 
 private:
-	inline static int32_t CheckSurvivalHUD(void* menu, bool survivalModeToggle)
+	inline static std::int32_t CheckSurvivalHUD(void* menu, bool survivalModeToggle)
 	{
 		survivalModeToggle = Survival::FeatureIsEnabled(Survival::Feature::HUDIndicators);
 		return _CheckSurvivalHUD(menu, survivalModeToggle);

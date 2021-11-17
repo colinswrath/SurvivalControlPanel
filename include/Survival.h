@@ -4,7 +4,7 @@
 
 namespace Survival
 {
-	enum class Feature : int32_t
+	enum class Feature : std::int32_t
 	{
 		HUDIndicators = 0,
 		InventoryUI = 1,
@@ -13,7 +13,7 @@ namespace Survival
 		LockpickWeight = 4,
 	};
 
-	enum class Preference : int32_t
+	enum class Preference : std::int32_t
 	{
 		None,
 		AlwaysDisabled,
@@ -29,7 +29,7 @@ namespace Survival
 		void UserEnable();
 		void UserDisable();
 		void UserReset();
-		bool SerializeSave(SKSE::SerializationInterface* a_intfc, uint32_t a_type, uint32_t a_version);
+		bool SerializeSave(SKSE::SerializationInterface* a_intfc, std::uint32_t a_type, std::uint32_t a_version);
 		bool SerializeSave(SKSE::SerializationInterface* a_intfc);
 		bool DeserializeLoad(SKSE::SerializationInterface* a_intfc);
 

@@ -9,7 +9,7 @@ using namespace Survival;
 namespace Json
 {
 	// Change this when we change the format
-	const int32_t version = 1;
+	const std::int32_t version = 1;
 
 	using JObject = picojson::object;
 	using JValue = picojson::value;
@@ -23,13 +23,13 @@ namespace Json
 			auto dataHandler = RE::TESDataHandler::GetSingleton();
 
 			std::string plugin = "";
-			uint8_t modIndex = formID >> 24;
+			std::uint8_t modIndex = formID >> 24;
 			if (modIndex < 0xFE) {
 				auto file = dataHandler->LookupLoadedModByIndex(modIndex);
 				plugin = file->fileName;
 			}
 			if (modIndex == 0xFE) {
-				uint16_t lightModIndex = static_cast<uint16_t>(relativeID >> 12);
+				std::uint16_t lightModIndex = static_cast<std::uint16_t>(relativeID >> 12);
 				relativeID %= 1 << 12;
 				auto file = dataHandler->LookupLoadedLightModByIndex(lightModIndex);
 				plugin = file->fileName;
@@ -52,7 +52,7 @@ namespace Json
 			std::getline(stream, plugin, '|');
 
 			std::getline(stream, id);
-			uint32_t relativeID;
+			std::uint32_t relativeID;
 			std::istringstream{ id } >> std::hex >> std::showbase >> relativeID;
 
 			auto dataHandler = RE::TESDataHandler::GetSingleton();
@@ -166,7 +166,7 @@ namespace Json
 		auto jSettings = v.get<JObject>();
 
 		// In the future, we may need to check version and defer to different loading functions/classes
-		//int32_t version = static_cast<int32_t>(jSettings["__version"].get<double>());
+		//std::int32_t version = static_cast<std::int32_t>(jSettings["__version"].get<double>());
 
 		hudIndicators->UserPreference = static_cast<Preference>(jSettings["HUDIndicators"].get<double>());
 		inventoryUI->UserPreference = static_cast<Preference>(jSettings["InventoryUI"].get<double>());

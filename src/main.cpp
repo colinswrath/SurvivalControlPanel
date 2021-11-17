@@ -102,9 +102,9 @@ void LoadCallBack(SKSE::SerializationInterface* a_intfc)
 	auto SleepSettings = Survival::GetSettings(Survival::Feature::SleepToLevelUp);
 	auto& warmthSettings = Survival::WarmthSettings::GetSingleton();
 
-	uint32_t type;
-	uint32_t version;
-	uint32_t length;
+	std::uint32_t type;
+	std::uint32_t version;
+	std::uint32_t length;
 
 	while (a_intfc->GetNextRecordInfo(type, version, length)) {
 		if (version != kSerializationVersion) {
