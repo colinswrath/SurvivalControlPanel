@@ -179,7 +179,8 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	logger::trace("Callbacks set"sv);
 
 	auto m_interface = SKSE::GetMessagingInterface();
-	m_interface->RegisterListener("SKSE", [](SKSE::MessagingInterface::Message* a_msg) {
+	m_interface->RegisterListener(
+		[](SKSE::MessagingInterface::Message* a_msg) {
 		if (a_msg && a_msg->type == SKSE::MessagingInterface::kNewGame) {
 			auto userDir = Json::GetUserDirectory();
 			auto userDefault = userDir / "default.json";
