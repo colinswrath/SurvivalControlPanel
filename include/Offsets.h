@@ -19,21 +19,50 @@
 //constexpr REL::ID SurvWarmthSettings_Warm_offset{ 502631 };
 //constexpr REL::ID SurvWarmthSettings_Cold_offset{ 502632 };
 
-constexpr REL::Offset IsSurvivalModeEnabled_offset{ 0x090A2A0 };
+namespace Offset
+{
+	namespace BottomBar
+	{
+		constexpr REL::Offset Update{ 0x8DEE20 };
+	}
 
-constexpr REL::Offset TESBoundObject_GetWeight_offset{ 0x01ACFE0 };
-constexpr REL::Offset TESBoundObject_GetWarmthRating_offset{ 0x3D4D60 };
+	namespace HUDMenu
+	{
+		constexpr REL::Offset Update{ 0x8AD130 };
+	}
 
-constexpr REL::Offset PlayerCharacter_sub_offset{ 0x6C28E0 };  //Prevent level up in world
-constexpr REL::Offset StatsMenu_Sub_offset{ 0x900550 };        //Stats menu when sleeping
-constexpr REL::Offset TweenMenu_Sub_offset{ 0x8EE960 };        //Widget
+	namespace ItemMenu
+	{
+		constexpr REL::Offset ShowItemData{ 0x8C0D10 };
+	}
 
-constexpr REL::Offset Inventory_offset{ 0x8C0D10 };
-constexpr REL::Offset OnEquipped_StatsUpdate_offset{ 0x8DEE20 };
-constexpr REL::Offset UIDescription_offset{ 0x8C33D0 };
+	namespace PlayerCharacter
+	{
+		constexpr REL::Offset StopSleepWait{ 0x6C28E0 };
+	}
 
-constexpr REL::Offset HUDMenu_Update_offset{ 0x8AD130 };
+	namespace StatsMenu
+	{
+		constexpr REL::Offset ProcessMessage{ 0x8EE960 };
+	}
 
-constexpr REL::Offset SurvWarmthSettings_Normal_offset{ 0x1E6C470 };
-constexpr REL::Offset SurvWarmthSettings_Warm_offset{ 0x1E6C490 };
-constexpr REL::Offset SurvWarmthSettings_Cold_offset{ 0x1E6C4B0 };
+	namespace Survival
+	{
+		constexpr REL::Offset IsModeActive{ 0x090A2A0 };
+		constexpr REL::Offset ReplaceText{ 0x8C33D0 };
+		constexpr REL::Offset WarmthSettings_Normal{ 0x1E6C470 };
+		constexpr REL::Offset WarmthSettings_Warm{ 0x1E6C490 };
+		constexpr REL::Offset WarmthSettings_Cold{ 0x1E6C4B0 };
+	}
+
+	namespace TESBoundObject
+	{
+		constexpr REL::Offset GetWeight{ 0x01ACFE0 };
+		constexpr REL::Offset GetWarmthRating{ 0x3D4D60 };
+	}
+
+	namespace TweenMenu
+	{
+		constexpr REL::Offset OpenMenu{ 0x900550 };
+	}
+}
