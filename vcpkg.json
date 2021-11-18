@@ -1,0 +1,14 @@
+{
+  "name": "survivalcontrolpanel",
+  "version-string": "1.0.4",
+  "description": "SKSE Plugin to toggle various survival features",
+  "homepage": "https://github.com/colinswrath/SurvivalControlPanel",
+  "license": "MIT",
+  "dependencies": [
+    "boost-atomic",
+    "boost-stl-interfaces",
+    "span-lite",
+    "spdlog",
+    "picojson"
+  ]
+}

@@ -1,13 +1,15 @@
-#include "picojson/picojson.h"
 #include "Json.h"
 #include "Survival.h"
 #include "Warmth.h"
+#include <ShlObj_core.h>
+#include <Windows.h>
+#include <picojson/picojson.h>
 
 using namespace Survival;
 namespace Json
 {
 	// Change this when we change the format
-	const int32_t version = 1;
+	const std::int32_t version = 1;
 
 	using JObject = picojson::object;
 	using JValue = picojson::value;
@@ -21,15 +23,13 @@ namespace Json
 			auto dataHandler = RE::TESDataHandler::GetSingleton();
 
 			std::string plugin = "";
-			uint8_t modIndex = formID >> 24;
-			if (modIndex < 0xFE)
-			{
+			std::uint8_t modIndex = formID >> 24;
+			if (modIndex < 0xFE) {
 				auto file = dataHandler->LookupLoadedModByIndex(modIndex);
 				plugin = file->fileName;
 			}
-			if (modIndex == 0xFE)
-			{
-				uint16_t lightModIndex = static_cast<uint16_t>(relativeID >> 12);
+			if (modIndex == 0xFE) {
+				std::uint16_t lightModIndex = static_cast<std::uint16_t>(relativeID >> 12);
 				relativeID %= 1 << 12;
 				auto file = dataHandler->LookupLoadedLightModByIndex(lightModIndex);
 				plugin = file->fileName;
@@ -52,7 +52,7 @@ namespace Json
 			std::getline(stream, plugin, '|');
 
 			std::getline(stream, id);
-			uint32_t relativeID;
+			std::uint32_t relativeID;
 			std::istringstream{ id } >> std::hex >> std::showbase >> relativeID;
 
 			auto dataHandler = RE::TESDataHandler::GetSingleton();
@@ -63,7 +63,7 @@ namespace Json
 
 	std::filesystem::path GetUserDirectory()
 	{
-		char mydocuments[MAX_PATH];
+		wchar_t mydocuments[MAX_PATH];
 		SHGetFolderPath(nullptr, CSIDL_MYDOCUMENTS, nullptr, SHGFP_TYPE_CURRENT, mydocuments);
 
 		std::filesystem::path path{ mydocuments };
@@ -113,10 +113,9 @@ namespace Json
 		jWarmth["ArmorScalar"] = JValue{ settings->GetSetting("fSurvArmorScalar")->GetFloat() };
 
 		JObject jOverrides;
-		jOverrides["__metaInfo"] = JValue{ JObject{ { "typeName", JValue{ "JFormMap"} } } };
+		jOverrides["__metaInfo"] = JValue{ JObject{ { "typeName", JValue{ "JFormMap" } } } };
 
-		for (auto [formID, value] : warmth.WarmthOverrides)
-		{
+		for (auto [formID, value] : warmth.WarmthOverrides) {
 			auto idString = FormToString(formID);
 			jOverrides[idString] = JValue{ static_cast<double>(value) };
 		}
@@ -126,8 +125,7 @@ namespace Json
 
 		auto userDir = GetUserDirectory();
 		std::filesystem::directory_entry dir_entry{ userDir };
-		if (!dir_entry.exists())
-		{
+		if (!dir_entry.exists()) {
 			std::filesystem::create_directory(userDir);
 		}
 
@@ -140,8 +138,7 @@ namespace Json
 	bool Load(std::filesystem::path filePath)
 	{
 		std::filesystem::directory_entry dir_entry{ filePath };
-		if (!dir_entry.exists())
-		{
+		if (!dir_entry.exists()) {
 			return false;
 		}
 
@@ -157,20 +154,18 @@ namespace Json
 
 		JValue v;
 		std::string err = picojson::parse(v, stream);
-		if (!err.empty())
-		{
+		if (!err.empty()) {
 			return false;
 		}
 
-		if (!v.is<JObject>())
-		{
+		if (!v.is<JObject>()) {
 			return false;
 		}
 
 		auto jSettings = v.get<JObject>();
 
 		// In the future, we may need to check version and defer to different loading functions/classes
-		//int32_t version = static_cast<int32_t>(jSettings["__version"].get<double>());
+		//std::int32_t version = static_cast<std::int32_t>(jSettings["__version"].get<double>());
 
 		hudIndicators->UserPreference = static_cast<Preference>(jSettings["HUDIndicators"].get<double>());
 		inventoryUI->UserPreference = static_cast<Preference>(jSettings["InventoryUI"].get<double>());
@@ -182,8 +177,8 @@ namespace Json
 		warmth.EnableFrostfallKeywords = jWarmth["EnableFrostfallKeywords"].get<double>();
 		warmth.EnableWarmthForCloaks = jWarmth["EnableWarmthForCloaks"].get<double>();
 
-#pragma warning( push )
-#pragma warning( disable : 4244 )
+#pragma warning(push)
+#pragma warning(disable : 4244)
 		settings->GetSetting("fSurvNormalBodyBonus")->data.f = jWarmth["NormalBodyBonus"].get<double>();
 		settings->GetSetting("fSurvWarmBodyBonus")->data.f = jWarmth["WarmBodyBonus"].get<double>();
 		settings->GetSetting("fSurvColdBodyBonus")->data.f = jWarmth["ColdBodyBonus"].get<double>();
@@ -201,11 +196,10 @@ namespace Json
 		warmth.SetCloakColdBonus(jWarmth["ColdCloakBonus"].get<double>());
 		settings->GetSetting("fSurvTorchBonus")->data.f = jWarmth["TorchBonus"].get<double>();
 		settings->GetSetting("fSurvArmorScalar")->data.f = jWarmth["ArmorScalar"].get<double>();
-#pragma warning( pop )
+#pragma warning(pop)
 
 		auto jOverrides = jWarmth["WarmthOverrides"].get<JObject>();
-		for (auto [formData, value] : jOverrides)
-		{
+		for (auto [formData, value] : jOverrides) {
 			auto form = FormFromString(formData);
 			if (!form)
 				continue;

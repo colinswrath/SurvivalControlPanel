@@ -1,6 +1,6 @@
 #include "Papyrus.h"
-#include "PapyrusSurvival.h"
 #include "PapyrusJson.h"
+#include "PapyrusSurvival.h"
 
 namespace Papyrus
 {
@@ -10,6 +10,6 @@ namespace Papyrus
 
 		papyrus->Register(PapyrusSurvival::RegisterFuncs);
 		papyrus->Register(PapyrusJson::RegisterFuncs);
-		logger::info("Registered Survival script");
+		logger::info("Registered Survival script"sv);
 	}
 }

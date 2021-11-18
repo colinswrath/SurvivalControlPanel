@@ -4,16 +4,16 @@
 
 namespace Survival
 {
-	enum class Feature : int32_t
+	enum class Feature : std::int32_t
 	{
-		HUDIndicators  = 0,
-		InventoryUI    = 1,
+		HUDIndicators = 0,
+		InventoryUI = 1,
 		SleepToLevelUp = 2,
-		ArrowWeight    = 3,
+		ArrowWeight = 3,
 		LockpickWeight = 4,
 	};
 
-	enum class Preference : int32_t
+	enum class Preference : std::int32_t
 	{
 		None,
 		AlwaysDisabled,
@@ -29,7 +29,7 @@ namespace Survival
 		void UserEnable();
 		void UserDisable();
 		void UserReset();
-		bool SerializeSave(SKSE::SerializationInterface* a_intfc, uint32_t a_type, uint32_t a_version);
+		bool SerializeSave(SKSE::SerializationInterface* a_intfc, std::uint32_t a_type, std::uint32_t a_version);
 		bool SerializeSave(SKSE::SerializationInterface* a_intfc);
 		bool DeserializeLoad(SKSE::SerializationInterface* a_intfc);
 
@@ -43,8 +43,7 @@ namespace Survival
 			static Settings arrowWeight;
 			static Settings lockpickWeight;
 
-			switch (feature)
-			{
+			switch (feature) {
 			case Feature::HUDIndicators:
 				return &hudIndicators;
 			case Feature::InventoryUI:
@@ -71,19 +70,16 @@ namespace Survival
 
 	inline bool ModeIsEnabled()
 	{
-		static REL::Relocation<bool()> IsSurvivalModeEnabled{ IsSurvivalModeEnabled_offset };
-		return IsSurvivalModeEnabled();
+		static REL::Relocation<bool()> IsSurvivalModeActive{ Offset::Survival::IsModeActive };
+		return IsSurvivalModeActive();
 	}
 
 	inline bool FeatureIsEnabled(Feature feature)
 	{
 		auto settings = GetSettings(feature);
-		if (!settings)
-		{
+		if (!settings) {
 			return ModeIsEnabled();
-		}
-		else
-		{
+		} else {
 			return settings->IsEnabled();
 		}
 	}
