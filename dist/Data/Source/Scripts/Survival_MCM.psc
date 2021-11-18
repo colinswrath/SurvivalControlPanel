@@ -80,7 +80,7 @@ EndEvent
 Event OnPageReset(String a_page)
 	
 	if a_page == ""
-        LoadCustomContent("SurvivalCP/SCP_splash.dds")
+        LoadCustomContent("SurvivalCP/SCP_splash.dds", 210, 71)
 		return
 	else
 		UnloadCustomContent()
