@@ -1,9 +1,7 @@
 #include "Hooks.h"
 #include "Json.h"
 #include "Papyrus.h"
-#include "Survival.h"
 #include "Version.h"
-#include "Warmth.h"
 #include "Serialization.h"
 
 void InitLogger()

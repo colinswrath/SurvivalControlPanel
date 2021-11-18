@@ -12,7 +12,7 @@ namespace Hooks
 	{
 		ArrowWeightManager::Install();
 		LockpickWeightManager::Install();
-		SleepLevelUpManager::Install();  //This one is fucked up
+		SleepLevelUpManager::Install();
 		InventoryUIManager::Install();
 		WarmthManager::Install();
 		HUDIndicatorManager::Install();
