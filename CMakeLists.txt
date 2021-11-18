@@ -85,35 +85,7 @@ find_package(spdlog REQUIRED CONFIG)
 
 # ---- Add source files ----
 
-set(SOURCES
-	src/main.cpp
-	src/PCH.h
-	src/picojson/picojson.h
-	src/ArrowWeightManager.h
-	src/Hooks.cpp
-	src/Hooks.h
-	src/HUDIndicatorManager.h
-	src/InventoryUIManager.h
-	src/Json.cpp
-	src/Json.h
-	src/LockpickWeightManager.h
-	src/main.cpp
-	src/Offsets.h
-	src/Papyrus.cpp
-	src/Papyrus.h
-	src/PapyrusJson.cpp
-	src/PapyrusJson.h
-	src/PapyrusSurvival.cpp
-	src/PapyrusSurvival.h
-	src/PCH.h
-	src/Serialization.h
-	src/SleepLevelUpManager.h
-	src/Survival.cpp
-	src/Survival.h
-	src/Warmth.cpp
-	src/Warmth.h
-	src/WarmthManager.h
-)
+include(cmake/sourcelist.cmake)
 
 source_group(
 	TREE
@@ -151,7 +123,7 @@ target_include_directories(
 	${PROJECT_NAME}
 	PRIVATE
 		${CMAKE_CURRENT_BINARY_DIR}/include
-		${CMAKE_CURRENT_SOURCE_DIR}/src
+		${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 target_link_libraries(
@@ -216,7 +188,7 @@ endif ()
 target_precompile_headers(
 	${PROJECT_NAME}
 	PRIVATE
-		src/PCH.h
+		include/PCH.h
 )
 
 # ---- Post build ----
