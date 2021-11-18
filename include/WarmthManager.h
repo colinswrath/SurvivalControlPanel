@@ -8,7 +8,7 @@ class WarmthManager
 public:
 	inline static void Install()
 	{
-		REL::Relocation<std::uintptr_t> GetWarmthRating_Hook{ REL::Offset(TESBoundObject_GetWarmthRating_offset.offset() + 0x6C) };
+		REL::Relocation<std::uintptr_t> GetWarmthRating_Hook{ Offset::TESBoundObject::GetWarmthRating.address() + 0x6C };
 
 		auto& trampoline = SKSE::GetTrampoline();
 		_GetWarmthInfo = trampoline.write_call<5>(GetWarmthRating_Hook.address(), GetWarmthInfo);
@@ -114,9 +114,9 @@ private:
 
 	inline static RE::Setting** GetWarmthSettings(Survival::WarmthClass warmthClass)
 	{
-		static REL::Relocation<RE::Setting**> normal{ SurvWarmthSettings_Normal_offset.address() };
-		static REL::Relocation<RE::Setting**> warm{ SurvWarmthSettings_Warm_offset.address() };
-		static REL::Relocation<RE::Setting**> cold{ SurvWarmthSettings_Cold_offset.address() };
+		static REL::Relocation<RE::Setting**> normal{ Offset::Survival::WarmthSettings_Normal.address() };
+		static REL::Relocation<RE::Setting**> warm{ Offset::Survival::WarmthSettings_Warm.address() };
+		static REL::Relocation<RE::Setting**> cold{ Offset::Survival::WarmthSettings_Cold.address() };
 
 		switch (warmthClass) {
 		case Survival::WarmthClass::Warm:

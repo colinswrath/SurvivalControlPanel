@@ -70,8 +70,8 @@ namespace Survival
 
 	inline bool ModeIsEnabled()
 	{
-		static REL::Relocation<bool()> IsSurvivalModeEnabled{ IsSurvivalModeEnabled_offset };
-		return IsSurvivalModeEnabled();
+		static REL::Relocation<bool()> IsSurvivalModeActive{ Offset::Survival::IsModeActive };
+		return IsSurvivalModeActive();
 	}
 
 	inline bool FeatureIsEnabled(Feature feature)
