@@ -8,7 +8,6 @@ class HUDIndicatorManager
 public:
 	inline static void Install()
 	{
-		//REL::Relocation<std::uintptr_t> HUDIndicator_Hook{ HUDMenu_Update_offset, 0xD5D };
 		REL::Relocation<std::uintptr_t> HUDIndicator_Hook{ Offset::HUDMenu::Update.address() + 0xD80 };
 
 		auto& trampoline = SKSE::GetTrampoline();
