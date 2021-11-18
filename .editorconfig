@@ -6,6 +6,20 @@ insert_final_newline = true
 indent_style = tab
 indent_size = 4
 
+[*.cmake]
+indent_style = tab
+indent_size = 4
+
 [*.json]
 indent_style = space
 indent_size = 2
+
+[*.ppj]
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.bat]
+end_of_line = crlf
