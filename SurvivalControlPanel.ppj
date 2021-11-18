@@ -31,6 +31,7 @@
     <Package Name="SkyrimSE\@filename" RootDir="dist\Data">
       <Match In="Interface\Translations">SurvivalControlPanel_*.txt</Match>
       <Match In="Scripts">Survival*.pex</Match>
+      <Include>Interface\SurvivalCP\SCP_splash.dds</Include>
     </Package>
   </Packages>
   <ZipFiles Output="dist">
