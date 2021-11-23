@@ -1,8 +1,8 @@
 #include "Hooks.h"
 #include "Json.h"
 #include "Papyrus.h"
-#include "Version.h"
 #include "Serialization.h"
+#include "Version.h"
 
 void InitLogger()
 {
@@ -64,17 +64,17 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	auto m_interface = SKSE::GetMessagingInterface();
 	m_interface->RegisterListener(
 		[](SKSE::MessagingInterface::Message* a_msg) {
-		if (a_msg && a_msg->type == SKSE::MessagingInterface::kNewGame) {
-			auto userDir = Json::GetUserDirectory();
-			auto userDefault = userDir / "default.json";
-			auto dataDefault = std::filesystem::path{ "Data/Survival.json" };
-			if (std::filesystem::directory_entry{ userDefault }.exists()) {
-				Json::Load(userDefault);
-			} else if (std::filesystem::directory_entry{ dataDefault }.exists()) {
-				Json::Load(dataDefault);
+			if (a_msg && a_msg->type == SKSE::MessagingInterface::kNewGame) {
+				auto userDir = Json::GetUserDirectory();
+				auto userDefault = userDir / "default.json";
+				auto dataDefault = std::filesystem::path{ "Data/Survival.json" };
+				if (std::filesystem::directory_entry{ userDefault }.exists()) {
+					Json::Load(userDefault);
+				} else if (std::filesystem::directory_entry{ dataDefault }.exists()) {
+					Json::Load(dataDefault);
+				}
 			}
-		}
-	});
+		});
 
 	logger::info("{} loaded"sv, Version::PROJECT);
 
