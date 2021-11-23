@@ -8,7 +8,7 @@ class ArrowWeightManager
 public:
 	inline static void Install()
 	{
-		REL::Relocation<std::uintptr_t> GetWeight_ArrowWeight_Hook{ Offset::TESBoundObject::GetWeight.address() + 0x6E };
+		REL::Relocation<std::uintptr_t> GetWeight_ArrowWeight_Hook{ Offset::TESBoundObject::GetWeight, 0x6E };
 
 		auto& trampoline = SKSE::GetTrampoline();
 		trampoline.write_call<5>(GetWeight_ArrowWeight_Hook.address(), IsArrowWeightEnabled);
