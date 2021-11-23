@@ -39,7 +39,6 @@ extern "C" DLLEXPORT constexpr auto SKSEPlugin_Version =
 		v.PluginVersion(Version::MAJOR);
 		v.PluginName(Version::PROJECT);
 		v.AuthorName("Parapets and colinswrath"sv);
-		v.CompatibleVersions({ SKSE::RUNTIME_1_6_318 });
 		v.UsesAddressLibrary(true);
 		return v;
 	}();

@@ -7,7 +7,7 @@
   "dependencies": [
     "boost-atomic",
     "boost-stl-interfaces",
-	"rsm-binary-io",
+    "rsm-binary-io",
     "span-lite",
     "spdlog",
     "picojson"
