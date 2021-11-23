@@ -44,7 +44,7 @@ namespace Survival
 
 		bool EnableFrostfallKeywords = true;
 		bool EnableWarmthForCloaks = true;
-		std::map<RE::FormID, WarmthClass> WarmthOverrides;
+		std::unordered_map<RE::FormID, WarmthClass> WarmthOverrides;
 
 	private:
 		WarmthSettings()

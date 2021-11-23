@@ -6,6 +6,8 @@
 class WarmthManager
 {
 public:
+	using WarmthClass = Survival::WarmthClass;
+
 	inline static void Install()
 	{
 		REL::Relocation<std::uintptr_t> GetWarmthRating_Hook{ Offset::TESBoundObject::GetWarmthRating, 0x6C };
@@ -16,12 +18,12 @@ public:
 		logger::info("Installed hook for armor warmth"sv);
 	}
 
-	inline static Survival::WarmthClass GetWarmthClass(RE::TESObjectARMO* armor)
+	inline static WarmthClass GetWarmthClass(RE::TESObjectARMO* armor)
 	{
-		std::int32_t slotMask;
-		RE::Setting** warmthValues;
+		std::int32_t slotMask{};
+		RE::Setting** warmthValues{};
 
-		ArmorWarmthInfo info;
+		ArmorWarmthInfo info{};
 		info.slotMask = &slotMask;
 		info.warmthValues = &warmthValues;
 
@@ -49,41 +51,43 @@ private:
 		auto warmthClass = GetWarmthClass(info);
 		auto& warmthSettings = Survival::WarmthSettings::GetSingleton();
 
-		if (warmthSettings.EnableFrostfallKeywords) {
-			auto dataHandler = RE::TESDataHandler::GetSingleton();
-			auto frostfallEnableKeywordProtection =
-				skyrim_cast<RE::BGSKeyword*>(dataHandler->LookupForm(RE::FormID{ 0x00CC0E28 }, "Update.esm"sv));
+		constexpr RE::FormID FrostfallEnableKeywordProtection{ 0x01CC0E28 };
+		static auto kywdFrostfallEnable =
+			RE::TESForm::LookupByID(FrostfallEnableKeywordProtection)->As<RE::BGSKeyword>();
 
-			if (frostfallEnableKeywordProtection && form->HasKeyword(frostfallEnableKeywordProtection)) {
+		if (warmthSettings.EnableFrostfallKeywords && kywdFrostfallEnable) {
+
+			if (form->HasKeyword(kywdFrostfallEnable)) {
 				for (std::uint32_t i = 0; i < form->numKeywords; i++) {
 					auto keyword = form->keywords[i];
 
-					RE::FormID frostfallWarmthPoor{ 0x01CC0E0F };
-					RE::FormID frostfallWarmthFair{ 0x01CC0E11 };
-					RE::FormID frostfallWarmthGood{ 0x01CC0E12 };
-					RE::FormID frostfallWarmthExcellent{ 0x01CC0E13 };
-					RE::FormID frostfallWarmthMax{ 0x01CC0E14 };
-					RE::FormID frostfallIsCloakFur{ 0x01CC0E1E };
+					constexpr RE::FormID FrostfallWarmthPoor{ 0x01CC0E0F };
+					constexpr RE::FormID FrostfallWarmthFair{ 0x01CC0E11 };
+					constexpr RE::FormID FrostfallWarmthGood{ 0x01CC0E12 };
+					constexpr RE::FormID FrostfallWarmthExcellent{ 0x01CC0E13 };
+					constexpr RE::FormID FrostfallWarmthMax{ 0x01CC0E14 };
+					constexpr RE::FormID FrostfallIsCloakFur{ 0x01CC0E1E };
 
-					if (keyword->formID == frostfallWarmthPoor) {
-						warmthClass = Survival::WarmthClass::Cold;
-						*info->warmthValues = GetWarmthSettings(Survival::WarmthClass::Cold);
-					} else if (keyword->formID == frostfallWarmthFair ||
-							   keyword->formID == frostfallWarmthGood) {
-						warmthClass = Survival::WarmthClass::Normal;
-						*info->warmthValues = GetWarmthSettings(Survival::WarmthClass::Normal);
-					} else if (keyword->formID == frostfallWarmthExcellent ||
-							   keyword->formID == frostfallWarmthMax ||
-							   keyword->formID == frostfallIsCloakFur) {
-						warmthClass = Survival::WarmthClass::Warm;
-						*info->warmthValues = GetWarmthSettings(Survival::WarmthClass::Warm);
+					switch (keyword->formID) {
+					case FrostfallWarmthPoor:
+						*info->warmthValues = GetWarmthSettings(WarmthClass::Cold);
+						break;
+					case FrostfallWarmthFair:
+					case FrostfallWarmthGood:
+						*info->warmthValues = GetWarmthSettings(WarmthClass::Normal);
+						break;
+					case FrostfallWarmthExcellent:
+					case FrostfallWarmthMax:
+						*info->warmthValues = GetWarmthSettings(WarmthClass::Warm);
+						break;
 					}
 				}
 			}
 		}
 
-		if (warmthSettings.WarmthOverrides.find(armorForm->formID) != warmthSettings.WarmthOverrides.end()) {
-			warmthClass = warmthSettings.WarmthOverrides[armorForm->formID];
+		auto it = warmthSettings.WarmthOverrides.find(armorForm->formID);
+		if (it != warmthSettings.WarmthOverrides.end()) {
+			warmthClass = it->second;
 			*info->warmthValues = GetWarmthSettings(warmthClass);
 		}
 
@@ -98,30 +102,31 @@ private:
 		}
 	}
 
-	inline static Survival::WarmthClass GetWarmthClass(ArmorWarmthInfo* info)
+	inline static WarmthClass GetWarmthClass(ArmorWarmthInfo* info)
 	{
 		auto& warmthSettings = Survival::WarmthSettings::GetSingleton();
-		if (*info->warmthValues == GetWarmthSettings(Survival::WarmthClass::Warm) ||
-			*info->warmthValues == warmthSettings.GetCloakSettings(Survival::WarmthClass::Warm)) {
-			return Survival::WarmthClass::Warm;
-		} else if (*info->warmthValues == GetWarmthSettings(Survival::WarmthClass::Cold) ||
-				   *info->warmthValues == warmthSettings.GetCloakSettings(Survival::WarmthClass::Cold)) {
-			return Survival::WarmthClass::Cold;
+
+		if (*info->warmthValues == GetWarmthSettings(WarmthClass::Warm) ||
+			*info->warmthValues == warmthSettings.GetCloakSettings(WarmthClass::Warm)) {
+			return WarmthClass::Warm;
+		} else if (*info->warmthValues == GetWarmthSettings(WarmthClass::Cold) ||
+				   *info->warmthValues == warmthSettings.GetCloakSettings(WarmthClass::Cold)) {
+			return WarmthClass::Cold;
 		} else {
-			return Survival::WarmthClass::Normal;
+			return WarmthClass::Normal;
 		}
 	}
 
-	inline static RE::Setting** GetWarmthSettings(Survival::WarmthClass warmthClass)
+	inline static RE::Setting** GetWarmthSettings(WarmthClass warmthClass)
 	{
-		static REL::Relocation<RE::Setting**> normal{ Offset::Survival::WarmthSettings_Normal.address() };
-		static REL::Relocation<RE::Setting**> warm{ Offset::Survival::WarmthSettings_Warm.address() };
-		static REL::Relocation<RE::Setting**> cold{ Offset::Survival::WarmthSettings_Cold.address() };
+		static REL::Relocation<RE::Setting**> normal{ Offset::Survival::WarmthSettings_Normal };
+		static REL::Relocation<RE::Setting**> warm{ Offset::Survival::WarmthSettings_Warm };
+		static REL::Relocation<RE::Setting**> cold{ Offset::Survival::WarmthSettings_Cold };
 
 		switch (warmthClass) {
-		case Survival::WarmthClass::Warm:
+		case WarmthClass::Warm:
 			return warm.get();
-		case Survival::WarmthClass::Cold:
+		case WarmthClass::Cold:
 			return cold.get();
 		default:
 			return normal.get();

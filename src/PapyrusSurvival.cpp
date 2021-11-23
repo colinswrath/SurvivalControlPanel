@@ -1,6 +1,6 @@
 #include "PapyrusSurvival.h"
+#include "Version.h"
 #include "Warmth.h"
-#include "version.h"
 
 namespace PapyrusSurvival
 {
