@@ -17,9 +17,6 @@ $DeleteFile	Delete
 $Enable Cloak Warmth	Enable Cloak Warmth
 $Enable Frostfall Keywords	Enable Frostfall Keywords
 $Equipment	Equipment
-$Error: Failed to delete profile.	Error: Failed to delete profile.
-$Error: Failed to load profile.	Error: Failed to load profile.
-$Error: Failed to save profile.	Error: Failed to save profile.
 $Feet	Feet
 $Feet Cold Bonus	Feet Cold Bonus
 $Feet Normal Bonus	Feet Normal Bonus
@@ -41,17 +38,25 @@ $New	New
 $NoEquipment	None
 $NormalWarmth	Normal
 $Other	Other
-$Profiles	Profiles
 $Reset all	Reset all
 $Reset all to default	Reset all to default
+$SCP_DeleteSettings	Delete saved settings
+$SCP_ReloadSettings	Reload settings
+$SCP_ResetSettings	Reset all to default
+$SCP_SaveSettings	Save all settings
+$SCP_ConfirmDelete	Delete saved settings? This cannot be undone.
+$SCP_ConfirmReload	Discard current settings and reload previous settings?
+$SCP_ConfirmReset	Reset all settings to their original values?
+$SCP_ConfirmSave	Save current settings as defaults?
+$SCP_ErrorDeleteFailed	Error: Failed to delete settings.
+$SCP_ErrorLoadFailed	Error: Failed to load settings.
+$SCP_ErrorSaveFailed	Error: Failed to save settings.
 $Save	Save
+$Save/Load	Save/Load
 $Scaling Factor	Scaling Factor
 $Sleep to level up	Sleep to level up
 $Survival Mode Features	Survival Mode Features
 $Survival Mode Patches	Survival Mode Patches
-$This cannot be undone.	This cannot be undone.
-$This will overwrite previously saved settings.	This will overwrite previously saved settings.
-$This will replace all current settings.	This will replace all current settings.
 $This will reset all equipment settings to default.	This will reset all equipment settings to default.
 $Torch Bonus	Torch Bonus
 $Warm	Warm

@@ -1,6 +1,6 @@
 {
   "name": "survivalcontrolpanel",
-  "version-string": "1.0.4",
+  "version-string": "1.1.0",
   "description": "SKSE Plugin to toggle various survival features",
   "homepage": "https://github.com/colinswrath/SurvivalControlPanel",
   "license": "MIT",

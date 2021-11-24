@@ -21,6 +21,8 @@ int Property HandsSlot = 33  AutoReadOnly
 int Property FeetSlot = 37  AutoReadOnly
 int Property CloakSlot = 46  AutoReadOnly
 
+String Property DefaultFilePath = "Data/Survival.json"  AutoReadOnly
+
 ; Main
 String[] FeatureMenuEntries
 int[] FeatureMenuOptions
@@ -57,7 +59,9 @@ int ResetOverrideButton
 
 ; Profiles
 bool SettingsMatchProfile = false
-String CurrentFile = ""
+
+; Deprecated (SCP v1.1)
+String CurrentFile
 String[] BrowseFileEntries
 
 Event OnInit()
@@ -77,10 +81,26 @@ Event OnInit()
 	WarmthMenuEntries[RESET_INDEX] = "$Default"
 EndEvent
 
+int Function GetVersion()
+	return 2
+EndFunction
+
+Event OnVersionUpdate(int a_version)
+	if a_version >= 2 && CurrentVersion < 2
+		Debug.Trace(self + ": Updating to script version 2")
+
+		Pages = new string[4]
+		Pages[0] = "$Main"
+		Pages[1] = "$Warmth Settings"
+		Pages[2] = "$Equipment"
+		Pages[3] = "$Save/Load"
+	endif
+EndEvent
+
 Event OnPageReset(String a_page)
 	
 	if a_page == ""
-        LoadCustomContent("SurvivalCP/SCP_splash.swf")
+		LoadCustomContent("SurvivalCP/SCP_splash.swf")
 		return
 	else
 		UnloadCustomContent()
@@ -157,35 +177,31 @@ Event OnPageReset(String a_page)
 
 		AddHeaderOption("$Reset all")
 		ResetOverrideButton = AddTextOption("$Reset all to default", "")
-	elseif a_page == "$Profiles"
+	elseif a_page == "$Save/Load"
 		; This page will use state-based MCM since the options are non-homogenous
 		SetCursorFillMode(TOP_TO_BOTTOM)
 
-		int iFlag = OPTION_FLAG_NONE
+		AddHeaderOption("$Save/Load")
 
-		AddHeaderOption("$Profiles")
-		AddInputOptionST("NewFile", "$New", "")
-
-		BrowseFileEntries = Survival_Json.ListFiles()
-		int iBrowseFlag = OPTION_FLAG_DISABLED
-		if BrowseFileEntries.Length > 0
-			iBrowseFlag = OPTION_FLAG_NONE
-		endif
-
-		AddMenuOptionST("Browse", "$Browse", CurrentFile, a_flags = iBrowseFlag)
-
-		int iLoadSaveFlag = OPTION_FLAG_DISABLED
+		int iSaveFlag = OPTION_FLAG_DISABLED
+		int iLoadFlag = OPTION_FLAG_DISABLED
 		int iDeleteFlag = OPTION_FLAG_DISABLED
-		if CurrentFile != ""
+
+		if !SettingsMatchProfile
+			iSaveFlag = OPTION_FLAG_NONE
+		endif
+		if Survival_Json.Exists(DefaultFilePath)
 			if !SettingsMatchProfile
-				iLoadSaveFlag = OPTION_FLAG_NONE
+				iLoadFlag = OPTION_FLAG_NONE
 			endif
 			iDeleteFlag = OPTION_FLAG_NONE
 		endif
 
-		AddTextOptionST("Load", "$Load", "", a_flags = iLoadSaveFlag)
-		AddTextOptionST("Save", "$Save", "", a_flags = iLoadSaveFlag)
-		AddTextOptionST("Delete", "$DeleteFile", "", a_flags = iDeleteFlag)
+		AddTextOptionST("Save", "$SCP_SaveSettings", "", a_flags = iSaveFlag)
+		AddTextOptionST("Load", "$SCP_ReloadSettings", "", a_flags = iLoadFlag)
+		AddEmptyOption()
+		AddTextOptionST("Reset", "$SCP_ResetSettings", "")
+		AddTextOptionST("Delete", "$SCP_DeleteSettings", "", a_flags = iDeleteFlag)
 	endif
 EndEvent
 
@@ -463,85 +479,35 @@ Event OnOptionSliderAccept(int a_option, float a_value)
 	SettingsMatchProfile = false
 EndEvent
 
-State NewFile
-Event OnInputAcceptST(String a_input)
-	bool doSave = false
-	if a_input != ""
-		if Survival_Json.Exists(a_input)
-			doSave = ShowMessage("$This will overwrite previously saved settings.")
-		else
-			doSave = true
-		endif
-	endif
-	if doSave
-		if Survival_Json.Save(a_input)
-			CurrentFile = a_input
+State Save
+Event OnSelectST()
+	if ShowMessage("$SCP_ConfirmSave")
+		if Survival_Json.Save(DefaultFilePath)
 			SettingsMatchProfile = true
-			GotoState("Browse")
-			SetMenuOptionValueST(a_input)
-			BrowseFileEntries = Survival_Json.ListFiles()
-			if BrowseFileEntries.Length > 0
-				SetOptionFlagsST(OPTION_FLAG_NONE)
-			endif
+			SetOptionFlagsST(OPTION_FLAG_DISABLED)
 			GotoState("Load")
-			SetOptionFlagsST(OPTION_FLAG_NONE)
-			GotoState("Save")
-			SetOptionFlagsST(OPTION_FLAG_NONE)
+			SetOptionFlagsST(OPTION_FLAG_DISABLED)
 			GotoState("Delete")
 			SetOptionFlagsST(OPTION_FLAG_NONE)
 		else
-			ShowMessage("$Error: Failed to save profile.", a_withCancel = false)
+			ShowMessage("$SCP_ErrorSaveFailed", a_withCancel = false)
 		endif
-	endif
-EndEvent
-EndState
-
-State Browse
-Event OnMenuOpenST()
-	SetMenuDialogOptions(BrowseFileEntries)
-EndEvent
-
-Event OnMenuAcceptST(int a_index)
-	String sFile = BrowseFileEntries[a_index]
-	if sFile != ""
-		CurrentFile = sFile
-		SettingsMatchProfile = false
-		SetMenuOptionValueST(sFile)
-		GotoState("Load")
-		SetOptionFlagsST(OPTION_FLAG_NONE)
-		GotoState("Save")
-		SetOptionFlagsST(OPTION_FLAG_NONE)
-		GotoState("Delete")
-		SetOptionFlagsST(OPTION_FLAG_NONE)
 	endif
 EndEvent
 EndState
 
 State Load
 Event OnSelectST()
-	if ShowMessage("$This will replace all current settings.")
-		if Survival_Json.Load(CurrentFile)
+	if ShowMessage("$SCP_ConfirmReload")
+		if Survival_Json.Load(DefaultFilePath)
 			SettingsMatchProfile = true
 			SetOptionFlagsST(OPTION_FLAG_DISABLED)
 			GotoState("Save")
 			SetOptionFlagsST(OPTION_FLAG_DISABLED)
+			GotoState("Reset")
+			SetOptionFlagsST(OPTION_FLAG_NONE)
 		else
-			ShowMessage("$Error: Failed to load profile.", a_withCancel = false)
-		endif
-	endif
-EndEvent
-EndState
-
-State Save
-Event OnSelectST()
-	if ShowMessage("$This will overwrite previously saved settings.")
-		if Survival_Json.Save(CurrentFile)
-			SettingsMatchProfile = true
-			SetOptionFlagsST(OPTION_FLAG_DISABLED)
-			GotoState("Load")
-			SetOptionFlagsST(OPTION_FLAG_DISABLED)
-		else
-			ShowMessage("$Error: Failed to save profile.", a_withCancel = false)
+			ShowMessage("$SCP_ErrorLoadFailed", a_withCancel = false)
 		endif
 	endif
 EndEvent
@@ -549,24 +515,56 @@ EndState
 
 State Delete
 Event OnSelectST()
-	if ShowMessage("$This cannot be undone.")
-		if Survival_Json.Delete(CurrentFile)
-			CurrentFile = ""
+	if ShowMessage("$SCP_ConfirmDelete")
+		if Survival_Json.Delete(DefaultFilePath)
 			SettingsMatchProfile = false
 			SetOptionFlagsST(OPTION_FLAG_DISABLED)
-			GotoState("Browse")
-			SetMenuOptionValueST("")
-			BrowseFileEntries = Survival_Json.ListFiles()
-			if BrowseFileEntries.Length == 0
-				SetOptionFlagsST(OPTION_FLAG_DISABLED)
-			endif
+			GotoState("Save")
+			SetOptionFlagsST(OPTION_FLAG_NONE)
 			GotoState("Load")
 			SetOptionFlagsST(OPTION_FLAG_DISABLED)
-			GotoState("Save")
-			SetOptionFlagsST(OPTION_FLAG_DISABLED)
 		else
-			ShowMessage("$Error: Failed to delete profile.", a_withCancel = false)
+			ShowMessage("$SCP_ErrorDeleteFailed", a_withCancel = false)
 		endif
+	endif
+EndEvent
+EndState
+
+State Reset
+Event OnSelectST()
+	if ShowMessage("$SCP_ConfirmReset")
+		; Main
+		UserReset(0)
+		UserReset(1)
+		UserReset(2)
+		UserReset(3)
+		UserReset(4)
+		; Warmth Settings
+		SetGameSettingFloat("fSurvNormalBodyBonus", 27.0)
+		SetGameSettingFloat("fSurvWarmBodyBonus", 54.0)
+		SetGameSettingFloat("fSurvColdBodyBonus", 17.0)
+		SetGameSettingFloat("fSurvNormalHeadBonus", 18.0)
+		SetGameSettingFloat("fSurvWarmHeadBonus", 29.0)
+		SetGameSettingFloat("fSurvColdHeadBonus", 8.0)
+		SetGameSettingFloat("fSurvNormalHandsBonus", 13.0)
+		SetGameSettingFloat("fSurvWarmHandsBonus", 24.0)
+		SetGameSettingFloat("fSurvColdHandsBonus", 7.0)
+		SetGameSettingFloat("fSurvNormalFeetBonus", 13.0)
+		SetGameSettingFloat("fSurvWarmFeetBonus", 24.0)
+		SetGameSettingFloat("fSurvColdFeetBonus", 7.0)
+		SetCloakNormalBonus(18.0)
+		SetCloakWarmBonus(29.0)
+		SetCloakColdBonus(8.0)
+		SetGameSettingFloat("fSurvTorchBonus", 50.0)
+		SetGameSettingFloat("fSurvArmorScalar", 1.0)
+		; Equipment
+		ResetAllArmorWarmthToDefault()
+		RecomputeArmorWarmths()
+
+		SettingsMatchProfile = false
+		SetOptionFlagsST(OPTION_FLAG_DISABLED)
+		GotoState("Save")
+		SetOptionFlagsST(OPTION_FLAG_NONE)
 	endif
 EndEvent
 EndState
