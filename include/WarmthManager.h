@@ -53,11 +53,11 @@ private:
 
 		constexpr RE::FormID FrostfallEnableKeywordProtection{ 0x01CC0E28 };
 		static auto kywdFrostfallEnable =
-			RE::TESForm::LookupByID(FrostfallEnableKeywordProtection)->As<RE::BGSKeyword>();
+			skyrim_cast<RE::BGSKeyword*>(RE::TESForm::LookupByID(FrostfallEnableKeywordProtection));
 
-		if (warmthSettings.EnableFrostfallKeywords && kywdFrostfallEnable) {
+		if (warmthSettings.EnableFrostfallKeywords) {
 
-			if (form->HasKeyword(kywdFrostfallEnable)) {
+			if (kywdFrostfallEnable && form->HasKeyword(kywdFrostfallEnable)) {
 				for (std::uint32_t i = 0; i < form->numKeywords; i++) {
 					auto keyword = form->keywords[i];
 
