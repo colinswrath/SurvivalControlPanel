@@ -32,7 +32,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STR
 
 project(
 	SurvivalControlPanel
-	VERSION 1.0.4
+	VERSION 1.1.0
 	LANGUAGES CXX
 )
 

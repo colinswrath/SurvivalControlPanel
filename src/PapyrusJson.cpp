@@ -3,9 +3,10 @@
 
 namespace PapyrusJson
 {
-	std::vector<RE::BSFixedString> ListFiles(RE::StaticFunctionTag*)
+	std::vector<std::string> ListFiles(RE::StaticFunctionTag*)
 	{
-		std::vector<RE::BSFixedString> files;
+		std::vector<std::string> files;
+
 		auto userDir = Json::GetUserDirectory();
 		std::filesystem::directory_entry dir_entry{ userDir };
 		if (!dir_entry.exists()) {
@@ -14,58 +15,69 @@ namespace PapyrusJson
 
 		std::filesystem::directory_iterator dirContents{ userDir };
 
-		for (auto file : dirContents) {
+		for (auto& file : dirContents) {
 			if (!file.is_regular_file())
 				continue;
 
 			if (file.path().extension() == ".json") {
-				files.push_back(RE::BSFixedString{ file.path().stem().string() });
+				files.push_back(file.path().stem().string());
 			}
 		}
 
 		return files;
 	}
 
-	bool Exists(RE::StaticFunctionTag*, RE::BSString a_filePath)
+	bool Exists(RE::StaticFunctionTag*, std::string a_filePath)
 	{
-		auto fullPath = Json::GetUserDirectory() / std::string_view{ a_filePath };
-		fullPath += ".json";
-
+		auto fullPath = ExpandPath(a_filePath);
 		std::filesystem::directory_entry dir_entry{ fullPath };
 
 		return dir_entry.exists();
 	}
 
-	bool Save(RE::StaticFunctionTag*, RE::BSString a_filePath)
+	bool Save(RE::StaticFunctionTag*, std::string a_filePath)
 	{
-		auto userDir = Json::GetUserDirectory();
-		auto fullPath = userDir / std::string_view{ a_filePath };
-		fullPath += ".json";
-
+		auto fullPath = ExpandPath(a_filePath);
 		return Json::Save(fullPath);
 	}
 
-	bool Load(RE::StaticFunctionTag*, RE::BSString a_filePath)
+	bool Load(RE::StaticFunctionTag*, std::string a_filePath)
 	{
-		auto userDir = Json::GetUserDirectory();
-		auto fullPath = userDir / std::string_view{ a_filePath };
-		fullPath += ".json";
-
+		auto fullPath = ExpandPath(a_filePath);
 		return Json::Load(fullPath);
 	}
 
-	bool Delete(RE::StaticFunctionTag*, RE::BSString a_filePath)
+	bool Delete(RE::StaticFunctionTag*, std::string a_filePath)
 	{
+		auto fullPath = ExpandPath(a_filePath);
+		std::filesystem::remove(fullPath);
+		return true;
+	}
+
+	std::filesystem::path ExpandPath(const std::string& a_filename)
+	{
+		std::string lower = a_filename;
+		std::transform(
+			std::execution::unseq,
+			lower.begin(),
+			lower.end(),
+			lower.begin(),
+			[](char c) { return static_cast<char>(std::tolower(c)); });
+
+		if (lower.starts_with("data"sv)) {
+			return a_filename;
+		}
+
 		auto userDir = Json::GetUserDirectory();
 		std::filesystem::directory_entry dir_entry{ userDir };
 		if (!dir_entry.exists()) {
-			return false;
+			return std::filesystem::path{};
 		}
 
-		auto fullPath = userDir / std::string_view{ a_filePath };
+		auto fullPath = userDir / a_filename;
 		fullPath += ".json";
-		std::filesystem::remove(fullPath);
-		return true;
+
+		return fullPath;
 	}
 
 	bool RegisterFuncs(RE::BSScript::IVirtualMachine* a_vm)
