@@ -11,11 +11,14 @@ public:
 	inline static void Install()
 	{
 		REL::Relocation<std::uintptr_t> GetWarmthRating_Hook{ Offset::TESBoundObject::GetWarmthRating, 0x6C };
+		REL::Relocation<std::uintptr_t> WarmthCalcFunc_Hook{ Offset::WarmthCalcFunc::Visit, 0x78 };
 
 		auto& trampoline = SKSE::GetTrampoline();
-		_GetWarmthInfo = trampoline.write_call<5>(GetWarmthRating_Hook.address(), GetWarmthInfo);
 
-		logger::info("Installed hook for armor warmth"sv);
+		_GetWarmthInfo1 = trampoline.write_call<5>(GetWarmthRating_Hook.address(), GetWarmthInfo1);
+		_GetWarmthInfo2 = trampoline.write_call<5>(WarmthCalcFunc_Hook.address(), GetWarmthInfo2);
+
+		logger::info("Installed hooks for armor warmth"sv);
 	}
 
 	inline static WarmthClass GetWarmthClass(RE::TESObjectARMO* armor)
@@ -40,9 +43,20 @@ private:
 	};
 	static_assert(sizeof(ArmorWarmthInfo) == 0x18);
 
+	inline static void GetWarmthInfo1(RE::BGSKeywordForm* form, ArmorWarmthInfo* info)
+	{
+		_GetWarmthInfo1(form, info);
+		GetWarmthInfo(form, info);
+	}
+
+	inline static void GetWarmthInfo2(RE::BGSKeywordForm* form, ArmorWarmthInfo* info)
+	{
+		_GetWarmthInfo2(form, info);
+		GetWarmthInfo(form, info);
+	}
+
 	inline static void GetWarmthInfo(RE::BGSKeywordForm* form, ArmorWarmthInfo* info)
 	{
-		_GetWarmthInfo(form, info);
 		auto armorForm = skyrim_cast<RE::TESObjectARMO*>(form);
 		if (!armorForm) {
 			return;
@@ -56,7 +70,6 @@ private:
 			skyrim_cast<RE::BGSKeyword*>(RE::TESForm::LookupByID(FrostfallEnableKeywordProtection));
 
 		if (warmthSettings.EnableFrostfallKeywords) {
-
 			if (kywdFrostfallEnable && form->HasKeyword(kywdFrostfallEnable)) {
 				for (std::uint32_t i = 0; i < form->numKeywords; i++) {
 					auto keyword = form->keywords[i];
@@ -133,5 +146,6 @@ private:
 		}
 	}
 
-	inline static REL::Relocation<decltype(GetWarmthInfo)> _GetWarmthInfo;
+	inline static REL::Relocation<decltype(GetWarmthInfo1)> _GetWarmthInfo1;
+	inline static REL::Relocation<decltype(GetWarmthInfo2)> _GetWarmthInfo2;
 };

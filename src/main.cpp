@@ -49,7 +49,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	logger::trace("{} {} loading begin"sv, Version::PROJECT, Version::MAJOR);
 
 	SKSE::Init(a_skse);
-	SKSE::AllocTrampoline(84);
+	SKSE::AllocTrampoline(98);
 
 	Papyrus::Register();
 	Hooks::Install();

@@ -15,6 +15,11 @@ using namespace std::literals;
 
 namespace logger = SKSE::log;
 
+namespace util
+{
+	using SKSE::stl::to_underlying;
+}
+
 #define DLLEXPORT __declspec(dllexport)
 
 #include "Version.h"

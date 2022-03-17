@@ -109,16 +109,16 @@ namespace Survival
 
 		for (auto& warmth : WarmthOverrides) {
 			if (!a_intfc->WriteRecordData(warmth.first)) {
-				logger::error("Failed to write warmth elem ({} : {})!"sv, warmth.first, warmth.second);
+				logger::error("Failed to write warmth elem ({} : {})!"sv, warmth.first, util::to_underlying(warmth.second));
 				return false;
 			}
 
 			if (!a_intfc->WriteRecordData(warmth.second)) {
-				logger::error("Failed to write warmth elem ({} : {})!"sv, warmth.first, warmth.second);
+				logger::error("Failed to write warmth elem ({} : {})!"sv, warmth.first, util::to_underlying(warmth.second));
 				return false;
 			}
 
-			logger::info("Wrote warmth elem ({} : {})!"sv, warmth.first, warmth.second);
+			logger::info("Wrote warmth elem ({} : {})!"sv, warmth.first, util::to_underlying(warmth.second));
 		}
 		return true;
 	}

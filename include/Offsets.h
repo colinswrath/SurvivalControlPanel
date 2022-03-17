@@ -46,4 +46,9 @@ namespace Offset
 	{
 		constexpr REL::ID OpenMenu{ 52715 };
 	}
+
+	namespace WarmthCalcFunc
+	{
+		constexpr REL::ID Visit{ 26404 };
+	}
 }
