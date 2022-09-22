@@ -79,7 +79,6 @@ private:
 					constexpr RE::FormID FrostfallWarmthGood{ 0x01CC0E12 };
 					constexpr RE::FormID FrostfallWarmthExcellent{ 0x01CC0E13 };
 					constexpr RE::FormID FrostfallWarmthMax{ 0x01CC0E14 };
-					constexpr RE::FormID FrostfallIsCloakFur{ 0x01CC0E1E };
 
 					switch (keyword->formID) {
 					case FrostfallWarmthPoor:
