@@ -1,4 +1,5 @@
-This is a basic plugin template for use with CommonLibSSE
+SKSE plugin that exposes native survival features, including sleep to level up,
+lockpick weight, and arrow weight and allows for cloaks to give warmth rating.
 
 ## Requirements
 * [CMake](https://cmake.org/)
