@@ -1,7 +1,7 @@
-#include "Hooks.h"
-#include "Json.h"
-#include "Papyrus.h"
-#include "Serialization.h"
+#include "Hooks/Hooks.h"
+#include "Papyrus/Papyrus.h"
+#include "SCP/Json.h"
+#include "SCP/Serialization.h"
 
 void InitLogger()
 {

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Offsets.h"
-#include "Survival.h"
+#include "RE/Offset.h"
+#include "SCP/Survival.h"
 
 class HUDIndicatorManager
 {
 public:
 	inline static void Install()
 	{
-		REL::Relocation<std::uintptr_t> HUDIndicator_Hook{ Offset::HUDMenu::Update, 0xD80 };
+		REL::Relocation<std::uintptr_t> HUDIndicator_Hook{ STATIC_OFFSET(HUDMenu::Update) + 0xD80 };
 
 		auto& trampoline = SKSE::GetTrampoline();
 		_CheckSurvivalHUD = trampoline.write_call<5>(HUDIndicator_Hook.address(), CheckSurvivalHUD);

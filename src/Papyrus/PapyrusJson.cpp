@@ -1,5 +1,5 @@
 #include "PapyrusJson.h"
-#include "Json.h"
+#include "SCP/Json.h"
 
 namespace PapyrusJson
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Offsets.h"
-#include "Warmth.h"
+#include "RE/Offset.h"
+#include "SCP/Warmth.h"
 
 class WarmthManager
 {
@@ -10,8 +10,8 @@ public:
 
 	inline static void Install()
 	{
-		REL::Relocation<std::uintptr_t> GetWarmthRating_Hook{ Offset::TESBoundObject::GetWarmthRating, 0x6C };
-		REL::Relocation<std::uintptr_t> WarmthCalcFunc_Hook{ Offset::WarmthCalcFunc::Visit, 0x78 };
+		REL::Relocation<std::uintptr_t> GetWarmthRating_Hook{ STATIC_OFFSET(TESBoundObject::GetWarmthRating) + 0x6C };
+		REL::Relocation<std::uintptr_t> WarmthCalcFunc_Hook{ STATIC_OFFSET(WarmthCalcFunc::Visit) + 0x78 };
 
 		auto& trampoline = SKSE::GetTrampoline();
 
@@ -131,9 +131,9 @@ private:
 
 	inline static RE::Setting** GetWarmthSettings(WarmthClass warmthClass)
 	{
-		static REL::Relocation<RE::Setting**> normal{ Offset::Survival::WarmthSettings_Normal };
-		static REL::Relocation<RE::Setting**> warm{ Offset::Survival::WarmthSettings_Warm };
-		static REL::Relocation<RE::Setting**> cold{ Offset::Survival::WarmthSettings_Cold };
+		static REL::Relocation<RE::Setting**> normal{ STATIC_OFFSET(Survival::WarmthSettings_Normal) };
+		static REL::Relocation<RE::Setting**> warm{ STATIC_OFFSET(Survival::WarmthSettings_Warm) };
+		static REL::Relocation<RE::Setting**> cold{ STATIC_OFFSET(Survival::WarmthSettings_Cold) };
 
 		switch (warmthClass) {
 		case WarmthClass::Warm:

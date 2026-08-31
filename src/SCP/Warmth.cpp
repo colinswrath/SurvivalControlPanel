@@ -1,6 +1,6 @@
 #include "Warmth.h"
+#include "Hooks/WarmthManager.h"
 #include "Serialization.h"
-#include "WarmthManager.h"
 
 namespace Survival
 {

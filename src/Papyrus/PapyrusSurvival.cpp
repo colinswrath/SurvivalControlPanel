@@ -1,5 +1,5 @@
 #include "PapyrusSurvival.h"
-#include "Warmth.h"
+#include "SCP/Warmth.h"
 
 namespace PapyrusSurvival
 {

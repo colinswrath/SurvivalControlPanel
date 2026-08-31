@@ -27,7 +27,7 @@ SKSEPlugin_Add(
 		README.md
 		vcpkg.json
 	PRECOMPILE_HEADERS
-		include/PCH.h
+		src/common/PCH.h
 )
 
 set_target_properties(CommonLibSSE PROPERTIES
@@ -39,7 +39,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 	INTERPROCEDURAL_OPTIMIZATION_DEBUG FALSE
 )
 
-set(DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dist/Data")
+set(DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data")
 
 set(TRANSLATION_FILES
 	"${DATA_DIR}/Interface/Translations/SurvivalControlPanel_ENGLISH.txt"

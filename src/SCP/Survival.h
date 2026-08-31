@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Offsets.h"
+#include "RE/Offset.h"
 
 namespace Survival
 {
@@ -70,7 +70,7 @@ namespace Survival
 
 	inline bool ModeIsEnabled()
 	{
-		static REL::Relocation<bool()> IsSurvivalModeActive{ Offset::Survival::IsModeActive };
+		static REL::Relocation<bool()> IsSurvivalModeActive{ STATIC_OFFSET(Survival::IsModeActive) };
 		return IsSurvivalModeActive();
 	}
 
