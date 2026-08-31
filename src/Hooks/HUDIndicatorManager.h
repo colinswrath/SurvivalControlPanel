@@ -9,6 +9,7 @@ public:
 	inline static void Install()
 	{
 		REL::Relocation<std::uintptr_t> HUDIndicator_Hook{ STATIC_OFFSET(HUDMenu::Update) + 0xD80 };
+		REL::make_pattern<"E8">().match_or_fail(HUDIndicator_Hook.address());
 
 		auto& trampoline = SKSE::GetTrampoline();
 		_CheckSurvivalHUD = trampoline.write_call<5>(HUDIndicator_Hook.address(), CheckSurvivalHUD);

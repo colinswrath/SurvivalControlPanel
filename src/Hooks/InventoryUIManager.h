@@ -12,6 +12,10 @@ public:
 		REL::Relocation<std::uintptr_t> BottomBar_Hook{ STATIC_OFFSET(BottomBar::Update) + 0x119 };
 		REL::Relocation<std::uintptr_t> UIDescription_Hook{ STATIC_OFFSET(Survival::ReplaceText) + 0x276 };
 
+		REL::make_pattern<"E8">().match_or_fail(ItemData_Hook.address());
+		REL::make_pattern<"E8">().match_or_fail(BottomBar_Hook.address());
+		REL::make_pattern<"E8">().match_or_fail(UIDescription_Hook.address());
+
 		auto& trampoline = SKSE::GetTrampoline();
 		trampoline.write_call<5>(ItemData_Hook.address(), IsInventoryUIEnabled);
 

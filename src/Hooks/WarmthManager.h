@@ -13,6 +13,9 @@ public:
 		REL::Relocation<std::uintptr_t> GetWarmthRating_Hook{ STATIC_OFFSET(TESBoundObject::GetWarmthRating) + 0x6C };
 		REL::Relocation<std::uintptr_t> WarmthCalcFunc_Hook{ STATIC_OFFSET(WarmthCalcFunc::Visit) + 0x78 };
 
+		REL::make_pattern<"E8">().match_or_fail(GetWarmthRating_Hook.address());
+		REL::make_pattern<"E8">().match_or_fail(WarmthCalcFunc_Hook.address());
+
 		auto& trampoline = SKSE::GetTrampoline();
 
 		_GetWarmthInfo1 = trampoline.write_call<5>(GetWarmthRating_Hook.address(), GetWarmthInfo1);
