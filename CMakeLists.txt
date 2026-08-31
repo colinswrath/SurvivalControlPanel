@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(
 	SurvivalControlPanel
-	VERSION 1.1.1
+	VERSION 1.1.2
 	LANGUAGES CXX
 )
 
@@ -16,8 +16,6 @@ list(APPEND CMAKE_MODULE_PATH
 include(SKSEPlugin)
 include(Papyrus)
 include(BSArchive)
-
-set(SKSE_COMMONLIBSSE_PATH "extern/CommonLibSSE")
 
 SKSEPlugin_Add(
 	${PROJECT_NAME}
