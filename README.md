@@ -12,8 +12,8 @@ lockpick weight, and arrow weight and allows for cloaks to give warmth rating.
 
 ## Building
 ```
-git clone https://github.com/Exit-9B/ExamplePlugin-CommonLibSSE
-cd ExamplePlugin-CommonLibSSE
+git clone https://github.com/colinswrath/SurvivalControlPanel
+cd SurvivalControlPanel
 git submodule init
 git submodule update
 cmake --preset vs2022-windows
