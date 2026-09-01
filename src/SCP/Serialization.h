@@ -1,14 +1,14 @@
 #pragma once
 
 #include "Survival.h"
-#include "Version.h"
 #include "Warmth.h"
 
 namespace Serialization
 {
+	inline constexpr std::uint32_t kSerializationVersion = 1;
+
 	enum
 	{
-		kSerializationVersion = 1,
 		kHUDIndicators = 'HUDS',
 		kInventoryUI = 'IUIS',
 		kSleepToLevelUp = 'STLS',
@@ -155,7 +155,7 @@ namespace Serialization
 				}
 				break;
 			default:
-				logger::error(FMT_STRING("Unrecognized signature type! {}"), type);
+				logger::error("Unrecognized signature type! {}"sv, type);
 				break;
 			}
 		}

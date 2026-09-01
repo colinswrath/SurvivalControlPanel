@@ -1,6 +1,7 @@
 {
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "survivalcontrolpanel",
-  "version-string": "1.1.0",
+  "version": "1",
   "description": "SKSE Plugin to toggle various survival features",
   "homepage": "https://github.com/colinswrath/SurvivalControlPanel",
   "license": "MIT",

@@ -1,8 +1,7 @@
-#include "Hooks.h"
-#include "Json.h"
-#include "Papyrus.h"
-#include "Serialization.h"
-#include "Version.h"
+#include "Hooks/Hooks.h"
+#include "Papyrus/Papyrus.h"
+#include "SCP/Json.h"
+#include "SCP/Serialization.h"
 
 void InitLogger()
 {
@@ -14,7 +13,7 @@ void InitLogger()
 		return;
 	}
 
-	*path /= fmt::format("{}.log"sv, Version::PROJECT);
+	*path /= fmt::format("{}.log"sv, Plugin::NAME);
 	auto sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true);
 #endif
 
@@ -29,15 +28,13 @@ void InitLogger()
 
 	spdlog::set_default_logger(std::move(log));
 	spdlog::set_pattern("%s(%#): [%^%l%$] %v"s);
-
-	logger::info(FMT_STRING("{} v{}"), Version::PROJECT, Version::NAME);
 }
 
 extern "C" DLLEXPORT constexpr auto SKSEPlugin_Version =
 	[]() {
 		SKSE::PluginVersionData v{};
-		v.PluginVersion(Version::MAJOR);
-		v.PluginName(Version::PROJECT);
+		v.PluginVersion(Plugin::VERSION);
+		v.PluginName(Plugin::NAME);
 		v.AuthorName("Parapets and colinswrath"sv);
 		v.UsesAddressLibrary(true);
 		return v;
@@ -46,7 +43,7 @@ extern "C" DLLEXPORT constexpr auto SKSEPlugin_Version =
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
 	InitLogger();
-	logger::trace("{} {} loading begin"sv, Version::PROJECT, Version::MAJOR);
+	logger::info("{} v{}"sv, Plugin::NAME, Plugin::VERSION.string());
 
 	SKSE::Init(a_skse);
 	SKSE::AllocTrampoline(98);
@@ -76,7 +73,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 			}
 		});
 
-	logger::info("{} loaded"sv, Version::PROJECT);
+	logger::info("{} loaded"sv, Plugin::NAME);
 
 	return true;
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Survival.h"
+#include "SCP/Survival.h"
 
 namespace PapyrusSurvival
 {

@@ -1,17 +1,16 @@
 #include "PapyrusSurvival.h"
-#include "Version.h"
-#include "Warmth.h"
+#include "SCP/Warmth.h"
 
 namespace PapyrusSurvival
 {
 	int GetVersion(RE::StaticFunctionTag*)
 	{
-		return Version::MAJOR;
+		return Plugin::VERSION[0];
 	}
 
 	int GetVersionMinor(RE::StaticFunctionTag*)
 	{
-		return Version::MINOR;
+		return Plugin::VERSION[1];
 	}
 
 	void ForceEnable(RE::StaticFunctionTag*, Feature a_feature)

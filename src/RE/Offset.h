@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Offset
+namespace RE::Offset
 {
 	namespace BottomBar
 	{

@@ -64,7 +64,7 @@ namespace Json
 	std::filesystem::path GetUserDirectory()
 	{
 		wchar_t mydocuments[MAX_PATH];
-		SHGetFolderPath(nullptr, CSIDL_MYDOCUMENTS, nullptr, SHGFP_TYPE_CURRENT, mydocuments);
+		::SHGetFolderPathW(nullptr, CSIDL_MYDOCUMENTS, nullptr, SHGFP_TYPE_CURRENT, mydocuments);
 
 		std::filesystem::path path{ mydocuments };
 		path = path / "My Games" / "Skyrim Special Edition" / "SurvivalCP";
